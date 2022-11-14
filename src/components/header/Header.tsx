@@ -1,25 +1,25 @@
 import styled from "styled-components";
-import { FlexCol, FlexRow } from "../../elements/Flex";
+import { FlexCol, FlexRow, Text } from "../../elements/elements";
 
 const Header = () => {
   return (
     <Ctn>
       <Wrap>
-        <FlexRow>
-          <span style={{ backgroundColor: "red" }}>hello</span>
-          <span style={{ backgroundColor: "green" }}>how</span>
+        <FlexRow gap="10px">
+          <Img src="https://user-images.githubusercontent.com/77138259/201538983-41eebf77-47ad-4db0-b489-c119066daf20.png" />
+          <FlexCol alignItem="left" gap="5px">
+            <Text fontWeight="600">떨면뭐하니</Text>
+            <Text fontSize="small">떨리는 면접, 우리만 아는 방법이 있다!</Text>
+          </FlexCol>
         </FlexRow>
-        <FlexCol>
-          <span style={{ backgroundColor: "red" }}>hello</span>
-          <span style={{ backgroundColor: "green" }}>how</span>
-        </FlexCol>
-        <Img src="https://user-images.githubusercontent.com/77138259/201538983-41eebf77-47ad-4db0-b489-c119066daf20.png" />
       </Wrap>
     </Ctn>
   );
 };
 
 const Ctn = styled.div`
+  position: fixed;
+  width: 100%;
   border: 1px solid red;
 `;
 const Wrap = styled.div`
@@ -32,7 +32,7 @@ const Wrap = styled.div`
 const Img = styled.img`
   width: 30px;
   height: 30px;
-  scale: 1.7;
+  scale: 1;
   object-fit: cover;
 `;
 

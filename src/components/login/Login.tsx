@@ -15,6 +15,11 @@ export const REFRESH_TOKEN = sessionStorage.getItem("refreshtoken");
 console.log(ACCESS_TOKEN);
 console.log(ACCESS_TOKEN);
 
+// interface IToken {
+//   Authorization: string;
+//   refresh: string;
+// }
+
 const Login = () => {
   const {
     register,
@@ -48,6 +53,42 @@ const Login = () => {
         console.log(error.message);
         return error.message;
       }
+    }
+  };
+  const onTrans = async () => {
+    try {
+      // const req = {
+      //   memberEmail: submitData.memberEmail,
+      //   password: submitData.password,
+      // };
+
+      // const { data } = await instance.get(`/members/me`);
+
+      const preRefreshToken = sessionStorage.getItem("refreshtoken");
+      const preAccessToken = sessionStorage.getItem("accesstoken");
+      const { data } = await axios.get(`https://dgbnb.shop/members/me`, {
+        headers: {
+          Authorization: preAccessToken,
+          // refresh: preRefreshToken,
+        },
+      });
+      console.log(data);
+
+      // 통신상태: 200, 401, 403, 500, ...
+      // ex
+      // 1) 액세스토큰이 만료 되었을 때.(에러. 400번대로 예상)
+      // 2) 액세스토큰이 만료되지 않았을 때. (에러 200, 300)
+      // 3) 통신이 되지 않았을 때.(400)
+      // 4) 서버가 닫혔을 때.
+      // 5) 유효하지 않은 액세스토큰일때.
+      // ...
+      // /members/me
+      // sessionStorage.setItem("accesstoken", data.data.accessToken);
+      // sessionStorage.setItem("refreshtoken", data.data.refreshToken);
+      return data;
+    } catch (error: any) {
+      console.log(error.message);
+      return error.message;
     }
   };
   console.log(errors);
@@ -101,10 +142,11 @@ const Login = () => {
             />
             <ErrorMsg>{errors?.password1?.message}</ErrorMsg>
           </InputBox>
-          <button>add</button>
+          <button>로그인</button>
           {/* <span>{errors?.extraError?.message}</span> */}
         </FlexCol>
       </form>
+      <button onClick={() => onTrans()}>통신버튼</button>
     </>
   );
 };

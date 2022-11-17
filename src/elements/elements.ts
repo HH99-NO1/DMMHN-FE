@@ -19,8 +19,8 @@ export const FlexRow = styled.div<IFlex>`
   width: ${(props) => props.width};
   max-width: ${(props) => props.maxWidth};
   gap: ${(props) => props.gap};
-  align-items: ${(props) => 
-  props.alignItem===undefined ? "center" : props.alignItem};
+  align-items: ${(props) =>
+    props.alignItem === undefined ? "center" : props.alignItem};
   justify-content: ${(props) => props.justifyContent};
   background-color: ${(props) => props.bgColor};
   padding: ${(props) => props.padding};
@@ -40,7 +40,7 @@ interface IText {
   color?: string;
 }
 
-export const Text = styled.div<IText>`
+export const Text = styled.span<IText>`
   font-size: ${(props) => props.fontSize}; // 기본: 14px
   font-weight: ${(props) => props.fontWeight}; // 기본: 300
   color: ${(props) => props.color}; // 기본: #222222

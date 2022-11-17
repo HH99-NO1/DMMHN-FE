@@ -140,7 +140,7 @@ export default () => {
         </Scheduler>
       </Paper> */}
       <Paper>
-        <Scheduler data={data} height={660}>
+        <Scheduler data={data}>
           <ViewState
             defaultCurrentDate={new Date()}
             // currentDate={new Date()}

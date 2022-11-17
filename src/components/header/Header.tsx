@@ -20,6 +20,8 @@ const Header = () => {
 const Ctn = styled.div`
   position: fixed;
   width: 100%;
+  background-color: white;
+  z-index: 2;
   border: 1px solid red;
 `;
 const Wrap = styled.div`

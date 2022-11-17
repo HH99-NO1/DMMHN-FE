@@ -13,7 +13,7 @@ interface IForm {
 export const ACCESS_TOKEN = sessionStorage.getItem("accesstoken");
 export const REFRESH_TOKEN = sessionStorage.getItem("refreshtoken");
 console.log(ACCESS_TOKEN);
-console.log(REFRESH_TOKEN);
+console.log(ACCESS_TOKEN);
 
 const Login = () => {
   const {

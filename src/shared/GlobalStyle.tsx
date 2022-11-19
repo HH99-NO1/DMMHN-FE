@@ -54,10 +54,11 @@ table {
 }
 * {
   box-sizing: border-box;
-  font-weight: 300;
   font-family: 'Noto Sans KR', sans-serif;
   line-height: 1.2;
+  font-weight: 300;
   font-size: 14px;
+  color: #222222
 }
 body {
   background-color: ${(props) => props.theme.bgColor};

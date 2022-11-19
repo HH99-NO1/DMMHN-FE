@@ -39,6 +39,7 @@ export default ViewPort;
 
 const 기업별_면접일정 = [
   {
+    기업ID: 14123,
     기업명: "팀스파르타",
     면접: [
       {

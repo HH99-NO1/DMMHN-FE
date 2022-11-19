@@ -12,8 +12,6 @@ interface IForm {
 
 export const ACCESS_TOKEN = sessionStorage.getItem("accesstoken");
 export const REFRESH_TOKEN = sessionStorage.getItem("refreshtoken");
-console.log(ACCESS_TOKEN);
-console.log(ACCESS_TOKEN);
 
 // interface IToken {
 //   Authorization: string;
@@ -55,7 +53,10 @@ const Login = () => {
       }
     }
   };
+
   const onTrans = async () => {
+    const preRefreshToken = sessionStorage.getItem("refreshtoken");
+    const preAccessToken = sessionStorage.getItem("accesstoken");
     try {
       // const req = {
       //   memberEmail: submitData.memberEmail,
@@ -64,8 +65,6 @@ const Login = () => {
 
       // const { data } = await instance.get(`/members/me`);
 
-      const preRefreshToken = sessionStorage.getItem("refreshtoken");
-      const preAccessToken = sessionStorage.getItem("accesstoken");
       const { data } = await axios.get(`https://dgbnb.shop/members/me`, {
         headers: {
           Authorization: preAccessToken,
@@ -87,7 +86,59 @@ const Login = () => {
       // sessionStorage.setItem("refreshtoken", data.data.refreshToken);
       return data;
     } catch (error: any) {
-      console.log(error.message);
+      const errorCode = error.response.data.ok;
+      console.log(errorCode);
+
+      if (errorCode === 6) {
+        // refresh token을 이용하여 access token 재발급
+        try {
+          console.log(preAccessToken);
+          console.log(preRefreshToken);
+          const { data } = await axios.post(
+            `https://dgbnb.shop/members/refresh`,
+            0,
+            {
+              headers: {
+                Authorization: preAccessToken,
+                refresh: preRefreshToken,
+              },
+            }
+          );
+          console.log(data);
+          return data;
+        } catch (error: any) {
+          const errorCode = error.response.data.ok;
+          console.log(error);
+          console.log(errorCode, error.message);
+        }
+
+        // .then(async (res) => {
+        //   const { access_token, refresh_token } = res.data;
+        //   // 새로 받은 token들 저장
+        //   sessionStorage.setItem(ACCESS_TOKEN, access_token);
+        //   sessionStorage.setItem(REFRESH_TOKEN, refresh_token);
+
+        //   // header 새로운 token으로 재설정
+        //   prevRequest.headers.Authorization = `${access_token}`;
+
+        //   // 실패했던 기존 request 재시도
+        //   return await axios(prevRequest);
+        // })
+        // .catch((e) => {
+        //   /*
+        //            token 재발행 또는 기존 요청 재시도 실패 시
+        //            기존 token 제거
+        //            */
+        //   sessionStorage.removeItem(ACCESS_TOKEN);
+        //   sessionStorage.removeItem(REFRESH_TOKEN);
+
+        //   return new Error(e);
+        // });
+      } else {
+        return alert("서버와의 통신에 문제가 있습니다.");
+      }
+
+      // if (error.)
       return error.message;
     }
   };

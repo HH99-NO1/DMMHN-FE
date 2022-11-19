@@ -10,6 +10,7 @@ const Home = () => {
         <Btn onClick={() => navigate("/login")}>로그인 창으로 이동</Btn>
         <Btn onClick={() => navigate("/signup")}>회원가입 창으로 이동</Btn>
         <Btn onClick={() => navigate("/interview")}>면접 관리 페이지 입장</Btn>
+        <Btn onClick={() => navigate("/meeting")}>면접 룸 입장</Btn>
       </Wrap>
     </Ctn>
   );

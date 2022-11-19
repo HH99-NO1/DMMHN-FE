@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 import styled from "styled-components";
 import Video from "./Video";
 import { WebRTCUser } from "./types";
@@ -38,7 +38,7 @@ const Meeting = () => {
   const setIsLocalVideo = useSetRecoilState(LocalVideoState);
 
   console.log(isLocalVideo);
-  const socketRef = useRef<SocketIOClient.Socket>();
+  const socketRef = useRef<Socket>();
   const pcsRef = useRef<{ [socketId: string]: RTCPeerConnection }>({});
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const localStreamRef = useRef<MediaStream>();

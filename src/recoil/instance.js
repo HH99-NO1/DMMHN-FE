@@ -8,41 +8,6 @@ export const instance = axios.create({
   headers: { Authorization: "accesstoken" },
 });
 
-// instance.interceptors.response.use(
-//   (res) => {
-//     return res;
-//   },
-//   async(error) => {
-//     try{
-//       const errResponseStatus = error.response.status;
-//       const errResponseData = error.response.data;
-//       const prevRequest = error.config;
-//       if (
-//         (errResponseData.error?.message === "jwt expired" ||
-//           errResponseStatus === 401)
-//       ){
-//         const preRefreshToken = sessionStorage.getItem("refreshtoken")
-//         if (preRefreshToken){
-//           async function regenerateToeken(){
-//             return await axios.post('/login',{refreshToken: preRefreshToken,})
-//             .then(async (res)=>{
-//               const {access_token, refresh_token} = res.data;
-//               sessionStorage.setItem(ACCESS_TOKEN,access_token,{path:"/"} );
-//               sessionStorage.setItem(REFRESH_TOKEN,refresh_token, {path:"/"});
-//               prevRequest.headers.Authorization = `${access_token}`;
-//               return await axios(prevRequest)
-//             })
-//             .catch((e)=>{
-//               sessionStorage.removeItem("domain");
-//               sessionStorage.removeItem("domain");
-//             })
-//           }
-//         }
-//       }
-//     }
-//   }
-// )
-
 instance.interceptors.response.use(
   (res) => {
     return res;
@@ -119,3 +84,9 @@ instance.interceptors.response.use(
     }
   }
 );
+
+export const UserApi = axios.create({
+  // baseURL: process.env.REACT_APP_API_URL,
+  // baseURL: "http://localhost:3001",
+  baseURL: "https://dgbnb.shop",
+});

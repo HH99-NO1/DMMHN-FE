@@ -9,6 +9,7 @@ import Scheduler from "../components/interview/Scheduler";
 import SchedulerTest from "../components/interview/SchedulerTest";
 import SchedulerTest2 from "../components/interview/SchedulerTest2";
 import MeetingPage from "../pages/MeetingPage";
+import SimulationPage from "../pages/SimulationPage";
 
 const Router = () => {
   return (
@@ -25,6 +26,7 @@ const Router = () => {
           <Route path="/schedulerTest" element={<SchedulerTest />} />
           <Route path="/schedulerTest2" element={<SchedulerTest2 />} />
           <Route path="/meeting" element={<MeetingPage />} />
+          <Route path="/simulation" element={<SimulationPage />} />
         </Routes>
       </BrowserRouter>
     </>

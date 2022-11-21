@@ -7,14 +7,15 @@ import InterviewPage from "../pages/InterviewPage";
 import { Gap } from "../elements/elements";
 import Scheduler from "../components/interview/Scheduler";
 import SchedulerTest from "../components/interview/SchedulerTest";
+import SchedulerTest2 from "../components/interview/SchedulerTest2";
 import MeetingPage from "../pages/MeetingPage";
 
 const Router = () => {
   return (
     <>
-      <Header />
-      <Gap />
       <BrowserRouter>
+        <Header />
+        <Gap />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -22,6 +23,7 @@ const Router = () => {
           <Route path="/interview" element={<InterviewPage />} />
           <Route path="/scheduler" element={<Scheduler />} />
           <Route path="/schedulerTest" element={<SchedulerTest />} />
+          <Route path="/schedulerTest2" element={<SchedulerTest2 />} />
           <Route path="/meeting" element={<MeetingPage />} />
         </Routes>
       </BrowserRouter>

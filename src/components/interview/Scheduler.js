@@ -104,41 +104,6 @@ export default () => {
 
   return (
     <Ctn>
-      {/* <Paper>
-        <Scheduler data={appointments} height={"auto"}>
-          <ViewState
-            defaultCurrentDate={new Date()}
-            currentDate={new Date()}
-            currentViewName={currentViewName}
-            onCurrentViewNameChange={currentViewNameChange}
-          />
-          <EditingState onCommitChanges={commitChanges} />
-          <IntegratedEditing />
-
-          <MonthView name="month" displayName="월" />
-          <WeekView
-            name="week"
-            displayName="주"
-            startDayHour={10}
-            endDayHour={19}
-          />
-          <DayView
-            name="day"
-            displayName="일"
-            startDayHour={10}
-            endDayHour={19}
-          />
-
-          <Toolbar />
-          <DateNavigator />
-          <TodayButton />
-          <ViewSwitcher />
-          <ConfirmationDialog />
-          <Appointments />
-          <AppointmentTooltip showCloseButton showOpenButton showDeleteButton />
-          <AppointmentForm />
-        </Scheduler>
-      </Paper> */}
       <Paper>
         <Scheduler data={data}>
           <ViewState

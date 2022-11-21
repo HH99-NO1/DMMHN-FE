@@ -12,6 +12,10 @@ import {
   AppointmentForm,
   AppointmentTooltip,
   ConfirmationDialog,
+  Toolbar,
+  DateNavigator,
+  TodayButton,
+  ViewSwitcher,
 } from "@devexpress/dx-react-scheduler-material-ui";
 
 export const appointments = [
@@ -344,6 +348,12 @@ export default class Demo extends React.PureComponent {
           <ViewState currentDate={currentDate} />
           <EditingState onCommitChanges={this.commitChanges} />
           <IntegratedEditing />
+
+          <Toolbar />
+          <DateNavigator />
+          <TodayButton />
+          <ViewSwitcher />
+
           <DayView startDayHour={9} endDayHour={19} />
           <ConfirmationDialog />
           <Appointments />

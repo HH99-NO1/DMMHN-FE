@@ -7,7 +7,7 @@ const HomePage = () => {
     <>
       <Layout>
         <Home />
-        <Footer />
+        {/* <Footer /> */}
       </Layout>
     </>
   );

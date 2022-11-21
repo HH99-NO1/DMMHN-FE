@@ -76,7 +76,7 @@ const Meet = () => {
 const Input = styled.input`
   padding: 4px 8px;
   border-radius: 5px;
-  border: 2px solid ${(props) => props.theme.__grayLight};
+  border: 2px solid ${(props) => props.theme.accentColor};
 `;
 const InputBox = styled.div`
   position: relative;

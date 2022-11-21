@@ -10,6 +10,7 @@ async function populateVoiceList(synth: SpeechSynthesis) {
       else if (aname === bname) return 0;
       else return +1;
     });
+    console.log(voices);
 
     return voices;
   } catch (error) {
@@ -32,9 +33,12 @@ export async function speak(textToRead: string, synth: SpeechSynthesis) {
     utterThis.onerror = function (event) {
       console.error("SpeechSynthesisUtterance.onerror");
     };
-    // utterThis.voice = voices[0]
+
+    // const voices = window.speechSynthesis.getVoices();
+    // utterThis.voice = voices[0];
     utterThis.pitch = pitch;
     utterThis.rate = rate;
+    utterThis.lang = "ko-KR" || "ko_KR";
     synth.speak(utterThis);
   }
 }

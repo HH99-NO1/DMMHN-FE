@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
 import SimulationSetting from "./SimulationSetting";
@@ -15,23 +15,35 @@ const Simulation = () => {
     "var / let / const 의 차이점은 무엇인가요?",
     "얕은 복사와 깊은 복사의 각 개념과 구현 방법을 설명하세요.",
   ];
+  let voices = [];
+
+  function setVoiceList() {
+    voices = window.speechSynthesis.getVoices();
+  }
+  const test = setVoiceList();
+  console.log(test);
 
   const [value, setValue] = useState(array[0]);
   const [currValue, setCurrValue] = useState(value);
   const [result, setResult] = useState({});
   const onClick = () => {
-    if (count < 5) {
+    if (count < 5 - 1) {
       count++;
       setValue(array[count]);
       setCurrValue(value);
     } else {
       setValue("모의 면접이 종료되었습니다.");
       setCurrValue(value);
+      count++;
     }
     speechSynthesis.cancel();
     speak(value, window.speechSynthesis);
   };
   console.log(array.slice(0, count));
+
+  useEffect(() => {
+    window.speechSynthesis.cancel();
+  }, []);
   return (
     <>
       <FlexCol gap="10px">
@@ -55,7 +67,7 @@ const Simulation = () => {
         </Text>
         <FlexCol gap="10px">
           {array.slice(0, count).map((v, index) => (
-            <FlexRow gap="5px">
+            <FlexRow gap="5px" key={index}>
               {index + 1}.<Text key={index}>{v}</Text>
             </FlexRow>
           ))}

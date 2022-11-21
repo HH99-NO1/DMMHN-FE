@@ -13,10 +13,6 @@ interface IForm {
 export const ACCESS_TOKEN = sessionStorage.getItem("accesstoken");
 export const REFRESH_TOKEN = sessionStorage.getItem("refreshtoken");
 
-// interface IToken {
-//   Authorization: string;
-//   refresh: string;
-// }
 
 const Login = () => {
   const {

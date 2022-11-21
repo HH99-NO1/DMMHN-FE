@@ -7,11 +7,10 @@ import { TonalitySharp } from "@material-ui/icons";
 
 interface IForm {
   memberEmail: string;
-  name: string;
-  phoneNumber: number;
+  memberName: string;
+  phoneNum: number;
   password: string;
-  password1: string;
-  extraError?: string;
+  confirmPw: string;
 }
 
 // export const ACCESS_TOKEN = sessionStorage.getItem("accesstoken");
@@ -32,20 +31,20 @@ const SignupPage = () => {
   });
   const onValid = async (submitData: IForm) => {
     console.log(submitData);
-    if (submitData.password !== submitData.password1) {
+    if (submitData.password !== submitData.confirmPw) {
       setError(
-        "password1",
+        "confirmPw",
         { message: "비밀번호가 일치하지 않습니다." },
         { shouldFocus: true }
       );
     } else {
       try {
         const req = {
-          name: submitData.name,
+          name: submitData.memberName,
           memberEmail: submitData.memberEmail,
-          phoneNumber: submitData.phoneNumber,
+          phoneNumber: submitData.phoneNum,
           password: submitData.password,
-          password1: submitData.password1,
+          confirmPw: submitData.confirmPw,
         };
         console.log(req);
         const { data } = await UserApi.post(`members/signup`, req);
@@ -74,12 +73,12 @@ const SignupPage = () => {
         <FlexCol gap="10px">
           <InputBox>
             <Input
-              {...register("name", {
+              {...register("memberName", {
                 required: "이름을 입력해주세요.",
               })}
               placeholder="이름(실명)"
             />
-            <ErrorMsg>{errors?.name?.message}</ErrorMsg>
+            <ErrorMsg>{errors?.memberName?.message}</ErrorMsg>
           </InputBox>
           <InputBox>
             <Input
@@ -96,7 +95,7 @@ const SignupPage = () => {
           </InputBox>
           <InputBox>
             <Input
-              {...register("phoneNumber", {
+              {...register("phoneNum", {
                 required: "휴대폰 번호을 입력해주세요.",
                 pattern: {
                   value: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
@@ -105,7 +104,7 @@ const SignupPage = () => {
               })}
               placeholder="휴대폰번호"
             />
-            <ErrorMsg>{errors?.phoneNumber?.message}</ErrorMsg>
+            <ErrorMsg>{errors?.phoneNum?.message}</ErrorMsg>
           </InputBox>
           <InputBox>
             <Input
@@ -126,7 +125,7 @@ const SignupPage = () => {
           <InputBox>
             <Input
               type="password"
-              {...register("password1", {
+              {...register("confirmPw", {
                 required: "비밀번호를 확인해주세요.",
                 pattern: {
                   value:
@@ -137,7 +136,7 @@ const SignupPage = () => {
               })}
               placeholder="중복확인"
             />
-            <ErrorMsg>{errors?.password1?.message}</ErrorMsg>
+            <ErrorMsg>{errors?.confirmPw?.message}</ErrorMsg>
           </InputBox>
           <button>가입하기</button>
         </FlexCol>

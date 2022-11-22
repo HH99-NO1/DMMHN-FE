@@ -4,6 +4,7 @@ import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
 import SimulationSetting from "./SimulationSetting";
 import { speak } from "./TextToSpeech";
 import { AiOutlineRight } from "react-icons/ai";
+import axios from "axios";
 
 let count = 0;
 
@@ -15,17 +16,19 @@ const Simulation = () => {
     "var / let / const 의 차이점은 무엇인가요?",
     "얕은 복사와 깊은 복사의 각 개념과 구현 방법을 설명하세요.",
   ];
-  let voices = [];
 
-  function setVoiceList() {
-    voices = window.speechSynthesis.getVoices();
-  }
-  const test = setVoiceList();
-  console.log(test);
+  // let voices = [];
+
+  // function setVoiceList() {
+  //   voices = window.speechSynthesis.getVoices();
+  //   return voices;
+  // }
+  // const test = setVoiceList();
+  // console.log(test);
 
   const [value, setValue] = useState(array[0]);
   const [currValue, setCurrValue] = useState(value);
-  const [result, setResult] = useState({});
+
   const onClick = () => {
     if (count < 5 - 1) {
       count++;

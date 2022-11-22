@@ -13,7 +13,6 @@ interface IForm {
 export const ACCESS_TOKEN = sessionStorage.getItem("accesstoken");
 export const REFRESH_TOKEN = sessionStorage.getItem("refreshtoken");
 
-
 const Login = () => {
   const {
     register,
@@ -24,29 +23,21 @@ const Login = () => {
 
   const onValid = async (submitData: IForm) => {
     console.log(submitData);
-    if (submitData.password !== submitData.password1) {
-      setError(
-        "password1",
-        { message: "비밀번호가 일치하지 않습니다." },
-        { shouldFocus: true }
-      );
-    } else {
-      try {
-        const req = {
-          memberEmail: submitData.memberEmail,
-          password: submitData.password,
-        };
-        console.log(req);
-        const { data } = await instance.post(`/members/login`, req);
-        console.log(data.data.accessToken);
-        console.log(data.data.refreshToken);
-        sessionStorage.setItem("accesstoken", data.data.accessToken);
-        sessionStorage.setItem("refreshtoken", data.data.refreshToken);
-        return data;
-      } catch (error: any) {
-        console.log(error.message);
-        return error.message;
-      }
+    try {
+      const req = {
+        memberEmail: submitData.memberEmail,
+        password: submitData.password,
+      };
+      console.log(req);
+      const { data } = await instance.post(`/members/login`, req);
+      console.log(data.data.accessToken);
+      console.log(data.data.refreshToken);
+      sessionStorage.setItem("accesstoken", data.data.accessToken);
+      sessionStorage.setItem("refreshtoken", data.data.refreshToken);
+      return data;
+    } catch (error: any) {
+      console.log(error.message);
+      return error.message;
     }
   };
 
@@ -172,22 +163,6 @@ const Login = () => {
               placeholder="비밀번호"
             />
             <ErrorMsg>{errors?.password?.message}</ErrorMsg>
-          </InputBox>
-          <InputBox>
-            <Input
-              type="password"
-              {...register("password1", {
-                required: "비밀번호를 확인해주세요.",
-                pattern: {
-                  value:
-                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,16}$/,
-                  message:
-                    "8~16자 영문 대소문자, 숫자, 특수문자 한 자 이상 조합",
-                },
-              })}
-              placeholder="중복확인"
-            />
-            <ErrorMsg>{errors?.password1?.message}</ErrorMsg>
           </InputBox>
           <button>로그인</button>
           {/* <span>{errors?.extraError?.message}</span> */}

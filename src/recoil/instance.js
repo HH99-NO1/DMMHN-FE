@@ -1,16 +1,35 @@
 import axios from "axios";
 
+const preAccessToken = sessionStorage.getItem("accesstoken");
 export const instance = axios.create({
   baseURL: "https://dgbnb.shop",
-  headers: { Authorization: "accesstoken" },
+  headers: { Authorization: preAccessToken },
 });
 
 export const UserApi = axios.create({
   baseURL: "https://dgbnb.shop",
 });
 
+const preRefreshToken = sessionStorage.getItem("refreshtoken");
+
+export const CheckAccessApi = axios.create({
+  baseURL: "https://dgbnb.shop/",
+  headers: {
+    Authorization: preAccessToken,
+    // refresh: preRefreshToken,
+  },
+});
+export const CheckRefreshApi = axios.create({
+  baseURL: "https://dgbnb.shop/",
+  headers: {
+    Authorization: preAccessToken,
+    refresh: preRefreshToken,
+  },
+});
+
 instance.interceptors.response.use(
   (res) => {
+    console.log(res);
     return res;
   },
   async (error) => {
@@ -27,18 +46,22 @@ instance.interceptors.response.use(
       ) {
         const preRefreshToken = sessionStorage.getItem("refreshtoken");
         const preAccessToken = sessionStorage.getItem("accesstoken");
-        console.log("Authorization: " + preAccessToken);
-        console.log("refresh: " + preRefreshToken);
+        // console.log("Authorization: " + preAccessToken);
+        // console.log("refresh: " + preRefreshToken);
         if (preRefreshToken) {
-          async function checkToken() {
-            return await axios
-              .post("https://dgbnb.shop/members/me", {
-                Authorization: preAccessToken,
-                refresh: preRefreshToken,
-              })
-              .then(async (res) => {
-                console.log(res);
-              });
+          try {
+            async function checkToken() {
+              console.log("checkToken 중...");
+              return await axios
+                .get("https://dgbnb.shop/members/me", {
+                  Authorization: preAccessToken,
+                })
+                .then(async (res) => {
+                  console.log(res);
+                });
+            }
+          } catch (error) {
+            console.log(error);
           }
         } else {
           throw new Error("There is no refresh token");

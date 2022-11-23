@@ -138,7 +138,7 @@ const MediaStream = () => {
       },
       video: {
         width: 1280,
-        height: 720,
+        height: 750,
       },
     };
     console.log("Using media constraints:", constraints);

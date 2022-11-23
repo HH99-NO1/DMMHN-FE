@@ -1,13 +1,51 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
 import SimulationSetting from "./SimulationSetting";
 import { speak } from "./TextToSpeech";
 import { AiOutlineRight } from "react-icons/ai";
+import RecordRTC, { invokeSaveAsDialog } from "recordrtc";
 
 let count = 0;
 
 const Simulation = () => {
+  //recordrtc
+  const [stream, setStream] = useState(null);
+  const [blob, setBlob] = useState(null);
+  const refVideo = useRef(null);
+  const recorderRef = useRef(null);
+
+  const handleRecording = async () => {
+    const mediaStream = await navigator.mediaDevices.getDisplayMedia({
+      video: {
+        width: 800,
+        height: 600,
+        frameRate: 60,
+      },
+      audio: true,
+    });
+
+    setStream(mediaStream);
+    recorderRef.current = new RecordRTC(mediaStream, { type: "video" });
+    recorderRef.current.startRecording();
+  };
+
+  const handleStop = () => {
+    recorderRef.current.stopRecording(() => {
+      setBlob(recorderRef.current.getBlob());
+    });
+  };
+
+  const handleSave = () => {
+    invokeSaveAsDialog(blob);
+  };
+
+  useEffect(() => {
+    if (!refVideo.current) {
+      return;
+    }
+  }, [stream, refVideo]);
+
   const array = [
     "CSR , SSR의 차이와 SEO의 차이점에 대해서 설명하세요.",
     "아토믹 디자인에서 위치를 어떻게 잡았나요?",
@@ -61,16 +99,18 @@ const Simulation = () => {
         </FlexCol>
       </FlexCol>
       <FlexCol>
-        <div>
-          <canvas id="local_video_area">
-            <video id="local_video"></video>
-          </canvas>
-        </div>
-        <button type="button">시작</button>
-        <button type="button" id="record_button">
-          녹화
-        </button>
-        <a id="download_link">다운로드</a>
+        {blob && (
+          <video
+            src={URL.createObjectURL(blob)}
+            controls
+            autoPlay
+            ref={refVideo}
+            style={{ width: "800px" }}
+          ></video>
+        )}
+        <button onClick={handleRecording}>시작</button>
+        <button onClick={handleStop}>멈춤</button>
+        <button onClick={handleSave}>저장</button>
       </FlexCol>
     </>
   );

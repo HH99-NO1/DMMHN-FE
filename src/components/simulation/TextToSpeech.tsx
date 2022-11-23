@@ -34,7 +34,7 @@ export async function speak(textToRead: string, synth: SpeechSynthesis) {
     };
 
     const voices = window.speechSynthesis.getVoices();
-    utterThis.voice = voices[3];
+    utterThis.voice = voices[0];
     utterThis.lang = "ko-KR" || "ko_KR";
     utterThis.pitch = pitch;
     utterThis.rate = rate;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
 import SimulationSetting from "./SimulationSetting";
@@ -18,9 +18,9 @@ const Simulation = () => {
 
   const [value, setValue] = useState(array[0]);
   const [currValue, setCurrValue] = useState(value);
-  const [result, setResult] = useState({});
+  // const [result, setResult] = useState({});
   const onClick = () => {
-    if (count < 5) {
+    if (count < 5 - 1) {
       count++;
       setValue(array[count]);
       setCurrValue(value);
@@ -31,7 +31,6 @@ const Simulation = () => {
     speechSynthesis.cancel();
     speak(value, window.speechSynthesis);
   };
-  console.log(array.slice(0, count));
   return (
     <>
       <FlexCol gap="10px">
@@ -60,6 +59,37 @@ const Simulation = () => {
             </FlexRow>
           ))}
         </FlexCol>
+      </FlexCol>
+      <FlexCol>
+        <div id="container">
+          <video id="gum" playsInline autoPlay muted></video>
+          <video id="recorded" playsInline loop></video>
+          <div>
+            <button id="start">Start camera</button>
+            <button id="record" disabled>
+              Start Recording
+            </button>
+            <button id="play" disabled>
+              Play
+            </button>
+            <button id="download" disabled>
+              Download
+            </button>
+          </div>
+          <div>
+            Recording format: <select id="codecPreferences" disabled></select>
+          </div>
+          <div>
+            <h4>Media Stream Constraints options</h4>
+            <p>
+              Echo cancellation: <input type="checkbox" id="echoCancellation" />
+            </p>
+          </div>
+
+          <div>
+            <span id="errorMsg"></span>
+          </div>
+        </div>
       </FlexCol>
     </>
   );

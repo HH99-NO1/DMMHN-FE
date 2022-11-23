@@ -1,14 +1,55 @@
-import { useEffect, useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
 import SimulationSetting from "./SimulationSetting";
 import { speak } from "./TextToSpeech";
 import { AiOutlineRight } from "react-icons/ai";
 import axios from "axios";
+import RecordRTC, { invokeSaveAsDialog } from "recordrtc";
 
 let count = 0;
 
 const Simulation = () => {
+  //recordrtc
+  const [stream, setStream] = useState(null);
+  const [blob, setBlob] = useState(null);
+  const refVideo = useRef(null);
+  const recorderRef = useRef(null);
+
+  const handleRecording = async () => {
+    const mediaStream = await navigator.mediaDevices.getDisplayMedia({
+      video: {
+        width: 800,
+        height: 600,
+        frameRate: 60,
+      },
+      audio: true,
+    });
+
+    setStream(mediaStream);
+    recorderRef.current = new RecordRTC(mediaStream, { type: "video" });
+    recorderRef.current.startRecording();
+  };
+
+  const handleStop = () => {
+    recorderRef.current.stopRecording(() => {
+      setBlob(recorderRef.current.getBlob());
+    });
+  };
+
+  const handleSave = () => {
+    invokeSaveAsDialog(blob);
+  };
+
+  useEffect(() => {
+    if (!refVideo.current) {
+      return;
+    }
+  }, [stream, refVideo]);
+  useEffect(() => {
+    window.speechSynthesis.cancel();
+  }, []);
+
   const array = [
     "CSR , SSR의 차이와 SEO의 차이점에 대해서 설명하세요.",
     "아토믹 디자인에서 위치를 어떻게 잡았나요?",
@@ -77,35 +118,18 @@ const Simulation = () => {
         </FlexCol>
       </FlexCol>
       <FlexCol>
-        <div id="container">
-          <video id="gum" playsInline autoPlay muted></video>
-          <video id="recorded" playsInline loop></video>
-          <div>
-            <button id="start">Start camera</button>
-            <button id="record" disabled>
-              Start Recording
-            </button>
-            <button id="play" disabled>
-              Play
-            </button>
-            <button id="download" disabled>
-              Download
-            </button>
-          </div>
-          <div>
-            Recording format: <select id="codecPreferences" disabled></select>
-          </div>
-          <div>
-            <h4>Media Stream Constraints options</h4>
-            <p>
-              Echo cancellation: <input type="checkbox" id="echoCancellation" />
-            </p>
-          </div>
-
-          <div>
-            <span id="errorMsg"></span>
-          </div>
-        </div>
+        {blob && (
+          <video
+            src={URL.createObjectURL(blob)}
+            controls
+            autoPlay
+            ref={refVideo}
+            style={{ width: "800px" }}
+          ></video>
+        )}
+        <button onClick={handleRecording}>시작</button>
+        <button onClick={handleStop}>멈춤</button>
+        <button onClick={handleSave}>저장</button>
       </FlexCol>
     </>
   );

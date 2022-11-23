@@ -1,4 +1,4 @@
-const pitch = 0;
+const pitch = 1;
 const rate = 0.8;
 
 async function populateVoiceList(synth: SpeechSynthesis) {

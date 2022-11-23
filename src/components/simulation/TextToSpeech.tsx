@@ -1,4 +1,4 @@
-const pitch = 1;
+const pitch = 0;
 const rate = 0.8;
 
 async function populateVoiceList(synth: SpeechSynthesis) {
@@ -34,8 +34,8 @@ export async function speak(textToRead: string, synth: SpeechSynthesis) {
       console.error("SpeechSynthesisUtterance.onerror");
     };
 
-    // const voices = window.speechSynthesis.getVoices();
-    // utterThis.voice = voices[0];
+    const voices = window.speechSynthesis.getVoices();
+    utterThis.voice = voices[0];
     utterThis.pitch = pitch;
     utterThis.rate = rate;
     utterThis.lang = "ko-KR" || "ko_KR";

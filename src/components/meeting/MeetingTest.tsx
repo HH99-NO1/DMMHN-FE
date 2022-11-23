@@ -1,3 +1,4 @@
+import { disconnect } from "process";
 import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
@@ -13,6 +14,17 @@ const MeetingTest = () => {
   console.log(roomName);
   // const SOCKET_SERVER_URL = "https://chamchimayo.shop/";
   const SOCKET_SERVER_URL = "https://dgbnb.shop/";
+  function stopStreamedVideo(myVideoRef: any) {
+    const stream = myVideoRef.current.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach(function (track: any) {
+      track.stop();
+    });
+
+    myVideoRef.current.srcObject = null;
+  }
+  // const refreshMedia = () => setInterval(() => getMedia(), 3000);
   const getMedia = async () => {
     try {
       console.log("getMedia 시작");
@@ -23,6 +35,8 @@ const MeetingTest = () => {
 
       if (myVideoRef.current) {
         console.log("내 비디오를 스트림에 저장했다!");
+        console.log(pcRef.current);
+        console.log(pcRef?.current?.connectionState);
         myVideoRef.current.srcObject = stream;
       }
       if (!(pcRef.current && socketRef.current)) {
@@ -41,6 +55,7 @@ const MeetingTest = () => {
       pcRef.current.onicecandidate = (e) => {
         if (e.candidate) {
           if (!socketRef.current) {
+            console.log("소켓에 정보가 없대!");
             return;
           }
           console.log("recv candidate");
@@ -51,8 +66,10 @@ const MeetingTest = () => {
       pcRef.current.ontrack = (e) => {
         if (remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = e.streams[0];
+          console.log(e.streams[0]);
         }
       };
+      return stream;
     } catch (e) {
       console.error(e);
     }
@@ -105,6 +122,7 @@ const MeetingTest = () => {
 
     socketRef.current.on("all_users", (allUsers: Array<{ id: string }>) => {
       console.log("connected!");
+      console.log(allUsers);
       if (allUsers.length > 0) {
         createOffer();
       }
@@ -142,16 +160,40 @@ const MeetingTest = () => {
 
     return () => {
       if (socketRef.current) {
-        console.log("test1");
-        socketRef.current.disconnect();
+        try {
+          console.log("내가 값이 있대잖아");
+          // socketRef.current.disconnect();
+          stopStreamedVideo(myVideoRef);
+          console.log("내 비디오를 스트림에서 뺐다!");
+        } catch (e) {
+          console.log(e);
+        }
+
+        // ??.getTracks().forEach((track) => track.stop());
       }
       if (pcRef.current) {
-        console.log("test2");
-        pcRef.current.close();
+        try {
+          console.log("남의 값이 있대잖아");
+          // pcRef.current.close();
+          stopStreamedVideo(pcRef);
+          console.log("남의 비디오를 스트림에서 뺐다!");
+        } catch (e) {
+          console.log(e);
+        }
       }
     };
   }, []);
-
+  // useEffect(() => {
+  //   console.log("??????");
+  //   if (pcRef?.current?.connectionState === "disconnected" || "failed") {
+  //     console.log("남의 값이 있대잖아");
+  //     pcRef?.current?.close();
+  //     stopStreamedVideo(pcRef);
+  //     console.log("남의 비디오를 스트림에서 뺐다!");
+  //   } else {
+  //     console.log("아마 값이 new 일껄");
+  //   }
+  // }, []);
   return (
     <FlexCol gap="10px">
       <video

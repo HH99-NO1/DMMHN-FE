@@ -9,5 +9,6 @@ declare module "styled-components" {
     __grayLight?: string;
     __grayMedium?: string;
     __grayDark?: string;
+    __greenMidium?: string;
   }
 }

@@ -5,6 +5,16 @@ const GlobalStyle = createGlobalStyle`
    v5.0.1 | 20191019
    License: none (public domain)
 */
+
+* {
+  box-sizing: border-box;
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.2;
+  font-weight: 300;
+  font-size: 14px;
+  color: #222222
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -18,11 +28,12 @@ article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 main, menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
+  /* font-family: 'Noto Sans KR', sans-serif; */
   margin: 0;
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
+  /* font: inherit; */
   vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
@@ -52,14 +63,7 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-* {
-  box-sizing: border-box;
-  font-family: 'Noto Sans KR', sans-serif;
-  line-height: 1.2;
-  font-weight: 300;
-  font-size: 14px;
-  color: #222222
-}
+
 body {
   background-color: ${(props) => props.theme.bgColor};
   color: ${(props) => props.theme.textColor};

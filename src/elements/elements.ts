@@ -26,6 +26,7 @@ export const FlexRow = styled.div<IFlex>`
   padding: ${(props) => props.padding};
   border: ${(props) => props.border};
   border-radius: ${(props) => props.borderRadius};
+  /* font-family: "Noto Sans KR", sans-serif; */
 `;
 
 export const FlexCol = styled(FlexRow)<IFlex>`
@@ -41,6 +42,7 @@ interface IText {
 }
 
 export const Text = styled.span<IText>`
+  /* font-family: "Noto Sans KR", sans-serif; */
   font-size: ${(props) => props.fontSize}; // 기본: 14px
   font-weight: ${(props) => props.fontWeight}; // 기본: 300
   color: ${(props) => props.color}; // 기본: #222222

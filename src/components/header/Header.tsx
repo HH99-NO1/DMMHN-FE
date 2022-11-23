@@ -1,13 +1,9 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Text } from "../../elements/elements";
-import {
-  CheckAccessApi,
-  CheckRefreshApi,
-  instance,
-} from "../../recoil/instance";
+import { instance } from "../../recoil/instance";
 import UserState from "./UserState";
 
 const Header = () => {
@@ -28,7 +24,9 @@ const Header = () => {
       // if (preAccessToken) {
       const { data } = await instance.get(`/members/me`);
       setLoginUser(true);
-      return console.log(data);
+      // setLoginUserData([data]);
+      console.log(data);
+      return;
     } catch (error: any) {
       const errorCode = error.response;
       if (errorCode === undefined) {
@@ -80,6 +78,7 @@ const Header = () => {
   useEffect(() => {
     if (reqLogin) {
       alert("로그인 세션이 만료되었습니다. 로그인 페이지로 이동합니다.");
+      navigate("/");
       setReqLogin(false);
     }
   }, []);
@@ -93,7 +92,7 @@ const Header = () => {
       <Wrap>
         <FlexRow gap="10px" justifyContent="space-between">
           <FlexRow gap="10px">
-            <Img src="https://user-images.githubusercontent.com/77138259/201538983-41eebf77-47ad-4db0-b489-c119066daf20.png" />
+            <Img src="img/logo.png" />
             <FlexCol alignItem="left" gap="5px">
               <Text fontWeight="600">떨면뭐하니</Text>
               <Text fontSize="small">
@@ -132,14 +131,16 @@ const Wrap = styled.div`
   border: 1px solid green;
 `;
 const Img = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   scale: 1;
   object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.3);
 `;
 const Btn = styled.button`
   width: 200px;
   margin: 0 auto;
 `;
 
-export default Header;
+export default React.memo(Header);

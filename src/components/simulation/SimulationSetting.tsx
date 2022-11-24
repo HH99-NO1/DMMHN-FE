@@ -4,11 +4,11 @@ import { FlexCol, FlexRow, Text } from "../../elements/elements";
 import { HiOutlineChevronUpDown } from "react-icons/hi2";
 import { instance } from "../../recoil/instance";
 import { useSetRecoilState } from "recoil";
-import { isSimulationState } from "../../recoil/atoms/atoms";
+import { isSimulationState, test } from "../../recoil/atoms/atoms";
 import axios from "axios";
 
 const SimulationSetting = () => {
-  const SERVER_URL = "https://dgbnb.shop";
+  const setTest = useSetRecoilState(test);
 
   const myVideoRef = useRef<HTMLVideoElement>(null);
   const [number, setNumber] = useState("");
@@ -61,13 +61,15 @@ const SimulationSetting = () => {
       number: number,
     };
     console.log(config);
-    setSimulation(true);
 
     if (window.confirm("모의면접을 시작하시겠습니까?")) {
       try {
         // url 바꿔야 함
-        const data = await instance.post(`/mockInterview`, config);
+        const { data } = await instance.post(`/mockInterview`, config);
         console.log(data);
+        setTest(data);
+        setSimulation(true);
+        return;
       } catch (e) {
         console.log(e);
       }
@@ -165,11 +167,13 @@ const Select = styled.select`
   font-weight: 600;
   appearance: none;
   width: 100%;
+  background-color: inherit;
 `;
 const Input = styled.input`
   border: none;
   width: 100%;
   font-size: 16px;
+  background-color: inherit;
 
   ::-webkit-inner-spin-button,
   ::-webkit-outer-spin-button {

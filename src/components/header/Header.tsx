@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Text } from "../../elements/elements";
@@ -13,7 +13,6 @@ const Header = () => {
   console.log(loginUser);
   const preRefreshToken = sessionStorage.getItem("refreshtoken");
   const preAccessToken = sessionStorage.getItem("accesstoken");
-
   const navigate = useNavigate();
 
   // console.log("Authorization: " + preAccessToken);
@@ -24,14 +23,17 @@ const Header = () => {
     try {
       // if (preAccessToken) {
       const { data } = await instance.get(`/members/me`);
+      // setReqLogin(false);
       setLoginUser(true);
       // setLoginUserData([data]);
       console.log(data);
+
       return;
     } catch (error: any) {
       const errorCode = error.response;
       if (errorCode === undefined) {
         try {
+          console.log("refresh를 요구했다.");
           const { data } = await instance.post(`/members/refresh`, 0, {
             headers: {
               Authorization: preAccessToken,
@@ -82,8 +84,10 @@ const Header = () => {
       navigate("/login");
       setReqLogin(false);
     }
-  }, []);
+  }, [reqLogin]);
   useEffect(() => {
+    preAccessToken && checkLogin();
+    // console.log(userLoginData);
     // checkLogin();
     // console.log(checkLogin());
   }, [checkLogin()]);

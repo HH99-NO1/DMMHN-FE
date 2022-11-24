@@ -1,5 +1,15 @@
 import { atom, selector } from "recoil";
 
+interface ITest {
+  category: string;
+  questionArr: [];
+}
+
+export const test = atom<ITest[]>({
+  key: "test",
+  default: [],
+});
+
 export const isSimulationState = atom({
   key: "isSimulation",
   default: false,

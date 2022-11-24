@@ -4,10 +4,19 @@ import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
 import { speak } from "./TextToSpeech";
 import { AiOutlineRight } from "react-icons/ai";
 import RecordRTC, { invokeSaveAsDialog } from "recordrtc";
+import { useRecoilValue } from "recoil";
+import { test } from "../../recoil/atoms/atoms";
+import { instance } from "../../recoil/instance";
+import { useNavigate } from "react-router-dom";
 
 let count = 0;
 
 const Simulation = () => {
+  const navigate = useNavigate();
+
+  const testSimulation = useRecoilValue(test);
+  console.log(testSimulation);
+
   //recordrtc
   const [stream, setStream] = useState(null);
   const [blob, setBlob] = useState(null);
@@ -58,13 +67,6 @@ const Simulation = () => {
       "얕은 복사와 깊은 복사의 각 개념과 구현 방법을 설명하세요.",
     ],
   };
-  const array = [
-    "CSR , SSR의 차이와 SEO의 차이점에 대해서 설명하세요.",
-    "아토믹 디자인에서 위치를 어떻게 잡았나요?",
-    "자바스크립트 엔진과 동작 원리에 대해 서술하세요.",
-    "var / let / const 의 차이점은 무엇인가요?",
-    "얕은 복사와 깊은 복사의 각 개념과 구현 방법을 설명하세요.",
-  ];
 
   // let voices = [];
 
@@ -75,24 +77,50 @@ const Simulation = () => {
   // const test = setVoiceList();
   // console.log(test);
 
-  const [value, setValue] = useState(array[0]);
+  const [value, setValue] = useState(testSimulation?.questionArr[0]);
   const [currValue, setCurrValue] = useState(value);
-
+  const [result, setResult] = useState([]);
+  console.log(result);
   const onClick = () => {
-    if (count < 5 - 1) {
+    speechSynthesis.cancel();
+    speak(value, window.speechSynthesis);
+
+    let resultEl = {
+      question: testSimulation.questionArr[count],
+      time: "05:00",
+    };
+
+    // 유효한 배열이 있을때만 result에 값을 저장함
+    testSimulation.questionArr[count] && setResult([...result, resultEl]);
+    if (count < testSimulation.questionArr.length - 1) {
       count++;
-      setValue(array[count]);
+      setValue(testSimulation.questionArr[count]);
       setCurrValue(value);
     } else {
       setValue("모의 면접이 종료되었습니다.");
       setCurrValue(value);
       count++;
     }
-    speechSynthesis.cancel();
-    speak(value, window.speechSynthesis);
   };
-  console.log(array.slice(0, count));
+  console.log(testSimulation.questionArr.slice(0, count));
+  const onResult = async () => {
+    if (result) {
+      const req = {
+        category: testSimulation.category,
+        number: result.length,
+        result: result,
+      };
+      try {
+        const { data } = await instance.post(`/mockInterview/saveResults`, req);
 
+        console.log(data);
+        alert("모의면접의 결과가 정상적으로 저장되었습니다.");
+        navigate("/mysimulation/");
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
   useEffect(() => {
     window.speechSynthesis.cancel();
   }, []);
@@ -100,7 +128,8 @@ const Simulation = () => {
     <>
       <FlexCol gap="10px">
         <Text fontSize="20px" fontWeight="600">
-          리액트 모의면접
+          {testSimulation.category === "react" ? "React.js" : "Node.js"} {""}
+          모의면접
         </Text>
         <Text fontSize="30px" fontWeight="600">
           {currValue}
@@ -118,7 +147,7 @@ const Simulation = () => {
           지금까지의 질문
         </Text>
         <FlexCol gap="10px">
-          {array.slice(0, count).map((v, index) => (
+          {testSimulation.questionArr.slice(0, count).map((v, index) => (
             <FlexRow gap="5px" key={index}>
               {index + 1}.<Text key={index}>{v}</Text>
             </FlexRow>
@@ -139,6 +168,13 @@ const Simulation = () => {
         <button onClick={handleStop}>멈춤</button>
         <button onClick={handleSave}>저장</button>
       </FlexCol>
+      <button
+        onClick={() => {
+          onResult();
+        }}
+      >
+        결과 보기
+      </button>
     </>
   );
 };

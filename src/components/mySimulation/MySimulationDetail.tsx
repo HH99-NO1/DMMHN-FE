@@ -1,13 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Liner } from "../../elements/elements";
+import { instance } from "../../recoil/instance";
 
 const MySimulationDetail = () => {
   const { postId } = useParams();
+  const init = {
+    category: "",
+    createdAt: "",
+    number: 0,
+    resultsArr: [
+      {
+        question: "",
+        time: "",
+      },
+    ],
+    sequence: 0,
+    totalTime: "",
+  };
+  const [mySimulation, setMySimulation] = useState(init);
+  console.log(mySimulation);
+
+  const getMySimulation = async () => {
+    try {
+      const { data } = await instance.get(
+        `mockInterview/getResultDetails/${postId}`
+      );
+      console.log(data);
+      setMySimulation(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const post = {
-    postId: "1",
+    sequence: "1",
     createdAt: "Tue Nov 15 2022 16:02:30 GMT+0000 (Coordinated Universal Time)",
     category: "react",
     number: "5",
@@ -35,7 +63,9 @@ const MySimulationDetail = () => {
       },
     ],
   };
-
+  useEffect(() => {
+    getMySimulation();
+  }, []);
   const dateChange = (date: string) => {
     const result = new Date(date).toLocaleString("ko-KR", {
       year: "numeric",
@@ -60,21 +90,23 @@ const MySimulationDetail = () => {
           alignItem="flex-end"
         >
           <TitleBar>모의면접 결과</TitleBar>
-          <Text>{dateChange(post.createdAt)}</Text>
+          <Text>{dateChange(mySimulation.createdAt)}</Text>
         </FlexRow>
         <FlexCol width="100%" gap="20px">
           <FlexRow width="100%" gap="10px" justifyContent="space-between">
             <MiddleTitle>카테고리</MiddleTitle>
             <OptionBox>
               <Text>
-                {post.category === "react" ? category.react : category.node}
+                {mySimulation.category === "react"
+                  ? category.react
+                  : category.node}
               </Text>
             </OptionBox>
           </FlexRow>
           <FlexRow width="100%" gap="10px" justifyContent="space-between">
             <MiddleTitle>문항 수</MiddleTitle>
             <OptionBox>
-              <Text>{post.number} 개</Text>
+              <Text>{mySimulation.number} 개</Text>
             </OptionBox>
           </FlexRow>
           <FlexRow
@@ -89,14 +121,14 @@ const MySimulationDetail = () => {
             <OptionScrollBox>
               <OptionScrollBox2>
                 <FlexCol gap="10px" alignItem="flex-start">
-                  <Text>총 소요시간 - {post.totalTime}</Text>
+                  <Text>총 소요시간 - {mySimulation.totalTime}</Text>
                   <Liner />
                   <Gap gap="10px" />
                   <Text>질문별 소요시간</Text>
                   <Liner />
                   <FlexCol width="100%" gap="10px" alignItem="flex-start">
                     <FlexCol width="100%" gap="5px" alignItem="flex-start">
-                      {post.array.map((arr, index) => (
+                      {mySimulation.resultsArr.map((arr, index) => (
                         <FlexRow
                           width="100%"
                           gap="10px"

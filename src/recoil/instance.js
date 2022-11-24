@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const preAccessToken = sessionStorage.getItem("accesstoken");
+const preAccessToken = sessionStorage.getItem("accessToken");
 export const instance = axios.create({
   baseURL: "https://dgbnb.shop",
   headers: { Authorization: preAccessToken },
@@ -8,23 +8,6 @@ export const instance = axios.create({
 
 export const UserApi = axios.create({
   baseURL: "https://dgbnb.shop",
-});
-
-const preRefreshToken = sessionStorage.getItem("refreshtoken");
-
-export const CheckAccessApi = axios.create({
-  baseURL: "https://dgbnb.shop/",
-  headers: {
-    Authorization: preAccessToken,
-    // refresh: preRefreshToken,
-  },
-});
-export const CheckRefreshApi = axios.create({
-  baseURL: "https://dgbnb.shop/",
-  headers: {
-    Authorization: preAccessToken,
-    refresh: preRefreshToken,
-  },
 });
 
 instance.interceptors.response.use(
@@ -44,8 +27,8 @@ instance.interceptors.response.use(
         errResponseData.error?.message === "jwt expired" ||
         errResponseStatus === 401
       ) {
-        const preRefreshToken = sessionStorage.getItem("refreshtoken");
-        const preAccessToken = sessionStorage.getItem("accesstoken");
+        const preRefreshToken = sessionStorage.getItem("refreshToken");
+        const preAccessToken = sessionStorage.getItem("accessToken");
         // console.log("Authorization: " + preAccessToken);
         // console.log("refresh: " + preRefreshToken);
         if (preRefreshToken) {

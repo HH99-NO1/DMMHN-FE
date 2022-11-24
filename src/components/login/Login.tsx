@@ -10,8 +10,8 @@ interface IForm {
   password1: string;
 }
 
-export const ACCESS_TOKEN = sessionStorage.getItem("accesstoken");
-export const REFRESH_TOKEN = sessionStorage.getItem("refreshtoken");
+export const ACCESS_TOKEN = sessionStorage.getItem("accessToken");
+export const REFRESH_TOKEN = sessionStorage.getItem("refreshToken");
 
 const Login = () => {
   const {
@@ -32,8 +32,8 @@ const Login = () => {
       const { data } = await instance.post(`/members/login`, req);
       console.log(data.data.accessToken);
       console.log(data.data.refreshToken);
-      sessionStorage.setItem("accesstoken", data.data.accessToken);
-      sessionStorage.setItem("refreshtoken", data.data.refreshToken);
+      sessionStorage.setItem("accessToken", data.data.accessToken);
+      sessionStorage.setItem("refreshToken", data.data.refreshToken);
       return data;
     } catch (error: any) {
       console.log(error.message);
@@ -42,8 +42,8 @@ const Login = () => {
   };
 
   const onTrans = async () => {
-    const preRefreshToken = sessionStorage.getItem("refreshtoken");
-    const preAccessToken = sessionStorage.getItem("accesstoken");
+    const preRefreshToken = sessionStorage.getItem("refreshToken");
+    const preAccessToken = sessionStorage.getItem("accessToken");
     try {
       // const req = {
       //   memberEmail: submitData.memberEmail,

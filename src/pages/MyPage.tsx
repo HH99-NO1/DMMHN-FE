@@ -79,8 +79,7 @@ const TapMenu = styled.ul`
 `;
 
 const Indicate = styled.div`
-  margin: 25px auto;
-  width: 1000px;
+  margin: 50px auto;
   height: 50px;
   background-color: lightgray;
   border-radius: 50px;

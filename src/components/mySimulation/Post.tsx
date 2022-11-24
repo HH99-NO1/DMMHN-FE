@@ -4,10 +4,10 @@ import { FlexCol, FlexRow, Text } from "../../elements/elements";
 
 interface IPost {
   post: {
-    postId: string;
-    createdAt: string;
     category: string;
-    number: string;
+    createdAt: string;
+    number: number;
+    sequence: number;
     totalTime: string;
   };
 }

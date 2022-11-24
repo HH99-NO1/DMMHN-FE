@@ -6,7 +6,17 @@ function App() {
   return (
     <>
       <Helmet>
-        <title>떨면뭐하니 테스트 코드</title>
+        <title>떨면뭐하니 - 떨리는 면접, 우리만 아는 방법이 있다!</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap"
+          rel="stylesheet"
+        />
       </Helmet>
       <GlobalStyle />
       <Router />

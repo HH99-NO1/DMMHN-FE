@@ -11,8 +11,10 @@ const Header = () => {
   const [loginUser, setLoginUser] = useState(false);
   const [reqLogin, setReqLogin] = useState(false);
   console.log(loginUser);
-  const preRefreshToken = sessionStorage.getItem("refreshtoken");
-  const preAccessToken = sessionStorage.getItem("accesstoken");
+  const preRefreshToken = sessionStorage.getItem("refreshToken");
+  const preAccessToken = sessionStorage.getItem("accessToken");
+  console.log(preRefreshToken);
+  console.log(preAccessToken);
 
   const navigate = useNavigate();
 
@@ -30,6 +32,7 @@ const Header = () => {
       return;
     } catch (error: any) {
       const errorCode = error.response;
+      console.log(errorCode);
       if (errorCode === undefined) {
         try {
           const { data } = await instance.post(`/members/refresh`, 0, {
@@ -44,39 +47,18 @@ const Header = () => {
           console.log(data.data.accessToken);
           console.log(newAccessToken);
 
-          return sessionStorage.setItem("accesstoken", newAccessToken);
+          return sessionStorage.setItem("accessToken", newAccessToken);
         } catch (e) {
           setReqLogin(true);
           console.log(e);
         }
       }
+      // setReqLogin(true);
       console.log(errorCode);
     }
-
-    //     const { data } = CheckAccessApi.get("members/me");
-    //     setLoginUser(true);
-    //     console.log("로그인 중");
-    //     console.log(data);
-    //     if (data === undefined) {
-    //       const twiceCheck = CheckRefreshApi.get("members/me");
-    //     }
-    //     return data;
-    //     // return console.log("loginUser_State: ", res.data);
-
-    //     // console.log(response.data);
-    //     // } else {
-    //     //   setLoginUser(false);
-    //     //   throw new Error("There is no refresh token");
-    //     // }
-    //   } catch (error: any) {
-    //     const errorCode = error.response.data.ok;
-    //     console.log(errorCode);
-    //     setLoginUser(false);
-    //     alert("access token이 만료되었습니다. 로그인 페이지로 이동합니다.");
-    //     return console.log("11");
-    //   }
   };
   useEffect(() => {
+    console.log(reqLogin);
     if (reqLogin) {
       alert("로그인 세션이 만료되었습니다. 로그인 페이지로 이동합니다.");
       navigate("/login");
@@ -84,7 +66,7 @@ const Header = () => {
     }
   }, []);
   useEffect(() => {
-    // checkLogin();
+    checkLogin();
     // console.log(checkLogin());
   }, [checkLogin()]);
 

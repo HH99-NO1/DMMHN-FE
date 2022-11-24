@@ -1,10 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
-import SimulationSetting from "./SimulationSetting";
 import { speak } from "./TextToSpeech";
 import { AiOutlineRight } from "react-icons/ai";
-import axios from "axios";
 import RecordRTC, { invokeSaveAsDialog } from "recordrtc";
 
 let count = 0;
@@ -50,6 +48,16 @@ const Simulation = () => {
     window.speechSynthesis.cancel();
   }, []);
 
+  const data = {
+    category: "react",
+    array: [
+      "CSR , SSR의 차이와 SEO의 차이점에 대해서 설명하세요.",
+      "아토믹 디자인에서 위치를 어떻게 잡았나요?",
+      "자바스크립트 엔진과 동작 원리에 대해 서술하세요.",
+      "var / let / const 의 차이점은 무엇인가요?",
+      "얕은 복사와 깊은 복사의 각 개념과 구현 방법을 설명하세요.",
+    ],
+  };
   const array = [
     "CSR , SSR의 차이와 SEO의 차이점에 대해서 설명하세요.",
     "아토믹 디자인에서 위치를 어떻게 잡았나요?",

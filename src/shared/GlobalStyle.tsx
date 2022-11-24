@@ -45,9 +45,7 @@ footer, header, hgroup, main, menu, nav, section {
 *[hidden] {
     display: none;
 }
-body {
-  line-height: 1;
-}
+
 menu, ol, ul, li {
   list-style: none;
 }
@@ -65,6 +63,7 @@ table {
 }
 
 body {
+  line-height: 1;
   background-color: ${(props) => props.theme.bgColor};
   color: ${(props) => props.theme.textColor};
 }

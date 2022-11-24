@@ -1,16 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FlexRow, Text } from "../../elements/elements";
 import Post from "./Post";
 
 const MySimulation = () => {
+  const navigate = useNavigate();
   const Posts = [
     {
       postId: "1",
       createdAt:
         "Tue Nov 15 2022 16:02:30 GMT+0000 (Coordinated Universal Time)",
       category: "react",
-      number: "20",
+      number: "5",
       totalTime: "40:20",
     },
     {
@@ -44,7 +46,12 @@ const MySimulation = () => {
       <TitleBar>나의 모의면접 현황</TitleBar>
       <FlexRow style={{ flexWrap: "wrap" }} gap="1.7%">
         {Posts.map((post) => (
-          <Post key={post.postId} post={post} />
+          <LinkBtn
+            key={post.postId}
+            onClick={() => navigate(`/mysimulation/${post.postId}`)}
+          >
+            <Post key={post.postId} post={post} />
+          </LinkBtn>
         ))}
       </FlexRow>
     </Ctn>
@@ -68,6 +75,9 @@ const TitleBar = styled.div`
   font-size: 20px;
   font-weight: 600;
   background-color: ${(props) => props.theme.__grayLight};
+`;
+const LinkBtn = styled.div`
+  width: 32.2%;
 `;
 
 export default MySimulation;

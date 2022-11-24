@@ -22,6 +22,33 @@ const Simulation = () => {
   const [blob, setBlob] = useState(null);
   const refVideo = useRef(null);
   const recorderRef = useRef(null);
+  const myVideoRef = useRef(null);
+
+  // 유저 비디오 연결 테스트
+  const getMedia = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        width: 400,
+        height: 300,
+        frameRate: 30,
+      },
+      audio: false,
+    });
+    if (myVideoRef.current) {
+      myVideoRef.current.srcObject = stream;
+    }
+  };
+
+  const stopStreamedVideo = (myVideoRef) => {
+    const stream = myVideoRef.current.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach(function (track) {
+      track.stop();
+    });
+
+    myVideoRef.current.srcObject = null;
+  };
 
   const handleRecording = async () => {
     const mediaStream = await navigator.mediaDevices.getDisplayMedia({
@@ -32,7 +59,6 @@ const Simulation = () => {
       },
       audio: true,
     });
-
     setStream(mediaStream);
     recorderRef.current = new RecordRTC(mediaStream, { type: "video" });
     recorderRef.current.startRecording();
@@ -40,6 +66,7 @@ const Simulation = () => {
 
   const handleStop = () => {
     recorderRef.current.stopRecording(() => {
+      stopStreamedVideo(myVideoRef);
       setBlob(recorderRef.current.getBlob());
     });
   };
@@ -56,26 +83,6 @@ const Simulation = () => {
   useEffect(() => {
     window.speechSynthesis.cancel();
   }, []);
-
-  const data = {
-    category: "react",
-    array: [
-      "CSR , SSR의 차이와 SEO의 차이점에 대해서 설명하세요.",
-      "아토믹 디자인에서 위치를 어떻게 잡았나요?",
-      "자바스크립트 엔진과 동작 원리에 대해 서술하세요.",
-      "var / let / const 의 차이점은 무엇인가요?",
-      "얕은 복사와 깊은 복사의 각 개념과 구현 방법을 설명하세요.",
-    ],
-  };
-
-  // let voices = [];
-
-  // function setVoiceList() {
-  //   voices = window.speechSynthesis.getVoices();
-  //   return voices;
-  // }
-  // const test = setVoiceList();
-  // console.log(test);
 
   const [value, setValue] = useState(testSimulation?.questionArr[0]);
   const [currValue, setCurrValue] = useState(value);
@@ -109,13 +116,14 @@ const Simulation = () => {
         category: testSimulation.category,
         number: result.length,
         result: result,
+        totalTime: "20:00",
       };
       try {
         const { data } = await instance.post(`/mockInterview/saveResults`, req);
 
         console.log(data);
         alert("모의면접의 결과가 정상적으로 저장되었습니다.");
-        navigate("/mysimulation/");
+        navigate(`/mysimulation/${data.sequence}`);
       } catch (e) {
         console.log(e);
       }
@@ -123,6 +131,10 @@ const Simulation = () => {
   };
   useEffect(() => {
     window.speechSynthesis.cancel();
+  }, []);
+
+  useEffect(() => {
+    getMedia();
   }, []);
   return (
     <>
@@ -155,7 +167,7 @@ const Simulation = () => {
         </FlexCol>
       </FlexCol>
       <FlexCol>
-        {blob && (
+        {blob ? (
           <video
             src={URL.createObjectURL(blob)}
             controls
@@ -163,6 +175,8 @@ const Simulation = () => {
             ref={refVideo}
             style={{ width: "800px" }}
           ></video>
+        ) : (
+          <video ref={myVideoRef} autoPlay muted />
         )}
         <button onClick={handleRecording}>시작</button>
         <button onClick={handleStop}>멈춤</button>

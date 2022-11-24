@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FlexRow, Text } from "../../elements/elements";
+import { instance } from "../../recoil/instance";
 import Post from "./Post";
 
 const MySimulation = () => {
   const navigate = useNavigate();
+  const init = [
+    {
+      category: "",
+      createdAt: "",
+      number: 0,
+      sequence: 0,
+      totalTime: "",
+    },
+  ];
+
+  const [mySimulations, setMySimulations] = useState(init);
+  console.log(mySimulations);
+
+  const getMySimulations = async () => {
+    try {
+      const { data } = await instance.get("/mockInterview/getResults");
+      console.log(data);
+      setMySimulations(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const Posts = [
     {
-      postId: "1",
+      sequence: "1",
       createdAt:
         "Tue Nov 15 2022 16:02:30 GMT+0000 (Coordinated Universal Time)",
       category: "react",
@@ -16,7 +39,7 @@ const MySimulation = () => {
       totalTime: "40:20",
     },
     {
-      postId: "2",
+      sequence: "2",
       createdAt:
         "Tue Nov 13 2022 16:02:30 GMT+0000 (Coordinated Universal Time)",
       category: "react",
@@ -24,7 +47,7 @@ const MySimulation = () => {
       totalTime: "12:08",
     },
     {
-      postId: "3",
+      sequence: "3",
       createdAt:
         "Tue Nov 1 2022 16:02:30 GMT+0000 (Coordinated Universal Time)",
       category: "node",
@@ -32,7 +55,7 @@ const MySimulation = () => {
       totalTime: "21:19",
     },
     {
-      postId: "4",
+      sequence: "4",
       createdAt:
         "Tue Oct 25 2022 16:02:30 GMT+0000 (Coordinated Universal Time)",
       category: "node",
@@ -40,17 +63,19 @@ const MySimulation = () => {
       totalTime: "42:05",
     },
   ];
-
+  useEffect(() => {
+    getMySimulations();
+  }, []);
   return (
     <Ctn>
       <TitleBar>나의 모의면접 현황</TitleBar>
       <FlexRow style={{ flexWrap: "wrap" }} gap="1.7%">
-        {Posts.map((post) => (
+        {mySimulations.map((post) => (
           <LinkBtn
-            key={post.postId}
-            onClick={() => navigate(`/mysimulation/${post.postId}`)}
+            key={post.sequence}
+            onClick={() => navigate(`/mysimulation/${post.sequence}`)}
           >
-            <Post key={post.postId} post={post} />
+            <Post key={post.sequence} post={post} />
           </LinkBtn>
         ))}
       </FlexRow>

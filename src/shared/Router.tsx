@@ -14,6 +14,7 @@ import Stopwatch from "../components/stopwatch/Stopwatch";
 import MyPage from "../pages/MyPage";
 import MeetingTest from "../components/meeting/MeetingTest";
 import MySimulationPage from "../pages/MySimulationPage";
+import MySimulationDetail from "../components/mySimulation/MySimulationDetail";
 
 
 const Router = () => {
@@ -35,6 +36,10 @@ const Router = () => {
           <Route path="/meeting2/:roomName" element={<MeetingTest />} />
           <Route path="/simulation/" element={<SimulationPage />} />
           <Route path="/mysimulation" element={<MySimulationPage />} />
+          <Route
+            path="/mysimulation/:postId"
+            element={<MySimulationDetail />}
+          />
           <Route path="/stopwatch" element={<Stopwatch />} />
         </Routes>
       </BrowserRouter>

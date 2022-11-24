@@ -5,8 +5,11 @@ import { HiOutlineChevronUpDown } from "react-icons/hi2";
 import { instance } from "../../recoil/instance";
 import { useSetRecoilState } from "recoil";
 import { isSimulationState } from "../../recoil/atoms/atoms";
+import axios from "axios";
 
 const SimulationSetting = () => {
+  const SERVER_URL = "https://dgbnb.shop";
+
   const myVideoRef = useRef<HTMLVideoElement>(null);
   const [number, setNumber] = useState("");
   const [category, setCategory] = useState("");
@@ -53,17 +56,17 @@ const SimulationSetting = () => {
       return alert("카테고리 또는 문항 수를 입력하세요.");
     }
 
-    const payload = {
+    const config = {
       category: category,
       number: number,
     };
-    console.log(payload);
+    console.log(config);
     setSimulation(true);
 
     if (window.confirm("모의면접을 시작하시겠습니까?")) {
       try {
         // url 바꿔야 함
-        const { data } = await instance.post(`/url`, payload);
+        const data = await instance.post(`/mockInterview`, config);
         console.log(data);
       } catch (e) {
         console.log(e);

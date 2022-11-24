@@ -51,7 +51,7 @@ const Post = ({ post }: IPost) => {
 };
 
 const PostCtn = styled.div`
-  width: 32.2%;
+  width: 100%;
   height: auto;
   padding: 20px;
   margin-bottom: 20px;

@@ -121,7 +121,8 @@ const Ctn = styled.div`
   position: fixed;
   width: 100%;
   background-color: white;
-  box-shadow: 0px 2px 8px -2px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0px 2px 8px -2px rgba(0, 0, 0, 0.1); */
+  border-bottom: 1px solid ${(props) => props.theme.__lineGray};
   z-index: 2;
   /* border: 1px solid red; */
 `;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FlexRow } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
-import { GiHamburgerMenu } from "react-icons/gi";
 
 const UserState = () => {
   const init = {
@@ -31,8 +30,6 @@ const UserState = () => {
     <>
       <FlexRow>
         <Img src={userLoginData?.profileImg} />
-        <GiHamburgerMenu size={30} />
-        <HamburgerMenu />
       </FlexRow>
     </>
   );
@@ -42,7 +39,6 @@ const Img = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 20px;
 `;
 const HamburgerMenu = styled.div``;
 

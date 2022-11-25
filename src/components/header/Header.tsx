@@ -6,12 +6,15 @@ import { FlexCol, FlexRow, Text } from "../../elements/elements";
 import LogoItem from "../../elements/LogoItem";
 import { instance } from "../../recoil/instance";
 import UserState from "./UserState";
-// import logo from "img/logo.png";
+import { GiHamburgerMenu } from "react-icons/gi";
+import HamburgerMenu from "./HamburgerMenu";
 
 const Header = () => {
-  const [loginUser, setLoginUser] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   const [reqLogin, setReqLogin] = useState(false);
-  console.log(loginUser);
+
+  const [isClick, setIsClick] = useState(false);
+  console.log(isLogin);
   const preRefreshToken = sessionStorage.getItem("refreshtoken");
   const preAccessToken = sessionStorage.getItem("accesstoken");
   const navigate = useNavigate();
@@ -25,7 +28,7 @@ const Header = () => {
       // if (preAccessToken) {
       const { data } = await instance.get(`/members/me`);
       // setReqLogin(false);
-      setLoginUser(true);
+      setIsLogin(true);
       // setLoginUserData([data]);
       console.log(data);
 
@@ -43,10 +46,10 @@ const Header = () => {
             },
           });
           const newAccessToken = data.data.accessToken;
-          console.log(data);
-          console.log(data.data);
-          console.log(data.data.accessToken);
-          console.log(newAccessToken);
+          // console.log(data);
+          // console.log(data.data);
+          // console.log(data.data.accessToken);
+          // console.log(newAccessToken);
 
           return sessionStorage.setItem("accessToken", newAccessToken);
         } catch (e) {
@@ -59,7 +62,7 @@ const Header = () => {
     }
   };
   useEffect(() => {
-    console.log(reqLogin);
+    console.log("reqLogin: ", reqLogin);
     if (reqLogin) {
       alert("로그인 세션이 만료되었습니다. 로그인 페이지로 이동합니다.");
       navigate("/login");
@@ -91,16 +94,26 @@ const Header = () => {
               </Text>
             </FlexCol>
           </FlexRow>
-          {loginUser ? (
-            <UserState />
-          ) : (
-            <FlexRow gap="10px">
-              <Btn onClick={() => navigate("/login")}>로그인 창으로 이동</Btn>
-              <Btn onClick={() => navigate("/signup")}>
-                회원가입 창으로 이동
-              </Btn>
-            </FlexRow>
-          )}
+          <FlexRow gap="10px">
+            {isLogin ? (
+              <UserState />
+            ) : (
+              <>
+                <Btn onClick={() => navigate("/login")}>Log in</Btn>
+                <Btn onClick={() => navigate("/signup")}>Sign up</Btn>
+              </>
+            )}
+            <Curser>
+              <GiHamburgerMenu onClick={() => setIsClick(!isClick)} size={30} />
+            </Curser>
+            {isClick && (
+              <HamburgerMenu
+                setIsClick={setIsClick}
+                isLogin={isLogin}
+                setIsLogin={setIsLogin}
+              />
+            )}
+          </FlexRow>
         </FlexRow>
       </Wrap>
     </Ctn>
@@ -117,6 +130,7 @@ const Ctn = styled.div`
   /* border: 1px solid red; */
 `;
 const Wrap = styled.div`
+  position: relative;
   max-width: 1200px;
   margin: 0 auto;
   padding: 10px 20px;
@@ -152,8 +166,18 @@ const Img = styled.img`
   }
 `;
 const Btn = styled.button`
-  width: 200px;
   margin: 0 auto;
+  background-color: transparent;
+  border: none;
+  font-family: 400;
+`;
+const Curser = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
 `;
 
 export default React.memo(Header);

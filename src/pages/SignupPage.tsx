@@ -4,6 +4,8 @@ import { instance, UserApi } from "../recoil/instance";
 import styled from "styled-components";
 import { FlexCol } from "../elements/elements";
 import { TonalitySharp } from "@material-ui/icons";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface IForm {
   memberEmail: string;
@@ -19,6 +21,8 @@ interface IForm {
 // console.log(ACCESS_TOKEN);
 
 const SignupPage = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -57,6 +61,14 @@ const SignupPage = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (sessionStorage.getItem("accessToken")) {
+      alert("이미 로그인 되어있습니다.");
+      navigate(-1);
+    }
+  }, []);
+
   console.log(errors);
   return (
     <>

@@ -3,6 +3,8 @@ import axios from "axios";
 import { instance } from "../../recoil/instance";
 import styled from "styled-components";
 import { FlexCol } from "../../elements/elements";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 interface IForm {
   memberEmail: string;
@@ -14,6 +16,8 @@ export const ACCESS_TOKEN = sessionStorage.getItem("accessToken");
 export const REFRESH_TOKEN = sessionStorage.getItem("refreshToken");
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -28,12 +32,14 @@ const Login = () => {
         memberEmail: submitData.memberEmail,
         password: submitData.password,
       };
-      console.log(req);
+      // console.log(req);
       const { data } = await instance.post(`/members/login`, req);
-      console.log(data.data.accessToken);
-      console.log(data.data.refreshToken);
+      // console.log(data.data.accessToken);
+      // console.log(data.data.refreshToken);
       sessionStorage.setItem("accessToken", data.data.accessToken);
       sessionStorage.setItem("refreshToken", data.data.refreshToken);
+      alert("로그인이 완료되었습니다. 메인 페이지로 이동합니다.");
+      navigate("/");
       return data;
     } catch (error: any) {
       console.log(error.message);
@@ -41,95 +47,15 @@ const Login = () => {
     }
   };
 
-  const onTrans = async () => {
-    const preRefreshToken = sessionStorage.getItem("refreshToken");
-    const preAccessToken = sessionStorage.getItem("accessToken");
-    try {
-      // const req = {
-      //   memberEmail: submitData.memberEmail,
-      //   password: submitData.password,
-      // };
-
-      // const { data } = await instance.get(`/members/me`);
-
-      const { data } = await axios.get(`https://dgbnb.shop/members/me`, {
-        headers: {
-          Authorization: preAccessToken,
-          // refresh: preRefreshToken,
-        },
-      });
-      console.log(data);
-
-      // 통신상태: 200, 401, 403, 500, ...
-      // ex
-      // 1) 액세스토큰이 만료 되었을 때.(에러. 400번대로 예상)
-      // 2) 액세스토큰이 만료되지 않았을 때. (에러 200, 300)
-      // 3) 통신이 되지 않았을 때.(400)
-      // 4) 서버가 닫혔을 때.
-      // 5) 유효하지 않은 액세스토큰일때.
-      // ...
-      // /members/me
-      // sessionStorage.setItem("accesstoken", data.data.accessToken);
-      // sessionStorage.setItem("refreshtoken", data.data.refreshToken);
-      return data;
-    } catch (error: any) {
-      const errorCode = error.response.data.ok;
-      console.log(errorCode);
-
-      if (errorCode === 6) {
-        // refresh token을 이용하여 access token 재발급
-        try {
-          console.log(preAccessToken);
-          console.log(preRefreshToken);
-          const { data } = await axios.post(
-            `https://dgbnb.shop/members/refresh`,
-            0,
-            {
-              headers: {
-                Authorization: preAccessToken,
-                refresh: preRefreshToken,
-              },
-            }
-          );
-          console.log(data);
-          return data;
-        } catch (error: any) {
-          const errorCode = error.response.data.ok;
-          console.log(error);
-          console.log(errorCode, error.message);
-        }
-
-        // .then(async (res) => {
-        //   const { access_token, refresh_token } = res.data;
-        //   // 새로 받은 token들 저장
-        //   sessionStorage.setItem(ACCESS_TOKEN, access_token);
-        //   sessionStorage.setItem(REFRESH_TOKEN, refresh_token);
-
-        //   // header 새로운 token으로 재설정
-        //   prevRequest.headers.Authorization = `${access_token}`;
-
-        //   // 실패했던 기존 request 재시도
-        //   return await axios(prevRequest);
-        // })
-        // .catch((e) => {
-        //   /*
-        //            token 재발행 또는 기존 요청 재시도 실패 시
-        //            기존 token 제거
-        //            */
-        //   sessionStorage.removeItem(ACCESS_TOKEN);
-        //   sessionStorage.removeItem(REFRESH_TOKEN);
-
-        //   return new Error(e);
-        // });
-      } else {
-        return alert("서버와의 통신에 문제가 있습니다.");
-      }
-
-      // if (error.)
-      return error.message;
-    }
-  };
   console.log(errors);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("accessToken")) {
+      alert("이미 로그인 되어있습니다.");
+      navigate(-1);
+    }
+  }, []);
+
   return (
     <>
       <h1>로그인 페이지</h1>
@@ -168,7 +94,6 @@ const Login = () => {
           {/* <span>{errors?.extraError?.message}</span> */}
         </FlexCol>
       </form>
-      <button onClick={() => onTrans()}>통신버튼</button>
     </>
   );
 };

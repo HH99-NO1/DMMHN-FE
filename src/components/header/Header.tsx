@@ -100,6 +100,7 @@ const Ctn = styled.div`
   z-index: 2;
   border-bottom: 1px solid lightgray;
 `;
+
 const Wrap = styled.div`
   max-width: 1200px;
   margin: 0 auto;

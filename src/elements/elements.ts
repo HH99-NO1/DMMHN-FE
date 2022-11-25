@@ -58,7 +58,7 @@ export const Liner = styled.div`
 // Gap element 시작
 export const Gap = styled.div`
   width: 100%;
-  border: 2px solid blue;
+  border-bottom: 1px solid lightgray;
   height: 100px;
 `;
 // Gap element 끝

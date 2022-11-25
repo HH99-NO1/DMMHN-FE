@@ -71,13 +71,10 @@ const Header = () => {
     <Ctn>
       <Wrap>
         <FlexRow gap="10px" justifyContent="space-between">
-          <FlexRow gap="10px">
+          <FlexRow gap="30px">
             <Img src="https://user-images.githubusercontent.com/77138259/201538983-41eebf77-47ad-4db0-b489-c119066daf20.png" />
             <FlexCol alignItem="left" gap="5px">
               <Text fontWeight="600">떨면뭐하니</Text>
-              <Text fontSize="small">
-                떨리는 면접, 우리만 아는 방법이 있다!
-              </Text>
             </FlexCol>
           </FlexRow>
           {loginUser ? (
@@ -101,14 +98,12 @@ const Ctn = styled.div`
   width: 100%;
   background-color: white;
   z-index: 2;
-  border: 1px solid red;
+  border-bottom: 1px solid lightgray;
 `;
 const Wrap = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 10px;
-
-  border: 1px solid green;
 `;
 const Img = styled.img`
   width: 30px;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FlexRow } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
-import { GiHamburgerMenu } from "react-icons/gi";
 
 const UserState = () => {
   const init = {
@@ -18,6 +17,7 @@ const UserState = () => {
     try {
       const { data } = await instance.get(`/members/me`);
       setUserLoginData(data);
+      return data;
     } catch (e) {
       console.log(e);
     }
@@ -30,9 +30,7 @@ const UserState = () => {
   return (
     <>
       <FlexRow>
-        <Img src={userLoginData?.profileImg} />
-        <GiHamburgerMenu size={30} />
-        <HamburgerMenu />
+        <Img src={userLoginData.profileImg} />
       </FlexRow>
     </>
   );
@@ -42,7 +40,6 @@ const Img = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 20px;
 `;
 const HamburgerMenu = styled.div``;
 

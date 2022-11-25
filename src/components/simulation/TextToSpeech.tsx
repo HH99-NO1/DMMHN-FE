@@ -1,7 +1,7 @@
 const pitch = 1;
 const rate = 0.8;
 
-async function populateVoiceList(synth: SpeechSynthesis) {
+const populateVoiceList = async (synth: SpeechSynthesis) => {
   try {
     const voices = await synth.getVoices().sort(function (a, b) {
       const aname = a.name.toUpperCase();
@@ -16,7 +16,7 @@ async function populateVoiceList(synth: SpeechSynthesis) {
   } catch (error) {
     throw new Error("Failure retrieving voices");
   }
-}
+};
 
 export async function speak(textToRead: string, synth: SpeechSynthesis) {
   if (speechSynthesis.onvoiceschanged !== undefined) {

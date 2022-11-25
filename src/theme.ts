@@ -10,7 +10,9 @@ export const lightTheme: DefaultTheme = {
   bgColor: "#F9F9F9",
   textColor: "black",
   accentColor: "#00a8ff",
+  __lineGray: "#dfdfdf",
   __grayLight: "#ebebeb",
   __grayMedium: "#B0B0B0",
   __grayDark: "#717171",
+  __greenMidium: "#025729",
 };

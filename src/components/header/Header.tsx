@@ -1,20 +1,18 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Text } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
 import UserState from "./UserState";
+// import logo from "img/logo.png";
 
 const Header = () => {
   const [loginUser, setLoginUser] = useState(false);
   const [reqLogin, setReqLogin] = useState(false);
   console.log(loginUser);
-  const preRefreshToken = sessionStorage.getItem("refreshToken");
-  const preAccessToken = sessionStorage.getItem("accessToken");
-  console.log(preRefreshToken);
-  console.log(preAccessToken);
-
+  const preRefreshToken = sessionStorage.getItem("refreshtoken");
+  const preAccessToken = sessionStorage.getItem("accesstoken");
   const navigate = useNavigate();
 
   // console.log("Authorization: " + preAccessToken);
@@ -25,13 +23,18 @@ const Header = () => {
     try {
       // if (preAccessToken) {
       const { data } = await instance.get(`/members/me`);
+      // setReqLogin(false);
       setLoginUser(true);
-      return console.log(data);
+      // setLoginUserData([data]);
+      console.log(data);
+
+      return;
     } catch (error: any) {
       const errorCode = error.response;
       console.log(errorCode);
       if (errorCode === undefined) {
         try {
+          console.log("refresh를 요구했다.");
           const { data } = await instance.post(`/members/refresh`, 0, {
             headers: {
               Authorization: preAccessToken,
@@ -61,9 +64,11 @@ const Header = () => {
       navigate("/login");
       setReqLogin(false);
     }
-  }, []);
+  }, [reqLogin]);
   useEffect(() => {
-    checkLogin();
+    preAccessToken && checkLogin();
+    // console.log(userLoginData);
+    // checkLogin();
     // console.log(checkLogin());
   }, [checkLogin()]);
 
@@ -97,6 +102,8 @@ const Ctn = styled.div`
   position: fixed;
   width: 100%;
   background-color: white;
+  /* box-shadow: 0px 2px 8px -2px rgba(0, 0, 0, 0.1); */
+  border-bottom: 1px solid ${(props) => props.theme.__lineGray};
   z-index: 2;
   border-bottom: 1px solid lightgray;
 `;
@@ -106,14 +113,21 @@ const Wrap = styled.div`
   padding: 10px;
 `;
 const Img = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   scale: 1;
   object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all, 0.3s;
+  :hover {
+    box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.3);
+  }
 `;
 const Btn = styled.button`
   width: 200px;
   margin: 0 auto;
 `;
 
-export default Header;
+export default React.memo(Header);

@@ -22,7 +22,6 @@ const Router = () => {
     <>
       <BrowserRouter>
         <Header />
-        <Gap />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />

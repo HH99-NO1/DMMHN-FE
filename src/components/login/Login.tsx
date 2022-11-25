@@ -188,6 +188,7 @@ const InputBox = styled.div`
   flex-direction: column;
   min-height: 50px;
   min-width: 300px;
+  margin-top: 50px;
 `;
 const ErrorMsg = styled.span`
   position: absolute;

@@ -1,6 +1,6 @@
 import Layout from "../components/home/Layout";
 import styled from "styled-components";
-import { FlexRow, FlexCol } from "../elements/elements";
+import { FlexRow, FlexCol, Text, Gap } from "../elements/elements";
 import { instance } from "../recoil/instance";
 import { useEffect, useState } from "react";
 
@@ -9,6 +9,7 @@ interface IUsers {
   _id: string;
   updatedAt: string;
   createdAt: string;
+  profileImg: string;
 }
 
 const MyPage = () => {
@@ -18,43 +19,38 @@ const MyPage = () => {
       return setUsers(response.data);
     });
   }, []);
-  console.log(users?.memberEmail);
+  console.log(users?.profileImg);
   return (
     <>
       <Layout>
         <Container>
-          <Tap>
-            <TapMenu>
-              <li>모의 면접 시작</li>
-              <li>모의 면접 현황</li>
-              <li>프로필</li>
-            </TapMenu>
-            <Content>
-              <Indicate>
-                <span>개인정보</span>
-              </Indicate>
-              <FlexCol gap="20px" alignItem="left">
-                <Rows>
-                  <Wrap>
-                    <Photo></Photo>
-                  </Wrap>
-                  <Row>{users?.memberEmail}</Row>
-                </Rows>
-                <Rows>
-                  <Row>연결된 소셜 계정</Row>
-                  <Row>{users?.memberEmail}</Row>
-                </Rows>
-                <Rows>
-                  <Row>연락처</Row>
-                  <Row>{users?.memberEmail}</Row>
-                </Rows>
-                <Rows>
-                  <Row>스택</Row>
-                  <Row>{users?.createdAt}</Row>
-                </Rows>
-              </FlexCol>
-            </Content>
-          </Tap>
+          <Profile>
+            <FlexRow gap="30px">
+              <img src={users?.profileImg}></img>
+              <Text>{users?.memberEmail}</Text>
+            </FlexRow>
+          </Profile>
+          <SubTitle>개인정보</SubTitle>
+          <Inform>
+            <FlexCol gap="30px" alignItem="left">
+              <Rows>
+                <Row>연결된 소셜 계정</Row>
+                <Row>{users?.memberEmail}</Row>
+              </Rows>
+              <Rows>
+                <Row>전공</Row>
+                <Row>{users?.memberEmail}</Row>
+              </Rows>
+              <Rows>
+                <Row>연락처</Row>
+                <Row>{users?.memberEmail}</Row>
+              </Rows>
+              <Rows>
+                <Row>스택</Row>
+                <Row>{users?.createdAt}</Row>
+              </Rows>
+            </FlexCol>
+          </Inform>
         </Container>
       </Layout>
     </>
@@ -62,59 +58,44 @@ const MyPage = () => {
 };
 export default MyPage;
 
-const Container = styled.div``;
-
-const Tap = styled.div`
-  height: 50px;
-  border: 3px solid lightgrey;
-  border-radius: 50px;
+const Container = styled.div`
+  width: 1290px;
+  margin: 20px auto;
 `;
 
-const TapMenu = styled.ul`
+const Profile = styled.div`
   display: flex;
-  height: 50px;
-  justify-content: space-around;
   align-items: center;
-  cursor: pointer;
-`;
-
-const Indicate = styled.div`
-  margin: 25px auto;
-  width: 1000px;
-  height: 50px;
-  background-color: lightgray;
-  border-radius: 50px;
-  line-height: 50px;
-  span {
-    padding-left: 30px;
+  img {
+    width: 100px;
+    height: 100px;
   }
 `;
 
-const Content = styled.div`
-  margin: 0 auto;
-  width: 1000px;
-`;
-
-const Photo = styled.img`
-  background-color: aliceblue;
-  width: 100px;
-  height: 100px;
-  border-radius: 100%;
+const Inform = styled.div`
+  width: 100%;
+  height: 500px;
+  background-color: white;
 `;
 
 const Rows = styled.div`
-  width: 1000px;
   display: flex;
   align-items: center;
   flex-basis: 100px;
-  gap: 250px;
-  padding-left: 30px;
+  gap: 150px;
+  padding-left: 50px;
 `;
 
 const Row = styled.div`
   width: 200px;
 `;
 
-const Wrap = styled.div`
-  width: 200px;
+const SubTitle = styled.div`
+  margin: 40px 0 40px 0;
+  font-size: 20px;
+  font-weight: 600;
 `;
+
+// const Container = styled.div``;
+
+// const Container = styled.div``;

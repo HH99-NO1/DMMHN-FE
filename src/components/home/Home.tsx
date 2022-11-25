@@ -13,6 +13,7 @@ const Home = () => {
         <Btn onClick={() => navigate("/meeting")}>면접 룸 입장</Btn>
         <Btn onClick={() => navigate("/simulation")}>모의면접 입장</Btn>
         <Btn onClick={() => navigate("/mysimulation")}>나의 모의면접 현황</Btn>
+        <Btn onClick={() => navigate("/mypage")}>마이페이지 입장</Btn>
         <Img
           src="https://user-images.githubusercontent.com/77138259/202983306-94a7eaba-80d7-4668-a7cd-cee962f7733a.png"
           alt="mainImg1"

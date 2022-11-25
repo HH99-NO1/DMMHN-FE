@@ -80,9 +80,6 @@ const Header = () => {
             <Img onClick={() => navigate("/")} src="img/logo.png" />
             <FlexCol alignItem="left" gap="5px">
               <Text fontWeight="600">떨면뭐하니</Text>
-              <Text fontSize="small">
-                떨리는 면접, 우리만 아는 방법이 있다!
-              </Text>
             </FlexCol>
           </FlexRow>
           {loginUser ? (

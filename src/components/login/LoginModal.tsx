@@ -125,8 +125,8 @@ const LoginModal = () => {
                       </ErrorMsg>
                     ) : (
                       <>
-                        <input type="checkbox" />
-                        로그인 상태 유지
+                        <input id="login_is" type="checkbox" />
+                        <label htmlFor="login_is">로그인 상태 유지</label>
                       </>
                     )}
                   </CheckBox>

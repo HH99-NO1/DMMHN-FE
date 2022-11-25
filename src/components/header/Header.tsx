@@ -76,13 +76,10 @@ const Header = () => {
     <Ctn>
       <Wrap>
         <FlexRow gap="10px" justifyContent="space-between">
-          <FlexRow gap="10px">
-            <Img onClick={() => navigate("/")} src="img/logo.png" />
+          <FlexRow gap="30px">
+            <Img src="https://user-images.githubusercontent.com/77138259/201538983-41eebf77-47ad-4db0-b489-c119066daf20.png" />
             <FlexCol alignItem="left" gap="5px">
               <Text fontWeight="600">떨면뭐하니</Text>
-              <Text fontSize="small">
-                떨리는 면접, 우리만 아는 방법이 있다!
-              </Text>
             </FlexCol>
           </FlexRow>
           {loginUser ? (
@@ -108,13 +105,12 @@ const Ctn = styled.div`
   /* box-shadow: 0px 2px 8px -2px rgba(0, 0, 0, 0.1); */
   border-bottom: 1px solid ${(props) => props.theme.__lineGray};
   z-index: 2;
-  /* border: 1px solid red; */
+  border-bottom: 1px solid lightgray;
 `;
 const Wrap = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 10px 20px;
-  /* border: 1px solid green; */
+  padding: 10px;
 `;
 const Img = styled.img`
   width: 40px;

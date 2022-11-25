@@ -63,8 +63,8 @@ interface IGap {
 }
 export const Gap = styled.div<IGap>`
   width: 100%;
-  /* border: 2px solid blue; */
-  height: ${(props) => (props.gap === undefined ? "100px" : props.gap)};
+  border-bottom: 1px solid lightgray;
+  height: 100px;
 `;
 // Gap element 끝
 // --------------------------

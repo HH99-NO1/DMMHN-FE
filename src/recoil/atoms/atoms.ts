@@ -1,5 +1,39 @@
 import { atom, selector } from "recoil";
 
+interface ITest {
+  category: string;
+  questionArr: [];
+}
+
+export const test = atom<ITest[]>({
+  key: "test",
+  default: [],
+});
+
+export const isSimulationState = atom({
+  key: "isSimulation",
+  default: false,
+});
+
+// interface ILoginUser {
+//   createdAt: string;
+//   memberEmail: string;
+//   updatedAt: string;
+//   _id: string;
+// }
+
+// export const loginUserState = atom<ILoginUser[]>({
+//   key: "loginUser",
+//   default: [
+//     {
+//       createdAt: "",
+//       memberEmail: "",
+//       updatedAt: "",
+//       _id: "",
+//     },
+//   ],
+// });
+
 export interface IStream {
   videoState: string;
   audioState: string;
@@ -10,9 +44,9 @@ export const StreamState = atom<IStream[]>({
   default: [],
 });
 
-// export interface ILocalVideo {
-// 	onChange: boolean;
-// }
+export interface ILocalVideo {
+  onChange: boolean;
+}
 
 export const LocalVideoState = atom({
   key: "LocalVideo",

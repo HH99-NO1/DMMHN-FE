@@ -18,15 +18,6 @@ const Home = () => {
 
   return (
     <Ctn>
-      {/* <Wrap>
-        <Btn onClick={() => navigate("/login")}>로그인 창으로 이동</Btn>
-        <Btn onClick={() => navigate("/signup")}>회원가입 창으로 이동</Btn>
-        <Btn onClick={() => navigate("/interview")}>면접 관리 페이지 입장</Btn>
-        <Btn onClick={() => navigate("/meeting")}>면접 룸 입장</Btn>
-        <Btn onClick={() => navigate("/simulation")}>모의면접 입장</Btn>
-        <Btn onClick={() => navigate("/mysimulation")}>나의 모의면접 현황</Btn>
-        <Btn onClick={() => navigate("/mypage")}>마이페이지 입장</Btn>
-      </Wrap> */}
       <MainCenter>
         <MainText>
           어떤 면접이든 연습을 통해 대비해보세요
@@ -76,14 +67,6 @@ const Home = () => {
             alt="mainImg2"
           />
         </SwiperSlide>
-        {/* <div>
-          <button ref={PrevRef}>
-            <img src="" alt="prevArrow" />
-          </button>
-          <button ref={NextRef}>
-            <img src="" alt="nextArrow" />
-          </button>
-        </div> */}
       </StyledSwiper>
     </Ctn>
   );
@@ -93,16 +76,10 @@ const Ctn = styled.div`
   margin: 10px auto 0 auto;
 `;
 
-const Wrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  height: 100%;
-`;
-
 const Img = styled.img`
   max-width: 500px;
   max-height: 500px;
+  width: 100%;
   margin: 0 auto;
 `;
 
@@ -134,11 +111,11 @@ const SubText = styled.p`
   line-height: 32.69px;
 `;
 
-const ArrowAll = styled.div`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 22;
-`;
+// const ArrowAll = styled.div`
+//   position: absolute;
+//   top: 50%;
+//   transform: translateY(-50%);
+//   z-index: 22;
+// `;
 
 export default Home;

@@ -1,14 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import { isLoginState, onLoginState } from "../../recoil/atoms/atoms";
 
 interface IHamburgerMenu {
-  setIsClick: any;
-  isLogin: boolean;
-  setIsLogin: any;
+  setIsClick: (state: boolean) => void;
 }
 
-const HamburgerMenu = ({ setIsClick, isLogin, setIsLogin }: IHamburgerMenu) => {
+const HamburgerMenu = ({ setIsClick }: IHamburgerMenu) => {
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+
+  const setOnLogin = useSetRecoilState(onLoginState);
   const navigate = useNavigate();
   console.log(isLogin);
   return (
@@ -16,7 +19,7 @@ const HamburgerMenu = ({ setIsClick, isLogin, setIsLogin }: IHamburgerMenu) => {
       {!isLogin ? (
         // 로그인이 되어있지 않을 때
         <>
-          <MenuBox onClick={() => navigate("/login")}>Log in</MenuBox>
+          <MenuBox onClick={() => setOnLogin(true)}>Log in</MenuBox>
           <MenuBox onClick={() => navigate("/signup")}>Sign up</MenuBox>
           <MenuLine />
           <MenuBox onClick={() => navigate("/simulation")}>모의면접</MenuBox>

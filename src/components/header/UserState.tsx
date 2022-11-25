@@ -17,6 +17,7 @@ const UserState = () => {
     try {
       const { data } = await instance.get(`/members/me`);
       setUserLoginData(data);
+      return data;
     } catch (e) {
       console.log(e);
     }
@@ -29,7 +30,7 @@ const UserState = () => {
   return (
     <>
       <FlexRow>
-        <Img src={userLoginData?.profileImg} />
+        <Img src={userLoginData.profileImg} />
       </FlexRow>
     </>
   );

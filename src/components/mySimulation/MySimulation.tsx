@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { FlexRow, Text } from "../../elements/elements";
+import { FlexRow } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
 import Post from "./Post";
 
@@ -29,40 +29,7 @@ const MySimulation = () => {
       console.log(e);
     }
   };
-  const Posts = [
-    {
-      sequence: "1",
-      createdAt:
-        "Tue Nov 15 2022 16:02:30 GMT+0000 (Coordinated Universal Time)",
-      category: "react",
-      number: "5",
-      totalTime: "40:20",
-    },
-    {
-      sequence: "2",
-      createdAt:
-        "Tue Nov 13 2022 16:02:30 GMT+0000 (Coordinated Universal Time)",
-      category: "react",
-      number: "5",
-      totalTime: "12:08",
-    },
-    {
-      sequence: "3",
-      createdAt:
-        "Tue Nov 1 2022 16:02:30 GMT+0000 (Coordinated Universal Time)",
-      category: "node",
-      number: "10",
-      totalTime: "21:19",
-    },
-    {
-      sequence: "4",
-      createdAt:
-        "Tue Oct 25 2022 16:02:30 GMT+0000 (Coordinated Universal Time)",
-      category: "node",
-      number: "20",
-      totalTime: "42:05",
-    },
-  ];
+
   useEffect(() => {
     getMySimulations();
   }, []);

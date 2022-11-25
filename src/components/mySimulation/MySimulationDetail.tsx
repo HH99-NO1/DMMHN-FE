@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Liner } from "../../elements/elements";
@@ -34,38 +34,10 @@ const MySimulationDetail = () => {
     }
   };
 
-  const post = {
-    sequence: "1",
-    createdAt: "Tue Nov 15 2022 16:02:30 GMT+0000 (Coordinated Universal Time)",
-    category: "react",
-    number: "5",
-    totalTime: "40:20",
-    array: [
-      {
-        question: "CSR , SSR의 차이와 SEO의 차이점에 대해서 설명하세요.",
-        time: "08:00",
-      },
-      {
-        question: "아토믹 디자인에서 위치를 어떻게 잡았나요?",
-        time: "05:00",
-      },
-      {
-        question: "자바스크립트 엔진과 동작 원리에 대해 서술하세요.",
-        time: "05:10",
-      },
-      {
-        question: "var / let / const 의 차이점은 무엇인가요?",
-        time: "12:10",
-      },
-      {
-        question: "얕은 복사와 깊은 복사의 각 개념과 구현 방법을 설명하세요.",
-        time: "10:00",
-      },
-    ],
-  };
   useEffect(() => {
     getMySimulation();
   }, []);
+
   const dateChange = (date: string) => {
     const result = new Date(date).toLocaleString("ko-KR", {
       year: "numeric",

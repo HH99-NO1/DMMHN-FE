@@ -1,9 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Home = () => {
-  const navigate = useNavigate();
-
   return (
     <Ctn>
       <Wrap>

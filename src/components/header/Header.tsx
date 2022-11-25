@@ -8,15 +8,20 @@ import { instance } from "../../recoil/instance";
 import UserState from "./UserState";
 import { GiHamburgerMenu } from "react-icons/gi";
 import HamburgerMenu from "./HamburgerMenu";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { isLoginState, onLoginState } from "../../recoil/atoms/atoms";
 
 const Header = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const setOnLogin = useSetRecoilState(onLoginState);
+
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+
   const [reqLogin, setReqLogin] = useState(false);
 
   const [isClick, setIsClick] = useState(false);
   console.log(isLogin);
-  const preRefreshToken = sessionStorage.getItem("refreshtoken");
-  const preAccessToken = sessionStorage.getItem("accesstoken");
+  const preRefreshToken = sessionStorage.getItem("refreshToken");
+  const preAccessToken = sessionStorage.getItem("accessToken");
   const navigate = useNavigate();
 
   // console.log("Authorization: " + preAccessToken);
@@ -24,51 +29,55 @@ const Header = () => {
 
   const checkLogin = async () => {
     // console.log("??");
-    try {
-      // if (preAccessToken) {
-      const { data } = await instance.get(`/members/me`);
-      // setReqLogin(false);
-      setIsLogin(true);
-      // setLoginUserData([data]);
-      console.log(data);
+    if (preAccessToken) {
+      try {
+        // if (preAccessToken) {
+        const { data } = await instance.get(`/members/me`);
+        // setReqLogin(false);
+        setIsLogin(true);
+        // setLoginUserData([data]);
+        console.log(data);
 
-      return;
-    } catch (error: any) {
-      const errorCode = error.response;
-      console.log(errorCode);
-      if (errorCode === undefined) {
-        try {
-          console.log("refresh를 요구했다.");
-          const { data } = await instance.post(`/members/refresh`, 0, {
-            headers: {
-              Authorization: preAccessToken,
-              refresh: preRefreshToken,
-            },
-          });
-          const newAccessToken = data.data.accessToken;
-          // console.log(data);
-          // console.log(data.data);
-          // console.log(data.data.accessToken);
-          // console.log(newAccessToken);
+        return;
+      } catch (error: any) {
+        const errorCode = error.response;
+        console.log(errorCode);
+        if (errorCode === undefined) {
+          try {
+            console.log("refresh를 요구했다.");
+            const { data } = await instance.post(`/members/refresh`, 0, {
+              headers: {
+                Authorization: preAccessToken,
+                refresh: preRefreshToken,
+              },
+            });
+            const newAccessToken = data.data.accessToken;
+            // console.log(data);
+            // console.log(data.data);
+            // console.log(data.data.accessToken);
+            // console.log(newAccessToken);
 
-          return sessionStorage.setItem("accessToken", newAccessToken);
-        } catch (e) {
-          setReqLogin(true);
-          console.log(e);
+            return sessionStorage.setItem("accessToken", newAccessToken);
+          } catch (e) {
+            setReqLogin(true);
+            console.log(e);
+          }
         }
+        // setReqLogin(true);
+        console.log(errorCode);
       }
-      // setReqLogin(true);
-      console.log(errorCode);
+    } else {
+      return;
     }
   };
   useEffect(() => {
     console.log("reqLogin: ", reqLogin);
     if (reqLogin) {
-      alert("로그인 세션이 만료되었습니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
+      alert("로그인 세션이 만료되었습니다. 로그인을 해주세요.");
       sessionStorage.removeItem("accessToken");
       sessionStorage.removeItem("refreshToken");
       setReqLogin(false);
+      setOnLogin(true);
     }
   }, []);
   useEffect(() => {
@@ -99,20 +108,14 @@ const Header = () => {
               <UserState />
             ) : (
               <>
-                <Btn onClick={() => navigate("/login")}>Log in</Btn>
+                <Btn onClick={() => setOnLogin(true)}>Log in</Btn>
                 <Btn onClick={() => navigate("/signup")}>Sign up</Btn>
               </>
             )}
             <Curser>
               <GiHamburgerMenu onClick={() => setIsClick(!isClick)} size={30} />
             </Curser>
-            {isClick && (
-              <HamburgerMenu
-                setIsClick={setIsClick}
-                isLogin={isLogin}
-                setIsLogin={setIsLogin}
-              />
-            )}
+            {isClick && <HamburgerMenu setIsClick={setIsClick} />}
           </FlexRow>
         </FlexRow>
       </Wrap>
@@ -170,6 +173,7 @@ const Btn = styled.button`
   background-color: transparent;
   border: none;
   font-family: 400;
+  cursor: pointer;
 `;
 const Curser = styled.div`
   display: flex;

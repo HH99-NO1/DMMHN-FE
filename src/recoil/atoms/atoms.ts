@@ -1,4 +1,4 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
 interface ITest {
   category: string;
@@ -12,6 +12,28 @@ export const test = atom<ITest[]>({
 
 export const isSimulationState = atom({
   key: "isSimulation",
+  default: false,
+});
+
+// 로그인 창을 띄워주기 위한 상태
+export const onLoginState = atom({
+  key: "onLogin",
+  default: false,
+});
+
+// 로그인이 되어있는지 체크하기 위한 상태
+const preAccessToken = sessionStorage.getItem("accessToken");
+const checkDefaultLoginState = preAccessToken ? true : false;
+console.log(checkDefaultLoginState);
+
+export const isLoginState = atom({
+  key: "isLogin",
+  default: checkDefaultLoginState,
+});
+
+// 로그인의 필요 여부를 체크하기 위한 상태
+export const isReqLoginState = atom({
+  key: "isReqLogin",
   default: false,
 });
 

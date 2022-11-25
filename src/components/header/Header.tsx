@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Text } from "../../elements/elements";
+import LogoItem from "../../elements/LogoItem";
 import { instance } from "../../recoil/instance";
 import UserState from "./UserState";
 // import logo from "img/logo.png";
@@ -62,9 +63,11 @@ const Header = () => {
     if (reqLogin) {
       alert("로그인 세션이 만료되었습니다. 로그인 페이지로 이동합니다.");
       navigate("/login");
+      sessionStorage.removeItem("accessToken");
+      sessionStorage.removeItem("refreshToken");
       setReqLogin(false);
     }
-  }, [reqLogin]);
+  }, []);
   useEffect(() => {
     preAccessToken && checkLogin();
     // console.log(userLoginData);
@@ -77,9 +80,15 @@ const Header = () => {
       <Wrap>
         <FlexRow gap="10px" justifyContent="space-between">
           <FlexRow gap="10px">
-            <Img onClick={() => navigate("/")} src="img/logo.png" />
+            <LogoBox onClick={() => navigate("/")}>
+              <LogoItem />
+            </LogoBox>
+            {/* <Img onClick={() => navigate("/")} src="img/logo.png" /> */}
             <FlexCol alignItem="left" gap="5px">
               <Text fontWeight="600">떨면뭐하니</Text>
+              <Text fontSize="small">
+                떨리는 면접, 우리만 아는 방법이 있다!
+              </Text>
             </FlexCol>
           </FlexRow>
           {loginUser ? (
@@ -112,6 +121,22 @@ const Wrap = styled.div`
   margin: 0 auto;
   padding: 10px 20px;
   /* border: 1px solid green; */
+`;
+const LogoBox = styled.div`
+  margin: 0;
+  width: 40px;
+  height: 40px;
+  & > svg {
+    border-radius: 12%;
+    width: 40px;
+    height: 40px;
+    box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.3);
+    transition: all, 0.2s;
+    cursor: pointer;
+  }
+  & > svg:hover {
+    box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.3);
+  }
 `;
 const Img = styled.img`
   width: 40px;

@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "../components/header/Header";
 import HomePage from "../pages/HomePage";
-import LoginPage from "../pages/LoginPage";
 import SignupPage from "../pages/SignupPage";
 import InterviewPage from "../pages/InterviewPage";
 import { Gap } from "../elements/elements";
@@ -15,16 +14,20 @@ import MyPage from "../pages/MyPage";
 import MeetingTest from "../components/meeting/MeetingTest";
 import MySimulationPage from "../pages/MySimulationPage";
 import MySimulationDetail from "../components/mySimulation/MySimulationDetail";
-
+import LoginModal from "../components/login/LoginModal";
+import { onLoginState } from "../recoil/atoms/atoms";
+import { useRecoilValue } from "recoil";
 
 const Router = () => {
+  const onLogin = useRecoilValue(onLoginState);
   return (
     <>
       <BrowserRouter>
         <Header />
+        <Gap />
+        {onLogin && <LoginModal />}
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/interview" element={<InterviewPage />} />
           <Route path="/mypage" element={<MyPage />} />

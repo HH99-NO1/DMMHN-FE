@@ -1,13 +1,27 @@
 import { useRecoilValue } from "recoil";
 import Simulation from "../components/simulation/Simulation";
+import SimulationGuide from "../components/simulation/SimulationGuide";
 import SimulationSetting from "../components/simulation/SimulationSetting";
-import { isSimulationState } from "../recoil/atoms/atoms";
+import { isLoginState, isSimulationState } from "../recoil/atoms/atoms";
 
 const SimulationPage = () => {
   const isSimulation = useRecoilValue(isSimulationState);
+  const isLogin = useRecoilValue(isLoginState);
   console.log(isSimulation);
 
-  return <>{!isSimulation ? <SimulationSetting /> : <Simulation />}</>;
+  return (
+    <>
+      {isLogin ? (
+        !isSimulation ? (
+          <SimulationSetting />
+        ) : (
+          <Simulation />
+        )
+      ) : (
+        <SimulationGuide />
+      )}
+    </>
+  );
 };
 
 export default SimulationPage;

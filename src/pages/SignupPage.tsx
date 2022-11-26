@@ -57,6 +57,7 @@ const SignupPage = () => {
         // sessionStorage.setItem("accesstoken", data.data.accessToken);
         // sessionStorage.setItem("refreshtoken", data.data.refreshToken);
       } catch (error: any) {
+        setErr(error.message);
         return error.message;
       }
     }
@@ -70,101 +71,135 @@ const SignupPage = () => {
   }, []);
 
   console.log(errors);
+  const [err, setErr] = useState();
   return (
-    <>
-      <h1>회원가입</h1>
-      <form
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "400px",
-          margin: "0 auto",
-        }}
-        onSubmit={handleSubmit(onValid)}
-      >
-        <FlexCol gap="10px">
-          <InputBox>
-            <Input
-              {...register("memberName", {
-                required: "이름을 입력해주세요.",
-              })}
-              placeholder="이름(실명)"
-            />
-            <ErrorMsg>{errors?.memberName?.message}</ErrorMsg>
-          </InputBox>
-          <InputBox>
-            <Input
-              {...register("memberEmail", {
-                required: "이메일을 입력해주세요.",
-                pattern: {
-                  value: /^[a-z0-9+-\_.]{4,15}@[a-z]{4,15}\.[a-z]{2,3}$/,
-                  message: "이메일 형식을 확인해주세요.",
-                },
-              })}
-              placeholder="이메일"
-            />
-            <ErrorMsg>{errors?.memberEmail?.message}</ErrorMsg>
-          </InputBox>
-          <InputBox>
-            <Input
-              {...register("phoneNum", {
-                required: "휴대폰 번호을 입력해주세요.",
-                pattern: {
-                  value: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
-                  message: "올바르지 않은 휴대폰 번호입니다.",
-                },
-              })}
-              placeholder="휴대폰번호"
-            />
-            <ErrorMsg>{errors?.phoneNum?.message}</ErrorMsg>
-          </InputBox>
-          <InputBox>
-            <Input
-              type="password"
-              {...register("password", {
-                required: "비밀번호를 입력해주세요.",
-                pattern: {
-                  value:
-                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,16}$/,
-                  message:
-                    "8~16자 영문 대소문자, 숫자, 특수문자 한 자 이상 조합",
-                },
-              })}
-              placeholder="비밀번호"
-            />
-            <ErrorMsg>{errors?.password?.message}</ErrorMsg>
-          </InputBox>
-          <InputBox>
-            <Input
-              type="password"
-              {...register("confirmPw", {
-                required: "비밀번호를 확인해주세요.",
-                pattern: {
-                  value:
-                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,16}$/,
-                  message:
-                    "8~16자 영문 대소문자, 숫자, 특수문자 한 자 이상 조합",
-                },
-              })}
-              placeholder="중복확인"
-            />
-            <ErrorMsg>{errors?.confirmPw?.message}</ErrorMsg>
-          </InputBox>
-          <button>가입하기</button>
-        </FlexCol>
-      </form>
-    </>
+    <Container>
+      <InnerWrap>
+        <Title>회원가입</Title>
+        <form
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "400px",
+            margin: "0 auto",
+          }}
+          onSubmit={handleSubmit(onValid)}
+        >
+          <FlexCol gap="10px">
+            <InputBox>
+              <Input
+                {...register("memberName", {
+                  required: "이름을 입력해주세요.",
+                })}
+                placeholder="이름(실명)"
+              />
+              {/* <ErrorMsg>{errors?.memberName?.message}</ErrorMsg> */}
+            </InputBox>
+            <InputBox>
+              <Input
+                {...register("memberEmail", {
+                  required: "이메일을 입력해주세요.",
+                  pattern: {
+                    value: /^[a-z0-9+-\_.]{4,15}@[a-z]{4,15}\.[a-z]{2,3}$/,
+                    message: "이메일 형식을 확인해주세요.",
+                  },
+                })}
+                placeholder="이메일"
+              />
+              {/* <ErrorMsg>{errors?.memberEmail?.message}</ErrorMsg> */}
+            </InputBox>
+            <InputBox>
+              <Input
+                {...register("phoneNum", {
+                  required: "휴대폰 번호을 입력해주세요.",
+                  pattern: {
+                    value: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
+                    message: "올바르지 않은 휴대폰 번호입니다.",
+                  },
+                })}
+                placeholder="휴대폰번호"
+              />
+              {/* <ErrorMsg>{errors?.phoneNum?.message}</ErrorMsg> */}
+            </InputBox>
+            <InputBox>
+              <Input
+                type="password"
+                {...register("password", {
+                  required: "비밀번호를 입력해주세요.",
+                  pattern: {
+                    value:
+                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,16}$/,
+                    message:
+                      "8~16자 영문 대소문자, 숫자, 특수문자 한 자 이상 조합",
+                  },
+                })}
+                placeholder="비밀번호"
+              />
+              {/* <ErrorMsg>{errors?.password?.message}</ErrorMsg> */}
+            </InputBox>
+            <InputBox>
+              <Input
+                type="password"
+                {...register("confirmPw", {
+                  required: "비밀번호를 확인해주세요.",
+                  pattern: {
+                    value:
+                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,16}$/,
+                    message:
+                      "8~16자 영문 대소문자, 숫자, 특수문자 한 자 이상 조합",
+                  },
+                })}
+                placeholder="중복확인"
+              />
+              {/* <ErrorMsg>{errors?.confirmPw?.message}</ErrorMsg> */}
+              <ErrorMsg>
+                <Message>{errors?.memberEmail?.message}</Message>
+              </ErrorMsg>
+            </InputBox>
+            <SignupBtn>가입하기</SignupBtn>
+          </FlexCol>
+        </form>
+      </InnerWrap>
+    </Container>
   );
 };
 
 export default SignupPage;
 
+const Container = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100vh;
+`;
+
+const InnerWrap = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 550px;
+  height: 630px;
+  border: 1px solid lightgray;
+  border-radius: 15px;
+  background-color: white;
+`;
+
+const Title = styled.div`
+  text-align: center;
+  margin: 40px auto;
+  font-size: 25px;
+  font-weight: 600;
+`;
+
 const Input = styled.input`
+  height: 50px;
+  margin: 10px 0 10px 0;
   padding: 4px 8px;
-  border-radius: 5px;
-  border: 2px solid ${(props) => props.theme.__grayLight};
+  border-radius: 67px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid ${(props) => props.theme.__grayLight};
   :focus {
-    outline: 1px solid ${(props) => props.theme.__grayDark};
+    outline: 1px solid ${(props) => props.theme.__red};
   }
 `;
 const InputBox = styled.div`
@@ -172,11 +207,34 @@ const InputBox = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 50px;
-  min-width: 300px;
+  min-width: 400px;
 `;
-const ErrorMsg = styled.span`
-  position: absolute;
-  top: 35px;
-  font-size: 12px;
-  color: tomato;
+const ErrorMsg = styled.div`
+  width: 400px;
+  height: 25px;
+  background: rgba(210, 18, 18, 0.1);
+  border: 1px solid #ffffff;
+  border-radius: 67px;
+  margin: 10px 0 10px 0;
+  color: #747373;
+`;
+
+const Message = styled.div`
+  width: 100%;
+  line-height: 25px;
+  color: #747373;
+  font-size: 14px;
+  padding-left: 10px;
+`;
+
+const SignupBtn = styled.button`
+  width: 400px;
+  height: 50px;
+  border: none;
+  background-color: #025729;
+  border-radius: 67px;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
 `;

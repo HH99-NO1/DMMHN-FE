@@ -130,6 +130,7 @@ const Ctn = styled.div`
   z-index: 2;
   /* border: 1px solid red; */
 `;
+
 const Wrap = styled.div`
   position: relative;
   max-width: 1200px;

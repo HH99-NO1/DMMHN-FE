@@ -48,7 +48,10 @@ const HamburgerMenu = ({ setIsClick }: IHamburgerMenu) => {
             <strong>Log out</strong>
           </MenuBox>
           <MenuLine />
-          <MenuBox bgColor="#FAE6E6" onClick={() => navigate("/interview")}>
+          <MenuBox
+            bgColor="#FAE6E6"
+            onClick={() => navigate("/schedulerTest2")}
+          >
             면접 스케줄러
           </MenuBox>
           <MenuBox bgColor="#FAE6E6" onClick={() => navigate("/meeting")}>

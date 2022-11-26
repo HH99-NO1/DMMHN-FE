@@ -64,7 +64,7 @@ interface IGap {
 export const Gap = styled.div<IGap>`
   width: 100%;
   /* border: 2px solid blue; */
-  height: ${(props) => (props.gap === undefined ? "100px" : props.gap)};
+  height: ${(props) => (props.gap === undefined ? "60px" : props.gap)};
 `;
 // Gap element 끝
 // --------------------------

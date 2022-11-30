@@ -20,8 +20,8 @@ const Simulation = () => {
   const [isResult, setIsResult] = useState(false);
   console.log(isResult);
 
-  const setSimulation = useSetRecoilState(isSimulationState);
   const testSimulation = useRecoilValue(test);
+  const setSimulation = useSetRecoilState(isSimulationState);
   console.log(testSimulation);
 
   //recordrtc
@@ -87,90 +87,38 @@ const Simulation = () => {
       return;
     }
   }, [stream, refVideo]);
+  useEffect(() => {
+    window.speechSynthesis.cancel();
+  }, []);
 
-  // useEffect(() => {
-  //   window.speechSynthesis.cancel();
-  // }, []);
-
-  // naver CLOVA VOICE api
+  // naver CLOVA VOICE api 영역
   const [value, setValue] = useState(testSimulation?.questionArr[0]);
   const [currValue, setCurrValue] = useState(value);
   const [result, setResult] = useState([]);
-
   console.log(`result.length: ${result.length}`);
   console.log(`count: ${count}`);
+  const onClick = () => {
+    speechSynthesis.cancel();
+    speak(value, window.speechSynthesis);
 
-  const requestAudioFile = async (event) => {
-    console.log("request Audio");
+    let resultEl = {
+      question: testSimulation.questionArr[count],
+      time: "05:00",
+    };
 
-    try {
-      const config = {
-        question: value,
-      };
-      const response = await instance.post(
-        "mockInterview/getQuestionsVoice",
-        config,
-        {
-          responseType: "arraybuffer",
-        }
-      );
-      console.log("response : ", response);
-
-      // let arr = toArrayBuffer(response.data);
-      // makeAudio(arr);
-      const audioContext = getAudioContext();
-      console.log("실행하기 전에 상태 :", audioContext.state);
-      // makeAudio(response)
-      const audioBuffer = await audioContext.decodeAudioData(response.data);
-
-      //create audio source
-      const source = audioContext.createBufferSource();
-      source.buffer = audioBuffer;
-      source.connect(audioContext.destination);
-
-      // 오디오 시작
-      source.start();
-      event.target.disabled = true;
-      event.target.style.backgroundColor = "black";
-
-      console.log("source : ", source.buffer.duration);
-      setTimeout(() => {
-        event.target.disabled = false;
-        event.target.style.backgroundColor = "#1b172f";
-        console.log("버튼 사용 가능");
-      }, source.buffer.duration * 1000 + 500);
-
-      console.log("source : ", source);
-
-      let resultEl = {
-        question: testSimulation.questionArr[count],
-        time: "05:00",
-      };
-      // 유효한 배열이 있을때만 result에 값을 저장함
-      testSimulation.questionArr[count] && setResult([...result, resultEl]);
-
-      if (count < testSimulation.questionArr.length - 1) {
-        count++;
-        setValue(testSimulation.questionArr[count]);
-        setCurrValue(value);
-      } else {
-        setValue("모의 면접이 종료되었습니다.");
-        setCurrValue(value);
-        count++;
-      }
-    } catch (e) {
-      console.log(e);
+    // 유효한 배열이 있을때만 result에 값을 저장함
+    testSimulation.questionArr[count] && setResult([...result, resultEl]);
+    if (count < testSimulation.questionArr.length - 1) {
+      count++;
+      setValue(testSimulation.questionArr[count]);
+      setCurrValue(value);
+    } else {
+      setValue("모의 면접이 종료되었습니다.");
+      setCurrValue(value);
+      count++;
     }
   };
-
-  const getAudioContext = () => {
-    AudioContext = window.AudioContext; /* || window.webkitAudioContext */
-    const audioContent = new AudioContext();
-    return audioContent;
-  };
-
   console.log(testSimulation.questionArr.slice(0, count));
-
   const onResult = async () => {
     if (result) {
       const req = {
@@ -183,8 +131,8 @@ const Simulation = () => {
         const { data } = await instance.post(`/mockInterview/saveResults`, req);
 
         console.log(data);
-        alert("모의면접의 결과가 정상적으로 저장되었습니다.");
         setSimulation(false);
+        alert("모의면접의 결과가 정상적으로 저장되었습니다.");
         navigate(`/mysimulation/${data.sequence}`);
       } catch (e) {
         console.log(e);
@@ -271,8 +219,8 @@ const Simulation = () => {
 
             {result.length >= count ? (
               <Button
-                onClick={(event) => {
-                  requestAudioFile(event);
+                onClick={() => {
+                  onClick();
                   setIsStart(true);
                 }}
               >
@@ -360,7 +308,6 @@ const Button = styled.button`
   border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
-  transition: all, 0.3s;
 `;
 const TextEl = styled(Text)`
   color: white;

@@ -7,7 +7,7 @@ import { isLoginState, isSimulationState } from "../recoil/atoms/atoms";
 const SimulationPage = () => {
   const isSimulation = useRecoilValue(isSimulationState);
   const isLogin = useRecoilValue(isLoginState);
-  console.log(isSimulation);
+  console.log("isSimulation: ", isSimulation);
 
   return (
     <>

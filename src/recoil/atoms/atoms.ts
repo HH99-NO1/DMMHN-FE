@@ -24,7 +24,7 @@ export const onLoginState = atom({
 // 로그인이 되어있는지 체크하기 위한 상태
 const preAccessToken = sessionStorage.getItem("accessToken");
 const checkDefaultLoginState = preAccessToken ? true : false;
-console.log(checkDefaultLoginState);
+// console.log(checkDefaultLoginState);
 
 export const isLoginState = atom({
   key: "isLogin",

@@ -12,7 +12,7 @@ const UserState = () => {
     _id: "",
   };
   const [userLoginData, setUserLoginData] = useState(init);
-  console.log(userLoginData);
+  // console.log(userLoginData);
   const getUserLoginData = async () => {
     try {
       const { data } = await instance.get(`/members/me`);

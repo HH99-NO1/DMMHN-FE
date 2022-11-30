@@ -2,12 +2,12 @@ import { atom } from "recoil";
 
 interface ITest {
   category: string;
-  questionArr: [];
+  questionArr: [string];
 }
 
-export const test = atom<ITest[]>({
+export const test = atom<ITest>({
   key: "test",
-  default: [],
+  default: undefined,
 });
 
 export const isSimulationState = atom({

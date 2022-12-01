@@ -242,10 +242,6 @@ const LoginBody = styled.form`
   height: 100%;
   padding: 30px 60px;
   overflow-y: auto;
-  @media screen and (max-height: 620px) {
-    position: relative;
-    height: calc(100vh - 40px);
-  }
 `;
 
 interface IInput {

@@ -12,7 +12,7 @@ export const UserApi = axios.create({
 
 instance.interceptors.response.use(
   (res) => {
-    console.log(res);
+    // console.log(res);
     return res;
   },
   async (error) => {

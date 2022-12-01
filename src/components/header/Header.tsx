@@ -19,7 +19,7 @@ const Header = () => {
   const [reqLogin, setReqLogin] = useState(false);
 
   const [isClick, setIsClick] = useState(false);
-  console.log(isLogin);
+  // console.log(isLogin);
   const preRefreshToken = sessionStorage.getItem("refreshToken");
   const preAccessToken = sessionStorage.getItem("accessToken");
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const Header = () => {
         // setReqLogin(false);
         setIsLogin(true);
         // setLoginUserData([data]);
-        console.log(data);
+        // console.log(data);
 
         return;
       } catch (error: any) {
@@ -71,7 +71,7 @@ const Header = () => {
     }
   };
   useEffect(() => {
-    console.log("reqLogin: ", reqLogin);
+    // console.log("reqLogin: ", reqLogin);
     if (reqLogin) {
       alert("로그인 세션이 만료되었습니다. 로그인을 해주세요.");
       sessionStorage.removeItem("accessToken");

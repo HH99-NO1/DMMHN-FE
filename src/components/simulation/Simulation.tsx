@@ -1,11 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
-import { speak } from "./TextToSpeech";
-import { AiOutlineRight } from "react-icons/ai";
 import RecordRTC, { invokeSaveAsDialog } from "recordrtc";
-import { useRecoilValue } from "recoil";
-import { test } from "../../recoil/atoms/atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isSimulationState, test } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
 import { useNavigate } from "react-router-dom";
 import TitleArea from "../../elements/TitleArea";
@@ -20,15 +18,16 @@ const Simulation = () => {
   const [isResult, setIsResult] = useState(false);
   console.log(isResult);
 
+  const setSimulation = useSetRecoilState(isSimulationState);
   const testSimulation = useRecoilValue(test);
   console.log(testSimulation);
 
   //recordrtc
-  const [stream, setStream] = useState(null);
-  const [blob, setBlob] = useState(null);
-  const refVideo = useRef(null);
-  const recorderRef = useRef(null);
-  const myVideoRef = useRef(null);
+  const [stream, setStream] = useState<MediaStream>();
+  const [blob, setBlob] = useState<Blob | null>();
+  const refVideo = useRef<HTMLVideoElement>(null);
+  const recorderRef = useRef<RecordRTC>();
+  const myVideoRef = useRef<HTMLVideoElement>(null);
 
   // 유저 비디오 연결 테스트
   const getMedia = async () => {
@@ -45,11 +44,11 @@ const Simulation = () => {
     }
   };
 
-  const stopStreamedVideo = (myVideoRef) => {
+  const stopStreamedVideo = (myVideoRef: any) => {
     const stream = myVideoRef.current.srcObject;
     const tracks = stream.getTracks();
 
-    tracks.forEach(function (track) {
+    tracks.forEach(function (track: MediaStreamTrack) {
       track.stop();
     });
 
@@ -65,20 +64,23 @@ const Simulation = () => {
       },
       audio: true,
     });
+
     setStream(mediaStream);
     recorderRef.current = new RecordRTC(mediaStream, { type: "video" });
     recorderRef.current.startRecording();
   };
 
   const handleStop = () => {
-    recorderRef.current.stopRecording(() => {
-      stopStreamedVideo(myVideoRef);
-      setBlob(recorderRef.current.getBlob());
-    });
+    if (recorderRef.current) {
+      recorderRef.current.stopRecording(() => {
+        stopStreamedVideo(myVideoRef);
+        setBlob(recorderRef?.current?.getBlob() as Blob);
+      });
+    }
   };
 
   const handleSave = () => {
-    invokeSaveAsDialog(blob);
+    invokeSaveAsDialog(blob as Blob);
   };
 
   useEffect(() => {
@@ -86,37 +88,88 @@ const Simulation = () => {
       return;
     }
   }, [stream, refVideo]);
-  useEffect(() => {
-    window.speechSynthesis.cancel();
-  }, []);
 
+  // naver CLOVA VOICE api
   const [value, setValue] = useState(testSimulation?.questionArr[0]);
   const [currValue, setCurrValue] = useState(value);
-  const [result, setResult] = useState([]);
+  const [result, setResult] = useState<
+    Array<{ question: string; time: string }>
+  >([]);
+
   console.log(`result.length: ${result.length}`);
   console.log(`count: ${count}`);
-  const onClick = () => {
-    speechSynthesis.cancel();
-    speak(value, window.speechSynthesis);
 
-    let resultEl = {
-      question: testSimulation.questionArr[count],
-      time: "05:00",
-    };
+  const requestAudioFile = async (event: any) => {
+    console.log("request Audio");
 
-    // 유효한 배열이 있을때만 result에 값을 저장함
-    testSimulation.questionArr[count] && setResult([...result, resultEl]);
-    if (count < testSimulation.questionArr.length - 1) {
-      count++;
-      setValue(testSimulation.questionArr[count]);
-      setCurrValue(value);
-    } else {
-      setValue("모의 면접이 종료되었습니다.");
-      setCurrValue(value);
-      count++;
+    try {
+      const config = {
+        question: value,
+      };
+      const response = await instance.post(
+        "mockInterview/getQuestionsVoice",
+        config,
+        {
+          responseType: "arraybuffer",
+        }
+      );
+      console.log("response : ", response);
+
+      // let arr = toArrayBuffer(response.data);
+      // makeAudio(arr);
+      const audioContext = getAudioContext();
+      console.log("실행하기 전에 상태 :", audioContext.state);
+      // makeAudio(response)
+      const audioBuffer = await audioContext.decodeAudioData(response.data);
+
+      //create audio source
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(audioContext.destination);
+
+      // 오디오 시작
+      source.start();
+      event.target.disabled = true;
+      event.target.style.backgroundColor = "black";
+
+      console.log("source : ", source.buffer.duration);
+      setTimeout(() => {
+        event.target.disabled = false;
+        event.target.style.backgroundColor = "#1b172f";
+        console.log("버튼 사용 가능");
+      }, source.buffer.duration * 1000 + 500);
+
+      console.log("source : ", source);
+
+      let resultEl = {
+        question: testSimulation.questionArr[count],
+        time: "05:00",
+      };
+      // 유효한 배열이 있을때만 result에 값을 저장함
+      testSimulation.questionArr[count] && setResult([...result, resultEl]);
+
+      if (count < testSimulation.questionArr.length - 1) {
+        count++;
+        setValue(testSimulation.questionArr[count]);
+        setCurrValue(value);
+      } else {
+        setValue("모의 면접이 종료되었습니다.");
+        setCurrValue(value);
+        count++;
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
+
+  const getAudioContext = () => {
+    AudioContext = window.AudioContext; /* || window.webkitAudioContext */
+    const audioContent = new AudioContext();
+    return audioContent;
+  };
+
   console.log(testSimulation.questionArr.slice(0, count));
+
   const onResult = async () => {
     if (result) {
       const req = {
@@ -130,15 +183,16 @@ const Simulation = () => {
 
         console.log(data);
         alert("모의면접의 결과가 정상적으로 저장되었습니다.");
+        setSimulation(false);
         navigate(`/mysimulation/${data.sequence}`);
       } catch (e) {
         console.log(e);
       }
     }
   };
-  useEffect(() => {
-    window.speechSynthesis.cancel();
-  }, []);
+  // useEffect(() => {
+  //   window.speechSynthesis.cancel();
+  // }, []);
 
   useEffect(() => {
     getMedia();
@@ -189,7 +243,7 @@ const Simulation = () => {
                   <FlexCol gap="10px">
                     {testSimulation.questionArr
                       .slice(0, count)
-                      .map((v, index) => (
+                      .map((v: string, index: number) => (
                         <FlexRow gap="5px" key={index}>
                           {index + 1}.<Text key={index}>{v}</Text>
                         </FlexRow>
@@ -216,8 +270,8 @@ const Simulation = () => {
 
             {result.length >= count ? (
               <Button
-                onClick={() => {
-                  onClick();
+                onClick={(event) => {
+                  requestAudioFile(event);
                   setIsStart(true);
                 }}
               >
@@ -305,6 +359,7 @@ const Button = styled.button`
   border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
+  transition: all, 0.3s;
 `;
 const TextEl = styled(Text)`
   color: white;

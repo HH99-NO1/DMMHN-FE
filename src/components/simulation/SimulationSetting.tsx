@@ -97,17 +97,15 @@ const SimulationSetting = () => {
                     <Select
                       name="category"
                       id="category-select"
-                      defaultValue=""
                       value={category}
                       onInput={onInput}
                     >
-                      <option value="">
+                      <option value="none">
                         -- 모의면접을 진행할 포지션을 선택해주세요 --
                       </option>
                       <option value="react">프론트엔드 - React.js</option>
                       <option value="node">백엔드 - Node.js</option>
                     </Select>
-                    <HiOutlineChevronUpDown size="20" />
                   </FlexRow>
                 </OptionBox>
               </FlexRow>

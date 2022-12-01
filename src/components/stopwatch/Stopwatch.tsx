@@ -4,6 +4,7 @@ import useStopwatch from "../../hooks/useStopwatch";
 import Controllers from "./Controllers";
 import Laps from "./Laps";
 import Time from "./Time";
+import stopwatchTime from "./utils/stopwatchTime";
 
 const Stopwatch: React.FC = () => {
   const { seconds, status, laps, nextLap, start, stop, record, reset } =
@@ -14,6 +15,7 @@ const Stopwatch: React.FC = () => {
       <IPhone>
         <Screen>
           <Time seconds={seconds} />
+          <button onClick={start}>시작</button>
           <Controllers
             state={status}
             record={record} // record={() => {}}

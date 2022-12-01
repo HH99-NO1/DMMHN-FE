@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import TitleArea from "../../elements/TitleArea";
 import PersonItem from "../../elements/PersonItem";
 import ResultIconItem from "../../elements/ResultIconItem";
+import useStopwatch from "../../hooks/useStopwatch";
+import stopwatchTime from "../stopwatch/utils/stopwatchTime";
 
 let count = 0;
 
@@ -89,6 +91,11 @@ const Simulation = () => {
     }
   }, [stream, refVideo]);
 
+  // 스톱워치 영역
+  const { seconds, status, laps, nextLap, start, stop, record, reset } =
+    useStopwatch();
+  const [isStop, setIsStop] = useState(false);
+
   // naver CLOVA VOICE api
   const [value, setValue] = useState(testSimulation?.questionArr[0]);
   const [currValue, setCurrValue] = useState(value);
@@ -100,6 +107,8 @@ const Simulation = () => {
   console.log(`count: ${count}`);
 
   const requestAudioFile = async (event: any) => {
+    isStop && stop();
+
     console.log("request Audio");
 
     try {
@@ -142,11 +151,12 @@ const Simulation = () => {
       console.log("source : ", source);
 
       let resultEl = {
-        question: testSimulation.questionArr[count],
-        time: "05:00",
+        question: currValue,
+        time: stopwatchTime(nextLap.lapTime),
       };
       // 유효한 배열이 있을때만 result에 값을 저장함
-      testSimulation.questionArr[count] && setResult([...result, resultEl]);
+      testSimulation.questionArr.length + 1 > count &&
+        setResult([...result, resultEl]);
 
       if (count < testSimulation.questionArr.length - 1) {
         count++;
@@ -155,6 +165,7 @@ const Simulation = () => {
       } else {
         setValue("모의 면접이 종료되었습니다.");
         setCurrValue(value);
+        setIsStop(true);
         count++;
       }
     } catch (e) {
@@ -172,11 +183,12 @@ const Simulation = () => {
 
   const onResult = async () => {
     if (result) {
+      const newResult = result.slice(1, result.length);
       const req = {
         category: testSimulation.category,
-        number: result.length,
-        result: result,
-        totalTime: "20:00",
+        number: newResult.length,
+        result: newResult,
+        totalTime: stopwatchTime(seconds),
       };
       try {
         const { data } = await instance.post(`/mockInterview/saveResults`, req);
@@ -252,31 +264,69 @@ const Simulation = () => {
                 </ResultArea>
               )}
             </FlexCol>
-            <FlexCol>
-              {blob ? (
-                <Video
-                  src={URL.createObjectURL(blob)}
-                  controls
-                  autoPlay
-                  ref={refVideo}
-                />
-              ) : (
-                <Video ref={myVideoRef} autoPlay />
-              )}
-              <button onClick={handleRecording}>시작</button>
-              <button onClick={handleStop}>멈춤</button>
-              <button onClick={handleSave}>저장</button>
-            </FlexCol>
 
-            {result.length >= count ? (
-              <Button
-                onClick={(event) => {
-                  requestAudioFile(event);
-                  setIsStart(true);
-                }}
-              >
-                {isStart ? "다음 질문으로" : "시작"}
-              </Button>
+            {/* 중간 컨텐츠 영역 */}
+            <SimulationContent>
+              <ContentWrap>
+                {blob ? (
+                  <Video
+                    src={URL.createObjectURL(blob)}
+                    controls
+                    autoPlay
+                    ref={refVideo}
+                  />
+                ) : (
+                  <Video ref={myVideoRef} autoPlay />
+                )}
+                <button onClick={handleRecording}>시작</button>
+                <button onClick={handleStop}>멈춤</button>
+                <button onClick={handleSave}>저장</button>
+              </ContentWrap>
+              <ContentWrap>
+                <TimeIndicatorBox>
+                  <TotalTimeTitle>총 모의면접 답변시간</TotalTimeTitle>
+                  <TimeBlackBox>
+                    <TimeGreenBox bgColor="#5ec694">
+                      <TotalTime>{stopwatchTime(seconds)}</TotalTime>
+                    </TimeGreenBox>
+                  </TimeBlackBox>
+                </TimeIndicatorBox>
+                <Gap gap="30px" />
+                <TimeIndicatorBox>
+                  <TotalTimeTitle>현재 질문 답변시간</TotalTimeTitle>
+                  <TimeBlackBox>
+                    <TimeGreenBox bgColor="#397055">
+                      <TotalTime>{stopwatchTime(nextLap.lapTime)}</TotalTime>
+                    </TimeGreenBox>
+                  </TimeBlackBox>
+                </TimeIndicatorBox>
+              </ContentWrap>
+            </SimulationContent>
+
+            {currValue !== "모의 면접이 종료되었습니다." ? (
+              <>
+                {!isStart ? (
+                  <Button
+                    onClick={(event) => {
+                      requestAudioFile(event);
+                      // startTotalTime()
+                      setIsStart(true);
+                      start();
+                    }}
+                  >
+                    시작
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={(event) => {
+                      record();
+                      requestAudioFile(event);
+                    }}
+                  >
+                    다음 질문으로
+                  </Button>
+                )}
+              </>
             ) : (
               <Button
                 onClick={() => {
@@ -299,12 +349,7 @@ const Simulation = () => {
 const BGBlack = styled.div`
   width: 100%;
   height: calc(100vh - 121px);
-  background: radial-gradient(
-    93.71% 307.5% at 86.33% 0%,
-    #1b172f 0%,
-    #1a1a1a 47.92%,
-    #1b172f 100%
-  );
+  background: #092001;
 `;
 const Padding20 = styled.div`
   padding: 0 20px;
@@ -314,8 +359,8 @@ const Ctn = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: #222844;
-  border: 1px solid #5351a5;
+  background: #002c17;
+  border: 1px solid #014021;
   border-radius: 20px;
   max-width: 1160px;
   width: 100%;
@@ -333,8 +378,8 @@ const CheckQuestion = styled.div`
   font-weight: 600;
   border-radius: 5px;
   margin: 0 auto;
-  border: 1px solid #5351a5;
-  background-color: #1b172f;
+  border: 1px solid #014021;
+  background-color: #092304;
   color: white;
 `;
 const SimulationHeader = styled(FlexCol)`
@@ -342,18 +387,22 @@ const SimulationHeader = styled(FlexCol)`
   gap: 10px;
   justify-content: center;
 `;
+const SimulationContent = styled(FlexRow)`
+  padding: 0 50px;
+  gap: 20px;
+  justify-content: space-between;
+`;
 
 const Button = styled.button`
   margin: 0 auto;
   width: 200px;
-
   display: flex;
   justify-content: center;
   gap: 5px;
   font-size: 20px;
   align-items: center;
-  border: 1px solid #5351a5;
-  background-color: #1b172f;
+  border: 1px solid #014021;
+  background-color: #092304;
   color: white;
   font-weight: 600;
   border-radius: 10px;
@@ -365,8 +414,9 @@ const TextEl = styled(Text)`
   color: white;
 `;
 const Video = styled.video`
-  width: 400px;
-  height: 300px;
+  max-width: 400px;
+  width: 100%;
+  height: auto;
   border-radius: 20px;
 `;
 
@@ -389,12 +439,55 @@ const IconArea = styled.div`
   align-items: center;
   width: 50px;
   height: 50px;
-  border: 1px solid #5351a5;
-  background-color: #1b172f;
+  border: 1px solid #014021;
+  background-color: #092304;
   border-radius: 50%;
   right: 20px;
   bottom: 20px;
   cursor: pointer;
+`;
+
+const ContentWrap = styled(FlexCol)`
+  width: 100%;
+  padding: 0 20px;
+`;
+const TimeIndicatorBox = styled(FlexCol)`
+  width: 100%;
+  gap: 10px;
+  align-items: flex-start;
+`;
+const TotalTimeTitle = styled(Text)`
+  color: white;
+  font-weight: 400;
+`;
+
+const TimeBlackBox = styled.div`
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  background-color: black;
+  border-radius: 20px;
+  padding: 5px;
+`;
+interface ITimeGreenBox {
+  bgColor?: string;
+}
+const TimeGreenBox = styled.div<ITimeGreenBox>`
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 60%;
+  height: 100%;
+  background-color: ${(props) => props.bgColor};
+  border-radius: 20px;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding-left: 20px;
+`;
+const TotalTime = styled(Text)`
+  color: white;
+  font-weight: 400;
 `;
 
 export default Simulation;

@@ -39,6 +39,7 @@ const MySimulationDetail = () => {
   }, []);
 
   const dateChange = (date: string) => {
+    console.log(date);
     const result = new Date(date).toLocaleString("ko-KR", {
       year: "numeric",
       month: "numeric",
@@ -46,6 +47,7 @@ const MySimulationDetail = () => {
       hour: "numeric",
       minute: "numeric",
     });
+    console.log("result: ", result);
     return result;
   };
   const category = {

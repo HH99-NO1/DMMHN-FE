@@ -34,7 +34,7 @@ const useStopwatch: () => UseStopwatchReturnType = () => {
   const nextLap = React.useMemo<Lap>(() => {
     return {
       id: laps.length + 1,
-      title: `랩 ${laps.length + 1}`,
+      title: `질문 ${laps.length + 1}`,
       lapTime: seconds - (laps[0]?.seconds ?? 0),
       seconds,
     };

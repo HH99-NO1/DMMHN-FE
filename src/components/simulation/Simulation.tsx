@@ -6,7 +6,6 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isSimulationState, test } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
 import { useNavigate } from "react-router-dom";
-import TitleArea from "../../elements/TitleArea";
 import PersonItem from "../../elements/PersonItem";
 import ResultIconItem from "../../elements/ResultIconItem";
 import useStopwatch from "../../hooks/useStopwatch";
@@ -211,14 +210,14 @@ const Simulation = () => {
   }, []);
   return (
     <>
-      <TitleArea>
-        모의면접 -{" "}
-        {testSimulation.category === "react" ? "React.js" : "Node.js"}
-      </TitleArea>
       <BGBlack>
-        <Gap gap="20px" />
+        <Gap gap="60px" />
         <Padding20>
           <Ctn>
+            <CategoryArea>
+              모의면접 -{" "}
+              {testSimulation.category === "react" ? "React.js" : "Node.js"}
+            </CategoryArea>
             <CheckQuestion>
               Q{result.length} / Q{testSimulation.questionArr.length}
             </CheckQuestion>
@@ -278,9 +277,11 @@ const Simulation = () => {
                 ) : (
                   <Video ref={myVideoRef} autoPlay />
                 )}
-                <button onClick={handleRecording}>시작</button>
-                <button onClick={handleStop}>멈춤</button>
-                <button onClick={handleSave}>저장</button>
+                <FlexRow gap="10px" justifyContent="space-between">
+                  <SmallBtn onClick={handleRecording}>시작</SmallBtn>
+                  <SmallBtn onClick={handleStop}>멈춤</SmallBtn>
+                  <SmallBtn onClick={handleSave}>저장</SmallBtn>
+                </FlexRow>
               </ContentWrap>
               <ContentWrap>
                 <TimeIndicatorBox>
@@ -348,11 +349,12 @@ const Simulation = () => {
 };
 const BGBlack = styled.div`
   width: 100%;
-  height: calc(100vh - 121px);
+  height: calc(100vh);
   background: #092001;
 `;
 const Padding20 = styled.div`
   padding: 0 20px;
+  margin-top: 50px;
 `;
 const Ctn = styled.div`
   position: relative;
@@ -367,6 +369,16 @@ const Ctn = styled.div`
   margin: 0 auto;
   padding: 20px;
   color: white;
+`;
+const CategoryArea = styled(Text)`
+  position: absolute;
+  border-bottom: 1px solid white;
+  top: 30px;
+  color: white;
+  padding-bottom: 10px;
+  width: auto;
+  font-size: 20px;
+  font-weight: 400;
 `;
 const CheckQuestion = styled.div`
   display: flex;
@@ -450,6 +462,7 @@ const IconArea = styled.div`
 const ContentWrap = styled(FlexCol)`
   width: 100%;
   padding: 0 20px;
+  gap: 10px;
 `;
 const TimeIndicatorBox = styled(FlexCol)`
   width: 100%;
@@ -488,6 +501,10 @@ const TimeGreenBox = styled.div<ITimeGreenBox>`
 const TotalTime = styled(Text)`
   color: white;
   font-weight: 400;
+`;
+const SmallBtn = styled(Button)`
+  font-size: 16px;
+  max-width: 100px;
 `;
 
 export default Simulation;

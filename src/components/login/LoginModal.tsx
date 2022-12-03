@@ -44,9 +44,11 @@ const LoginModal = () => {
       sessionStorage.setItem("accessToken", data.data.accessToken);
       sessionStorage.setItem("refreshToken", data.data.refreshToken);
       alert("로그인이 완료되었습니다.");
+      console.log(data);
       setOnLogin(false);
       setIsLogin(true);
-      return window.location.reload();
+      // return window.location.reload();
+      return;
     } catch (error: any) {
       console.log(error.message);
       return error.message;

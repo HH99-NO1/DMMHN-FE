@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { instance, UserApi } from "../recoil/instance";
 import styled from "styled-components";
-import { FlexCol } from "../elements/elements";
+import { FlexCol, Gap, HeaderBox } from "../elements/elements";
 import { TonalitySharp } from "@material-ui/icons";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -74,6 +74,7 @@ const SignupPage = () => {
   const [err, setErr] = useState();
   return (
     <Container>
+      <HeaderBox />
       <InnerWrap>
         <Title>회원가입</Title>
         <form

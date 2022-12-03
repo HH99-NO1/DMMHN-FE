@@ -1,8 +1,7 @@
-import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { FlexCol, FlexRow, Text } from "../../elements/elements";
+import { FlexRow, Text } from "../../elements/elements";
 import LogoItem from "../../elements/LogoItem";
 import { instance } from "../../recoil/instance";
 import UserState from "./UserState";
@@ -38,7 +37,7 @@ const Header = () => {
         // setLoginUserData([data]);
         // console.log(data);
 
-        return;
+        return data;
       } catch (error: any) {
         const errorCode = error.response;
         console.log(errorCode);
@@ -97,7 +96,7 @@ const Header = () => {
             </LogoBox>
             {/* <Img onClick={() => navigate("/")} src="img/logo.png" /> */}
 
-            <Text fontSize="20px" fontWeight="600">
+            <Text fontSize="20px" fontWeight="600" color="white">
               떨면뭐하니
             </Text>
           </FlexRow>
@@ -111,7 +110,11 @@ const Header = () => {
               </>
             )}
             <Curser>
-              <GiHamburgerMenu onClick={() => setIsClick(!isClick)} size={30} />
+              <GiHamburgerMenu
+                onClick={() => setIsClick(!isClick)}
+                size={30}
+                fill="white"
+              />
             </Curser>
             {isClick && <HamburgerMenu setIsClick={setIsClick} />}
           </FlexRow>
@@ -124,9 +127,9 @@ const Header = () => {
 const Ctn = styled.div`
   position: fixed;
   width: 100%;
-  background-color: white;
+  background-color: transparent;
   /* box-shadow: 0px 2px 8px -2px rgba(0, 0, 0, 0.1); */
-  border-bottom: 1px solid ${(props) => props.theme.__lineGray};
+  /* border-bottom: 1px solid ${(props) => props.theme.__lineGray}; */
   z-index: 2;
   /* border: 1px solid red; */
 `;
@@ -154,24 +157,25 @@ const LogoBox = styled.div`
     box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.3);
   }
 `;
-const Img = styled.img`
-  width: 40px;
-  height: 40px;
-  scale: 1;
-  object-fit: cover;
-  border-radius: 12px;
-  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: all, 0.3s;
-  :hover {
-    box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.3);
-  }
-`;
+// const Img = styled.img`
+//   width: 40px;
+//   height: 40px;
+//   scale: 1;
+//   object-fit: cover;
+//   border-radius: 12px;
+//   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.3);
+//   cursor: pointer;
+//   transition: all, 0.3s;
+//   :hover {
+//     box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.3);
+//   }
+// `;
 const Btn = styled.button`
   margin: 0 auto;
   background-color: transparent;
   border: none;
   font-family: 400;
+  color: white;
   cursor: pointer;
 `;
 const Curser = styled.div`

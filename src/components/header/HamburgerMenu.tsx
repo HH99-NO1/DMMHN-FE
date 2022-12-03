@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
@@ -48,12 +47,6 @@ const HamburgerMenu = ({ setIsClick }: IHamburgerMenu) => {
             <strong>Log out</strong>
           </MenuBox>
           <MenuLine />
-          <MenuBox
-            bgColor="#FAE6E6"
-            onClick={() => navigate("/schedulerTest2")}
-          >
-            면접 스케줄러
-          </MenuBox>
           <MenuBox bgColor="#FAE6E6" onClick={() => navigate("/meeting")}>
             면접 룸
           </MenuBox>

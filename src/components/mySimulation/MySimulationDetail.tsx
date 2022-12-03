@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { FlexCol, FlexRow, Gap, Liner } from "../../elements/elements";
+import {
+  FlexCol,
+  FlexRow,
+  Gap,
+  HeaderBox,
+  Liner,
+} from "../../elements/elements";
 import { instance } from "../../recoil/instance";
 
 const MySimulationDetail = () => {
@@ -56,79 +62,86 @@ const MySimulationDetail = () => {
   };
 
   return (
-    <Ctn>
-      <FlexCol width="100%" gap="20px">
-        <FlexRow
-          width="100%"
-          justifyContent="space-between"
-          alignItem="flex-end"
-        >
-          <TitleBar>모의면접 결과</TitleBar>
-          <Text>{dateChange(mySimulation.createdAt)}</Text>
-        </FlexRow>
+    <>
+      <HeaderBox />
+      <Ctn>
         <FlexCol width="100%" gap="20px">
-          <FlexRow width="100%" gap="10px" justifyContent="space-between">
-            <MiddleTitle>카테고리</MiddleTitle>
-            <OptionBox>
-              <Text>
-                {mySimulation.category === "react"
-                  ? category.react
-                  : category.node}
-              </Text>
-            </OptionBox>
-          </FlexRow>
-          <FlexRow width="100%" gap="10px" justifyContent="space-between">
-            <MiddleTitle>문항 수</MiddleTitle>
-            <OptionBox>
-              <Text>{mySimulation.number} 개</Text>
-            </OptionBox>
-          </FlexRow>
           <FlexRow
             width="100%"
-            gap="10px"
             justifyContent="space-between"
-            alignItem="flex-start"
+            alignItem="flex-end"
           >
-            <MiddleTitle style={{ marginTop: "10px" }}>
-              모의면접 결과
-            </MiddleTitle>
-            <OptionScrollBox>
-              <OptionScrollBox2>
-                <FlexCol gap="10px" alignItem="flex-start">
-                  <Text>총 소요시간 - {mySimulation.totalTime}</Text>
-                  <Liner />
-                  <Gap gap="10px" />
-                  <Text>질문별 소요시간</Text>
-                  <Liner />
-                  <FlexCol width="100%" gap="10px" alignItem="flex-start">
-                    <FlexCol width="100%" gap="5px" alignItem="flex-start">
-                      {mySimulation.resultsArr.map((arr, index) => (
-                        <FlexRow
-                          width="100%"
-                          gap="10px"
-                          justifyContent="space-between"
-                        >
-                          <Question>
-                            <NumberArea>{index + 1}.</NumberArea> {arr.question}
-                          </Question>
-                          <Question> - [{arr.time}]</Question>
-                        </FlexRow>
-                      ))}
+            <TitleBar>모의면접 결과</TitleBar>
+            <Text>{dateChange(mySimulation.createdAt)}</Text>
+          </FlexRow>
+          <FlexCol width="100%" gap="20px">
+            <FlexRow width="100%" gap="10px" justifyContent="space-between">
+              <MiddleTitle>카테고리</MiddleTitle>
+              <OptionBox>
+                <Text>
+                  {mySimulation.category === "react"
+                    ? category.react
+                    : category.node}
+                </Text>
+              </OptionBox>
+            </FlexRow>
+            <FlexRow width="100%" gap="10px" justifyContent="space-between">
+              <MiddleTitle>문항 수</MiddleTitle>
+              <OptionBox>
+                <Text>{mySimulation.number} 개</Text>
+              </OptionBox>
+            </FlexRow>
+            <FlexRow
+              width="100%"
+              gap="10px"
+              justifyContent="space-between"
+              alignItem="flex-start"
+            >
+              <MiddleTitle style={{ marginTop: "10px" }}>
+                모의면접 결과
+              </MiddleTitle>
+              <OptionScrollBox>
+                <OptionScrollBox2>
+                  <FlexCol gap="10px" alignItem="flex-start">
+                    <Text>총 소요시간 - {mySimulation.totalTime}</Text>
+                    <Liner />
+                    <Gap gap="10px" />
+                    <Text>질문별 소요시간</Text>
+                    <Liner />
+                    <FlexCol width="100%" gap="10px" alignItem="flex-start">
+                      <FlexCol width="100%" gap="5px" alignItem="flex-start">
+                        {mySimulation.resultsArr.map((arr, index) => (
+                          <FlexRow
+                            width="100%"
+                            gap="10px"
+                            justifyContent="space-between"
+                          >
+                            <Question>
+                              <NumberArea>{index + 1}.</NumberArea>{" "}
+                              {arr.question}
+                            </Question>
+                            <Question> - [{arr.time}]</Question>
+                          </FlexRow>
+                        ))}
+                      </FlexCol>
                     </FlexCol>
                   </FlexCol>
-                </FlexCol>
-              </OptionScrollBox2>
-            </OptionScrollBox>
-          </FlexRow>
-          <FlexRow width="100%" gap="10px" alignItem="flex-start">
-            <MiddleTitle style={{ marginTop: "10px" }}>
-              모의면접 영상
-            </MiddleTitle>
-            <Video src="https://www.youtube.com/watch?v=CATSTw3CRMk" autoPlay />
-          </FlexRow>
+                </OptionScrollBox2>
+              </OptionScrollBox>
+            </FlexRow>
+            <FlexRow width="100%" gap="10px" alignItem="flex-start">
+              <MiddleTitle style={{ marginTop: "10px" }}>
+                모의면접 영상
+              </MiddleTitle>
+              <Video
+                src="https://www.youtube.com/watch?v=CATSTw3CRMk"
+                autoPlay
+              />
+            </FlexRow>
+          </FlexCol>
         </FlexCol>
-      </FlexCol>
-    </Ctn>
+      </Ctn>
+    </>
   );
 };
 const Ctn = styled.div`

@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
+import {
+  FlexCol,
+  FlexRow,
+  Gap,
+  HeaderBox,
+  Text,
+} from "../../elements/elements";
 import { HiOutlineChevronUpDown } from "react-icons/hi2";
 import { instance } from "../../recoil/instance";
 import { useSetRecoilState } from "recoil";
@@ -85,7 +91,8 @@ const SimulationSetting = () => {
 
   return (
     <>
-      <TitleArea>모의면접 - 준비</TitleArea>
+      <HeaderBox />
+      <TitleArea>모의면접 입장</TitleArea>
       <BGBlack>
         <Ctn>
           <FlexCol gap="30px">

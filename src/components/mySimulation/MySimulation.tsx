@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { FlexRow } from "../../elements/elements";
+import { FlexRow, HeaderBox } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
 import Post from "./Post";
 
@@ -34,19 +34,22 @@ const MySimulation = () => {
     getMySimulations();
   }, []);
   return (
-    <Ctn>
-      <TitleBar>나의 모의면접 현황</TitleBar>
-      <FlexRow style={{ flexWrap: "wrap" }} gap="1.7%">
-        {mySimulations.map((post) => (
-          <LinkBtn
-            key={post.sequence}
-            onClick={() => navigate(`/mysimulation/${post.sequence}`)}
-          >
-            <Post key={post.sequence} post={post} />
-          </LinkBtn>
-        ))}
-      </FlexRow>
-    </Ctn>
+    <>
+      <HeaderBox />
+      <Ctn>
+        <TitleBar>나의 모의면접 현황</TitleBar>
+        <FlexRow style={{ flexWrap: "wrap" }} gap="1.7%">
+          {mySimulations.map((post) => (
+            <LinkBtn
+              key={post.sequence}
+              onClick={() => navigate(`/mysimulation/${post.sequence}`)}
+            >
+              <Post key={post.sequence} post={post} />
+            </LinkBtn>
+          ))}
+        </FlexRow>
+      </Ctn>
+    </>
   );
 };
 

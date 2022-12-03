@@ -68,3 +68,11 @@ export const Gap = styled.div<IGap>`
 `;
 // Gap element 끝
 // --------------------------
+// HeaderBox element 시작
+export const HeaderBox = styled(Gap)`
+  height: 60px;
+  background-color: #004922;
+  border-bottom: 1px solid ${(props) => props.theme.__lineGray};
+`;
+// HeaderBox element 끝
+// --------------------------

@@ -3,7 +3,6 @@ import axios from "axios";
 import { instance, UserApi } from "../recoil/instance";
 import styled from "styled-components";
 import { FlexCol, Gap, HeaderBox } from "../elements/elements";
-import { TonalitySharp } from "@material-ui/icons";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 

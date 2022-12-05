@@ -15,9 +15,11 @@ import { useRecoilValue } from "recoil";
 import Room from "../components/meeting/Room";
 import RoomDetail from "../components/meeting/RoomDetail";
 import NaverTTS from "../components/simulation/NaverTTS";
+import TestRecorder from "../components/simulation/TestRecorder";
 
 const Router = () => {
   const onLogin = useRecoilValue(onLoginState);
+
   return (
     <>
       <BrowserRouter>
@@ -34,6 +36,7 @@ const Router = () => {
           <Route path="/simulation/" element={<SimulationPage />} />
           <Route path="/mysimulation" element={<MySimulationPage />} />
           <Route path="/tts" element={<NaverTTS />} />
+          <Route path="/recorder" element={<TestRecorder />} />
           <Route
             path="/mysimulation/:postId"
             element={<MySimulationDetail />}

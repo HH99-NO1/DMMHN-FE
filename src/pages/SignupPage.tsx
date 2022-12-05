@@ -1,20 +1,29 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm, useFormState } from "react-hook-form";
 import axios from "axios";
 import { instance, UserApi } from "../recoil/instance";
 import styled from "styled-components";
-import { FlexCol, Gap, HeaderBox } from "../elements/elements";
-import { TonalitySharp } from "@material-ui/icons";
+import { FlexCol } from "../elements/elements";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineAlert } from "react-icons/ai";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import ko from "date-fns/locale/ko";
 
 interface IForm {
   memberEmail: string;
   memberName: string;
-  phoneNum: number;
   password: string;
   confirmPw: string;
+  birth: string;
+  job: string;
+  gender: string;
+  stack: string;
 }
 
+// interface IDate {
+//   setModify: (state: boolean) => void;
+// }
 // export const ACCESS_TOKEN = sessionStorage.getItem("accesstoken");
 // export const REFRESH_TOKEN = sessionStorage.getItem("refreshtoken");
 // console.log(ACCESS_TOKEN);
@@ -22,16 +31,20 @@ interface IForm {
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const [startDate, setStartDate] = useState(new Date());
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
+    control,
   } = useForm<IForm>({
     // defaultValues: {
     //   email: "@naver.com",
     // },
+    // mode: "onChange",
+    // criteriaMode: "firstError",
   });
   const onValid = async (submitData: IForm) => {
     console.log(submitData);
@@ -44,11 +57,14 @@ const SignupPage = () => {
     } else {
       try {
         const req = {
-          name: submitData.memberName,
+          memberName: submitData.memberName,
           memberEmail: submitData.memberEmail,
-          phoneNumber: submitData.phoneNum,
           password: submitData.password,
           confirmPw: submitData.confirmPw,
+          birth: submitData.birth,
+          gender: submitData.gender,
+          job: submitData.job,
+          stack: submitData.stack,
         };
         console.log(req);
         const { data } = await UserApi.post(`members/signup`, req);
@@ -57,7 +73,6 @@ const SignupPage = () => {
         // sessionStorage.setItem("accesstoken", data.data.accessToken);
         // sessionStorage.setItem("refreshtoken", data.data.refreshToken);
       } catch (error: any) {
-        setErr(error.message);
         return error.message;
       }
     }
@@ -69,12 +84,8 @@ const SignupPage = () => {
       navigate(-1);
     }
   }, []);
-
-  console.log(errors);
-  const [err, setErr] = useState();
   return (
     <Container>
-      <HeaderBox />
       <InnerWrap>
         <Title>회원가입</Title>
         <form
@@ -86,16 +97,7 @@ const SignupPage = () => {
           }}
           onSubmit={handleSubmit(onValid)}
         >
-          <FlexCol gap="10px">
-            <InputBox>
-              <Input
-                {...register("memberName", {
-                  required: "이름을 입력해주세요.",
-                })}
-                placeholder="이름(실명)"
-              />
-              {/* <ErrorMsg>{errors?.memberName?.message}</ErrorMsg> */}
-            </InputBox>
+          <FlexCol gap="25px">
             <InputBox>
               <Input
                 {...register("memberEmail", {
@@ -107,20 +109,40 @@ const SignupPage = () => {
                 })}
                 placeholder="이메일"
               />
-              {/* <ErrorMsg>{errors?.memberEmail?.message}</ErrorMsg> */}
+              {errors?.memberEmail?.message ? (
+                <ErrorMsg>
+                  <AiOutlineAlert
+                    fill="tomato"
+                    stroke="tomato"
+                    strokeWidth={30}
+                    size={16}
+                  />
+                  {errors?.memberEmail?.message}
+                </ErrorMsg>
+              ) : (
+                ""
+              )}
             </InputBox>
             <InputBox>
               <Input
-                {...register("phoneNum", {
-                  required: "휴대폰 번호을 입력해주세요.",
-                  pattern: {
-                    value: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
-                    message: "올바르지 않은 휴대폰 번호입니다.",
-                  },
+                {...register("memberName", {
+                  required: "이름을 입력해주세요.",
                 })}
-                placeholder="휴대폰번호"
+                placeholder="닉네임"
               />
-              {/* <ErrorMsg>{errors?.phoneNum?.message}</ErrorMsg> */}
+              {errors?.memberName?.message ? (
+                <ErrorMsg>
+                  <AiOutlineAlert
+                    fill="tomato"
+                    stroke="tomato"
+                    strokeWidth={30}
+                    size={16}
+                  />
+                  {errors?.memberName?.message}
+                </ErrorMsg>
+              ) : (
+                ""
+              )}
             </InputBox>
             <InputBox>
               <Input
@@ -136,7 +158,19 @@ const SignupPage = () => {
                 })}
                 placeholder="비밀번호"
               />
-              {/* <ErrorMsg>{errors?.password?.message}</ErrorMsg> */}
+              {errors?.password?.message ? (
+                <ErrorMsg>
+                  <AiOutlineAlert
+                    fill="tomato"
+                    stroke="tomato"
+                    strokeWidth={30}
+                    size={16}
+                  />
+                  {errors?.password?.message}
+                </ErrorMsg>
+              ) : (
+                ""
+              )}
             </InputBox>
             <InputBox>
               <Input
@@ -150,13 +184,124 @@ const SignupPage = () => {
                       "8~16자 영문 대소문자, 숫자, 특수문자 한 자 이상 조합",
                   },
                 })}
-                placeholder="중복확인"
+                placeholder="비밀번호 확인"
               />
-              {/* <ErrorMsg>{errors?.confirmPw?.message}</ErrorMsg> */}
-              <ErrorMsg>
-                <Message>{errors?.memberEmail?.message}</Message>
-              </ErrorMsg>
+              {errors?.confirmPw?.message ? (
+                <ErrorMsg>
+                  <AiOutlineAlert
+                    fill="tomato"
+                    stroke="tomato"
+                    strokeWidth={30}
+                    size={16}
+                  />
+                  {errors?.confirmPw?.message}
+                </ErrorMsg>
+              ) : (
+                ""
+              )}
             </InputBox>
+            <BoxWrap>
+              <GenderBox>
+                성별:
+                <label htmlFor="gender">
+                  <input {...register("gender")} type="radio" value="남자" />
+                  남자
+                </label>
+                <label htmlFor="gender">
+                  <input {...register("gender")} type="radio" value="여자" />
+                  여자
+                </label>
+              </GenderBox>
+              <BirthBox>
+                <span>생년월일:</span>
+
+                <Controller
+                  control={control}
+                  name="birth"
+                  render={(field) => (
+                    <DatePicker
+                      {...register("birth")}
+                      locale={ko}
+                      dateFormat="yyyy/MM/dd"
+                      selected={startDate}
+                      minDate={new Date("1900-01-01")}
+                      placeholderText="생년월일을 입력"
+                      onChange={(date: any) => setStartDate(date)}
+                    />
+                  )}
+                />
+                {/* <DatePicker
+                  {...register("birth")}
+                  locale={ko}
+                  dateFormat="yyyy/MM/dd"
+                  selected={startDate}
+                  minDate={new Date("1900-01-01")}
+                  placeholderText="생년월일을 입력"
+                  onChange={(date: any) => setStartDate(date)}
+                /> */}
+              </BirthBox>
+              <JobBox>
+                직업:
+                <label htmlFor="job">
+                  <input {...register("job")} type="radio" value="취준생" />
+                  취준생
+                </label>
+                <label htmlFor="job">
+                  <input
+                    {...register("job")}
+                    type="radio"
+                    value="프론트개발자"
+                  />
+                  프론트개발자
+                </label>
+                <label htmlFor="job">
+                  <input
+                    {...register("job")}
+                    type="radio"
+                    value="백엔드개발자"
+                  />
+                  백엔드개발자
+                </label>
+              </JobBox>
+              <StackBox>
+                {/* <Input
+                type="stack"
+                {...register("stack", {
+                  required: "스택을 작성해주세요.",
+                })}
+                placeholder="스택을 작성해주세요. ex) /javascript/node"
+              /> */}
+                스택:
+                <label htmlFor="stack">
+                  <input
+                    {...register("stack")}
+                    type="checkbox"
+                    value="javaScript"
+                  />
+                  javaScript
+                </label>
+                <label htmlFor="stack">
+                  <input {...register("stack")} type="checkbox" value="React" />
+                  React
+                </label>
+                <label htmlFor="stack">
+                  <input
+                    {...register("stack")}
+                    type="checkbox"
+                    value="Node.js"
+                  />
+                  Node.js
+                </label>
+                <label htmlFor="stack">
+                  <input
+                    {...register("stack")}
+                    type="checkbox"
+                    value="Node.js"
+                  />
+                  Spring
+                </label>
+              </StackBox>
+            </BoxWrap>
             <SignupBtn>가입하기</SignupBtn>
           </FlexCol>
         </form>
@@ -179,7 +324,7 @@ const InnerWrap = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 550px;
-  height: 630px;
+  height: 800px;
   border: 1px solid lightgray;
   border-radius: 15px;
   background-color: white;
@@ -194,8 +339,8 @@ const Title = styled.div`
 
 const Input = styled.input`
   height: 50px;
-  margin: 10px 0 10px 0;
   padding: 4px 8px;
+  margin-top: 5px;
   border-radius: 67px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
   border: 1px solid ${(props) => props.theme.__grayLight};
@@ -213,24 +358,24 @@ const InputBox = styled.div`
 const ErrorMsg = styled.div`
   width: 400px;
   height: 25px;
+  margin-top: 5px;
   background: rgba(210, 18, 18, 0.1);
   border: 1px solid #ffffff;
   border-radius: 67px;
-  margin: 10px 0 10px 0;
   color: #747373;
 `;
 
-const Message = styled.div`
-  width: 100%;
-  line-height: 25px;
-  color: #747373;
-  font-size: 14px;
-  padding-left: 10px;
+const BoxWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 const SignupBtn = styled.button`
+  position: absolute;
   width: 400px;
   height: 50px;
+  bottom: 40px;
   border: none;
   background-color: #025729;
   border-radius: 67px;
@@ -238,4 +383,26 @@ const SignupBtn = styled.button`
   font-size: 20px;
   font-weight: 600;
   cursor: pointer;
+`;
+
+const GenderBox = styled.div`
+  width: 400px;
+  margin-top: 5px;
+  display: flex;
+  justify-content: left;
+  color: #747373;
+  label {
+    color: #747373;
+  }
+`;
+
+const JobBox = styled(GenderBox)``;
+
+const StackBox = styled(GenderBox)``;
+
+const BirthBox = styled(GenderBox)`
+  span {
+    width: 80px;
+    color: #747373;
+  }
 `;

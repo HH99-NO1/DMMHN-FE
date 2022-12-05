@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { FlexRow, FlexCol, Text, Gap } from "../elements/elements";
 import { instance } from "../recoil/instance";
 import { useEffect, useState } from "react";
-import { RepeatOneSharp } from "@material-ui/icons";
 
 interface IUsers {
   memberEmail: string;

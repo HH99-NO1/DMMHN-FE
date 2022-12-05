@@ -253,10 +253,11 @@ const Simulation = () => {
                   </Text>
                   <FlexCol gap="10px">
                     {testSimulation.questionArr
-                      .slice(0, count)
+                      .slice(1, count)
                       .map((v: string, index: number) => (
                         <FlexRow gap="5px" key={index}>
                           {index + 1}.<Text key={index}>{v}</Text>
+                          <Text>{stopwatchTime(nextLap.lapTime)}</Text>
                         </FlexRow>
                       ))}
                   </FlexCol>

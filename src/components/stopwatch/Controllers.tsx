@@ -1,11 +1,13 @@
-// Controllers.tsx
-import * as react from "react";
+import React, * as react from "react";
+import styled from "styled-components";
+import { STATUS } from "../../hooks/useStopwatch"; // 이걸 가져옴
+import Button from "./Button";
 
-// 작동중 : 랩      정지
-// 정지   : 초기화   시작
+// 시작 후 : 랩      정지
+// 정지    : 초기화   시작
 
 interface IProps {
-  state: unknown;
+  state: STATUS;
   record: () => void;
   stop: () => void;
   reset: () => void;
@@ -20,20 +22,39 @@ const Controllers: React.FC<IProps> = ({
   start,
 }) => {
   return (
-    <div>
-      {state === "Processing" ? (
+    <Container>
+      {state === STATUS.PROCESSING ? (
         <>
-          <button onClick={record}>랩</button>
-          <button onClick={stop}>정지</button>
+          <Button type="NORMAL" onClick={record}>
+            랩
+          </Button>
+          <Button type="ERROR" onClick={stop}>
+            정지
+          </Button>
         </>
       ) : (
         <>
-          <button onClick={reset}>초기화</button>
-          <button onClick={start}>시작</button>
+          <Button type="NORMAL" onClick={reset}>
+            초기화
+          </Button>
+          <Button type="SUCCESS" onClick={start}>
+            시작
+          </Button>
         </>
       )}
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  flex: none;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+
+  border-bottom: 1px solid #1d1c1e;
+`;
 
 export default Controllers;

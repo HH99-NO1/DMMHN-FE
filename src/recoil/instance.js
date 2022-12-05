@@ -2,17 +2,19 @@ import axios from "axios";
 
 const preAccessToken = sessionStorage.getItem("accessToken");
 export const instance = axios.create({
-  baseURL: "https://dgbnb.shop",
+  // baseURL: "https://dgbnb.shop",
+  baseURL: "https://chamchimayo.shop",
   headers: { Authorization: preAccessToken },
 });
 
 export const UserApi = axios.create({
-  baseURL: "https://dgbnb.shop",
+  // baseURL: "https://dgbnb.shop",
+  baseURL: "https://chamchimayo.shop",
 });
 
 instance.interceptors.response.use(
   (res) => {
-    console.log(res);
+    // console.log(res);
     return res;
   },
   async (error) => {

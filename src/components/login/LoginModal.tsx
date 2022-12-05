@@ -44,9 +44,11 @@ const LoginModal = () => {
       sessionStorage.setItem("accessToken", data.data.accessToken);
       sessionStorage.setItem("refreshToken", data.data.refreshToken);
       alert("로그인이 완료되었습니다.");
+      console.log(data);
       setOnLogin(false);
       setIsLogin(true);
-      return window.location.reload();
+      // return window.location.reload();
+      return;
     } catch (error: any) {
       console.log(error.message);
       return error.message;
@@ -242,10 +244,6 @@ const LoginBody = styled.form`
   height: 100%;
   padding: 30px 60px;
   overflow-y: auto;
-  @media screen and (max-height: 620px) {
-    position: relative;
-    height: calc(100vh - 40px);
-  }
 `;
 
 interface IInput {

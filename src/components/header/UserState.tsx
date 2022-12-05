@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FlexRow } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
@@ -7,12 +7,12 @@ const UserState = () => {
   const init = {
     createdAt: "",
     memberEmail: "",
-    profileImg: "",
+    img: "",
     updatedAt: "",
     _id: "",
   };
   const [userLoginData, setUserLoginData] = useState(init);
-  console.log(userLoginData);
+  // console.log(userLoginData);
   const getUserLoginData = async () => {
     try {
       const { data } = await instance.get(`/members/me`);
@@ -25,12 +25,13 @@ const UserState = () => {
   useEffect(() => {
     getUserLoginData();
   }, []);
+  console.log(userLoginData.img);
 
   useEffect(() => {}, [userLoginData]);
   return (
     <>
       <FlexRow>
-        <Img src={userLoginData.profileImg} />
+        <Img src={userLoginData.img} />
       </FlexRow>
     </>
   );
@@ -41,6 +42,5 @@ const Img = styled.img`
   height: 40px;
   border-radius: 50%;
 `;
-const HamburgerMenu = styled.div``;
 
 export default UserState;

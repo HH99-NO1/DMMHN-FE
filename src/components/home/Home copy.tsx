@@ -7,15 +7,10 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
 import "swiper/css/pagination";
-import { FlexCol, HeaderBox } from "../../elements/elements";
-import { useSetRecoilState } from "recoil";
-import { onLoginState } from "../../recoil/atoms/atoms";
 
 SwiperCore.use([Navigation, Autoplay, Pagination]);
 
-const SimulationGuide = () => {
-  const onLogin = useSetRecoilState(onLoginState);
-
+const Home = () => {
   const [swiper, setSwiper] = useState(null);
   const navigate = useNavigate();
   const PrevRef = useRef(null);
@@ -23,21 +18,19 @@ const SimulationGuide = () => {
 
   return (
     <Ctn>
-      <HeaderBox />
       <MainCenter>
         <MainText>
-          떨리는 면접, 우리만의 방법이 있다!
+          어떤 면접이든 연습을 통해 대비해보세요
           <br />
-          <MainInnerText>"모의면접"</MainInnerText>을 통해 시작해보세요
+          <MainInnerText>"떨면 뭐하니"</MainInnerText>가 도와드립니다
         </MainText>
         <SubText>
-          모의면접관의 질문을 <MainInnerText>"음성"</MainInnerText>으로 듣고,
-          확실하게 준비하세요.
+          떨면뭐하니의 신뢰할 수 있는 비디오 미팅 솔루션을 사용하여
           <br />
-          떨면뭐하니와 함께라면 긴장을 이겨낼 수 있습니다.
+          소통하고, 협업하고, 함께 더욱 많은 것을 해내세요.
         </SubText>
       </MainCenter>
-      <LoginBtn onClick={() => onLogin(true)}>모의면접 시작하기</LoginBtn>
+
       <StyledSwiper
         speed={1000}
         // navigation={{
@@ -79,9 +72,8 @@ const SimulationGuide = () => {
   );
 };
 
-const Ctn = styled(FlexCol)`
-  margin: 0 auto 0 auto;
-  gap: 10px;
+const Ctn = styled.div`
+  /* margin: 10px auto 0 auto; */
 `;
 
 const Img = styled.img`
@@ -98,10 +90,11 @@ const StyledSwiper = styled(Swiper)`
 
 const MainCenter = styled.div`
   text-align: center;
+  margin-bottom: 80px;
 `;
 
 const MainText = styled.h2`
-  font-size: 30px;
+  font-size: 36px;
   font-weight: 700;
   line-height: 49px;
   margin-bottom: 25px;
@@ -113,7 +106,7 @@ const MainInnerText = styled.span`
 `;
 
 const SubText = styled.p`
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 200;
   line-height: 32.69px;
 `;
@@ -125,22 +118,4 @@ const SubText = styled.p`
 //   z-index: 22;
 // `;
 
-const LoginBtn = styled.button`
-  background-color: ${(props) => props.theme.__greenMidium};
-  color: white;
-  border: none;
-  font-size: 30px;
-  font-weight: 600;
-  margin: 30px auto 30px auto;
-  max-width: 300px;
-  width: 100%;
-  padding: 10px 30px;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: all, 0.2s;
-  :hover {
-    box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.5) inset;
-  }
-`;
-
-export default SimulationGuide;
+export default Home;

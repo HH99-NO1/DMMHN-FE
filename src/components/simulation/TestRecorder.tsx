@@ -65,7 +65,9 @@ const TestRecorder = () => {
           다운받기
         </button>
         <div style={{ width: "600px", height: "600px" }}>
-          {videoBlob && <Player src={window.URL.createObjectURL(videoBlob)} />}
+          {!!videoBlob && (
+            <Player src={window.URL.createObjectURL(videoBlob)} />
+          )}
         </div>
       </RecordTop>
     </>

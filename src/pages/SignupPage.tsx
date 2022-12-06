@@ -232,10 +232,13 @@ const SignupPage = () => {
                     <DatePicker
                       {...register("birth")}
                       locale={ko}
-                      dateFormat="yyyy/MM/dd"
+                      dateFormat="yyyy - MM - dd"
                       selected={startDate}
                       minDate={new Date("1900-01-01")}
                       placeholderText="생년월일을 입력"
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
                       onChange={(date: any) => setStartDate(date)}
                     />
                   )}

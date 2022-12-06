@@ -2,12 +2,8 @@ import Layout from "../components/home/Layout";
 import styled from "styled-components";
 import { FlexRow, FlexCol, Text, Gap } from "../elements/elements";
 import { instance } from "../recoil/instance";
-<<<<<<< HEAD
-import { useEffect, useState } from "react";
-=======
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Modification from "../components/modify/Modification";
->>>>>>> ddf71c19612fac9034d8197e9ff1d37d8d060036
 
 interface IUsers {
   memberEmail: string;

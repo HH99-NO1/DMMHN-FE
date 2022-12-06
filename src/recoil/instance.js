@@ -38,7 +38,7 @@ instance.interceptors.response.use(
             const checkToken = async () => {
               console.log("checkToken 중...");
               return await axios
-                .get("https://dgbnb.shop/members/me", {
+                .get("https://chamchimayo.shop/members/me", {
                   Authorization: preAccessToken,
                 })
                 .then(async (res) => {

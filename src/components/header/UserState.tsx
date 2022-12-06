@@ -1,37 +1,20 @@
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { FlexRow } from "../../elements/elements";
-import { instance } from "../../recoil/instance";
+import { FlexRow, Text } from "../../elements/elements";
+import { userState } from "../../recoil/atoms/atoms";
 
 const UserState = () => {
-  const init = {
-    createdAt: "",
-    memberEmail: "",
-    img: "",
-    updatedAt: "",
-    _id: "",
-  };
-  const [userLoginData, setUserLoginData] = useState(init);
-  // console.log(userLoginData);
-  const getUserLoginData = async () => {
-    try {
-      const { data } = await instance.get(`/members/me`);
-      setUserLoginData(data);
-      return data;
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  useEffect(() => {
-    getUserLoginData();
-  }, []);
-  console.log(userLoginData.img);
+  const loginUserState = useRecoilValue(userState);
+  console.log(loginUserState);
 
-  useEffect(() => {}, [userLoginData]);
   return (
     <>
       <FlexRow>
-        <Img src={userLoginData.img} />
+        <Img src={loginUserState?.img} />
+        <Text fontSize="14px" color="white">
+          {loginUserState?.memberName}
+        </Text>
       </FlexRow>
     </>
   );

@@ -112,6 +112,7 @@ const SimulationSetting = () => {
                       </option>
                       <option value="react">프론트엔드 - React.js</option>
                       <option value="node">백엔드 - Node.js</option>
+                      <option value="spring">백엔드 - spring</option>
                     </Select>
                   </FlexRow>
                 </OptionBox>

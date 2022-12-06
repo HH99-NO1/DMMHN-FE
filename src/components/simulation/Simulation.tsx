@@ -91,8 +91,7 @@ const Simulation = () => {
   }, [stream, refVideo]);
 
   // 스톱워치 영역
-  const { seconds, status, laps, nextLap, start, stop, record, reset } =
-    useStopwatch();
+  const { seconds, nextLap, start, stop, record } = useStopwatch();
   const [isStop, setIsStop] = useState(false);
 
   // naver CLOVA VOICE api
@@ -107,6 +106,19 @@ const Simulation = () => {
 
   const requestAudioFile = async (event: any) => {
     isStop && stop();
+
+    // if (!isStart) {
+    //   event.target.disabled = true;
+    //   event.target.style.backgroundColor = "black";
+
+    //   setTimeout(() => {
+    //     event.target.disabled = false;
+    //     event.target.style.backgroundColor = "#092304";
+    //     console.log("버튼 사용 가능");
+    //   }, 3000);
+
+    //   return;
+    // }
 
     console.log("request Audio");
 
@@ -137,13 +149,15 @@ const Simulation = () => {
 
       // 오디오 시작
       source.start();
+
+      // 오디오 재생 중 버튼 비활성화 처리
       event.target.disabled = true;
       event.target.style.backgroundColor = "black";
 
       console.log("source : ", source.buffer.duration);
       setTimeout(() => {
         event.target.disabled = false;
-        event.target.style.backgroundColor = "#1b172f";
+        event.target.style.backgroundColor = "#092304";
         console.log("버튼 사용 가능");
       }, source.buffer.duration * 1000 + 500);
 
@@ -216,15 +230,22 @@ const Simulation = () => {
           <Ctn>
             <CategoryArea>
               모의면접 -{" "}
-              {testSimulation.category === "react" ? "React.js" : "Node.js"}
+              {testSimulation.category === "react"
+                ? "React.js"
+                : testSimulation.category === "node"
+                ? "Node.js"
+                : "spring"}
             </CategoryArea>
             <CheckQuestion>
-              Q{result.length} / Q{testSimulation.questionArr.length}
+              {currValue !== "모의 면접이 종료되었습니다."
+                ? `Q${result.length}`
+                : `Q${result.length - 1}`}
+              / Q{testSimulation.questionArr.length}
             </CheckQuestion>
             <SimulationHeader>
               {isStart ? (
                 <>
-                  {result.length >= count ? (
+                  {currValue !== "모의 면접이 종료되었습니다." ? (
                     <TextEl fontSize="24px" fontWeight="600">
                       Q{result.length}.
                     </TextEl>
@@ -243,22 +264,36 @@ const Simulation = () => {
               )}
             </SimulationHeader>
 
-            <Gap gap="20px" />
-
             <FlexCol gap="10px">
               {isResult && (
                 <ResultArea>
                   <Text fontSize="20px" fontWeight="600">
                     모의면접 진행 현황
                   </Text>
-                  <FlexCol gap="10px">
-                    {testSimulation.questionArr
-                      .slice(0, count)
-                      .map((v: string, index: number) => (
-                        <FlexRow gap="5px" key={index}>
-                          {index + 1}.<Text key={index}>{v}</Text>
-                        </FlexRow>
-                      ))}
+                  <Gap gap="30px" />
+                  <FlexCol gap="10px" width="100%">
+                    {result &&
+                      result
+                        ?.slice(1, count)
+                        .map(
+                          (
+                            v: { question: string; time: string },
+                            index: number
+                          ) => (
+                            <FlexRow
+                              gap="20px"
+                              width="100%"
+                              justifyContent="space-between"
+                              alignItem="flex-start"
+                              key={index}
+                            >
+                              <Text key={index}>
+                                Q{index + 1}.{v.question}
+                              </Text>
+                              <Text>{v.time}</Text>
+                            </FlexRow>
+                          )
+                        )}
                   </FlexCol>
                 </ResultArea>
               )}
@@ -303,11 +338,12 @@ const Simulation = () => {
                 </TimeIndicatorBox>
               </ContentWrap>
             </SimulationContent>
-
+            <Gap gap="20px" />
             {currValue !== "모의 면접이 종료되었습니다." ? (
               <>
                 {!isStart ? (
                   <Button
+                    id="startBtn"
                     onClick={(event) => {
                       requestAudioFile(event);
                       // startTotalTime()
@@ -441,7 +477,7 @@ const ResultArea = styled(FlexCol)`
   width: 400px;
   height: 300px;
   border-radius: 10px;
-  padding: 10px;
+  padding: 15px;
 `;
 const IconArea = styled.div`
   position: absolute;

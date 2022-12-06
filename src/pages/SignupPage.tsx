@@ -2,7 +2,7 @@ import { Controller, useForm, useFormState } from "react-hook-form";
 import axios from "axios";
 import { instance, UserApi } from "../recoil/instance";
 import styled from "styled-components";
-import { FlexCol } from "../elements/elements";
+import { FlexCol, Gap, HeaderBox } from "../elements/elements";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineAlert } from "react-icons/ai";

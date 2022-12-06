@@ -4,12 +4,13 @@ import styled from "styled-components";
 import { GrClose } from "react-icons/gr";
 import { AiOutlineAlert } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import { instance } from "../../recoil/instance";
+import { instance, UserApi } from "../../recoil/instance";
 import { useForm } from "react-hook-form";
 import { FlexCol, FlexRow, Liner, Text } from "../../elements/elements";
 import errorNotYet from "../errors/errorNotYet";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isLoginState, onLoginState } from "../../recoil/atoms/atoms";
+import axios from "axios";
 
 interface IForm {
   memberEmail: string;
@@ -37,8 +38,7 @@ const LoginModal = () => {
         memberEmail: submitData.memberEmail,
         password: submitData.password,
       };
-      // console.log(req);
-      const { data } = await instance.post(`/members/login`, req);
+      const { data } = await UserApi.post(`/members/login`, req);
       // console.log(data.data.accessToken);
       // console.log(data.data.refreshToken);
       sessionStorage.setItem("accessToken", data.data.accessToken);
@@ -50,8 +50,12 @@ const LoginModal = () => {
       // return window.location.reload();
       return;
     } catch (error: any) {
-      console.log(error.message);
-      return error.message;
+      console.log(error.response);
+      // console.log(error.message);
+      if (error.response.status === 400) {
+        alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+      }
+      return error.response;
     }
   };
 

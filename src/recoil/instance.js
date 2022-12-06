@@ -33,24 +33,71 @@ instance.interceptors.response.use(
         const preAccessToken = sessionStorage.getItem("accessToken");
         // console.log("Authorization: " + preAccessToken);
         // console.log("refresh: " + preRefreshToken);
-        if (preRefreshToken) {
+        if (preAccessToken) {
           try {
-            async function checkToken() {
+            const checkToken = async () => {
               console.log("checkToken 중...");
               return await axios
-                .get("https://dgbnb.shop/members/me", {
+                .get("https://chamchimayo.shop/members/me", {
                   Authorization: preAccessToken,
                 })
                 .then(async (res) => {
                   console.log(res);
                 });
-            }
+            };
           } catch (error) {
-            console.log(error);
+            const errorCode = error.response;
+            console.log(errorCode);
+            if (errorCode === undefined) {
+              try {
+                console.log("refresh를 요구했다.");
+                const { data } = await instance.post(`/members/refresh`, 0, {
+                  headers: {
+                    Authorization: preAccessToken,
+                    refresh: preRefreshToken,
+                  },
+                });
+                const newAccessToken = data.data.accessToken;
+                // console.log(data);
+                // console.log(data.data);
+                // console.log(data.data.accessToken);
+                // console.log(newAccessToken);
+
+                return sessionStorage.setItem("accessToken", newAccessToken);
+              } catch (e) {
+                alert("로그인 기한이 만료되었습니다.");
+                sessionStorage.removeItem("accessToken");
+                sessionStorage.removeItem("refreshToken");
+                // setReqLogin(true);
+                console.log(e);
+              }
+            }
+            // setReqLogin(true);
+            console.log(errorCode);
           }
         } else {
           throw new Error("There is no refresh token");
         }
+
+        // if (preRefreshToken) {
+        //   try {
+        //     async function checkToken() {
+        //       console.log("checkToken 중...");
+        //       return await axios
+        //         .get("https://dgbnb.shop/members/me", {
+        //           Authorization: preAccessToken,
+        //         })
+        //         .then(async (res) => {
+        //           console.log(res);
+        //         });
+        //     }
+        //   } catch (error) {
+        //     console.log(error);
+        //   }
+        // }
+        // else {
+        //   throw new Error("There is no refresh token");
+        // }
       }
     } catch (e) {
       // 오류 내용 출력 후 요청 거절

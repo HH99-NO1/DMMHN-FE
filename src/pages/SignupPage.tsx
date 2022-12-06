@@ -203,12 +203,22 @@ const SignupPage = () => {
             <BoxWrap>
               <GenderBox>
                 성별:
-                <label htmlFor="gender">
-                  <input {...register("gender")} type="radio" value="남자" />
+                <label htmlFor="male">
+                  <input
+                    id="male"
+                    {...register("gender")}
+                    type="radio"
+                    value="남자"
+                  />
                   남자
                 </label>
-                <label htmlFor="gender">
-                  <input {...register("gender")} type="radio" value="여자" />
+                <label htmlFor="female">
+                  <input
+                    id="female"
+                    {...register("gender")}
+                    type="radio"
+                    value="여자"
+                  />
                   여자
                 </label>
               </GenderBox>
@@ -242,20 +252,27 @@ const SignupPage = () => {
               </BirthBox>
               <JobBox>
                 직업:
-                <label htmlFor="job">
-                  <input {...register("job")} type="radio" value="취준생" />
+                <label htmlFor="seeker">
+                  <input
+                    id="seeker"
+                    {...register("job")}
+                    type="radio"
+                    value="취준생"
+                  />
                   취준생
                 </label>
-                <label htmlFor="job">
+                <label htmlFor="frontDev">
                   <input
+                    id="frontDev"
                     {...register("job")}
                     type="radio"
                     value="프론트개발자"
                   />
                   프론트개발자
                 </label>
-                <label htmlFor="job">
+                <label htmlFor="backDev">
                   <input
+                    id="backDev"
                     {...register("job")}
                     type="radio"
                     value="백엔드개발자"
@@ -272,31 +289,39 @@ const SignupPage = () => {
                 placeholder="스택을 작성해주세요. ex) /javascript/node"
               /> */}
                 스택:
-                <label htmlFor="stack">
+                <label htmlFor="javaScript">
                   <input
+                    id="javaScript"
                     {...register("stack")}
                     type="checkbox"
                     value="javaScript"
                   />
                   javaScript
                 </label>
-                <label htmlFor="stack">
-                  <input {...register("stack")} type="checkbox" value="React" />
+                <label htmlFor="React">
+                  <input
+                    id="React"
+                    {...register("stack")}
+                    type="checkbox"
+                    value="React"
+                  />
                   React
                 </label>
-                <label htmlFor="stack">
+                <label htmlFor="Nodejs">
                   <input
+                    id="Nodejs"
                     {...register("stack")}
                     type="checkbox"
                     value="Node.js"
                   />
                   Node.js
                 </label>
-                <label htmlFor="stack">
+                <label htmlFor="Spring">
                   <input
+                    id="Spring"
                     {...register("stack")}
                     type="checkbox"
-                    value="Node.js"
+                    value="Spring"
                   />
                   Spring
                 </label>

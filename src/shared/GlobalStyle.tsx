@@ -75,6 +75,13 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+.birth-datepicker {
+  border: none;
+}
+.react-datepicker {
+  border: 1px solid red;
+}
 `;
 
 export default GlobalStyle;

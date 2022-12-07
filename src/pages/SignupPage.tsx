@@ -15,7 +15,7 @@ interface IForm {
   memberName: string;
   password: string;
   confirmPw: string;
-  birth: string;
+  birth: Date;
   job: string;
   gender: string;
   stack: string;
@@ -32,6 +32,8 @@ interface IForm {
 const SignupPage = () => {
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState(new Date());
+
+  console.log(startDate);
 
   const {
     register,
@@ -61,7 +63,7 @@ const SignupPage = () => {
           memberEmail: submitData.memberEmail,
           password: submitData.password,
           confirmPw: submitData.confirmPw,
-          birth: submitData.birth,
+          birth: startDate.toDateString(),
           gender: submitData.gender,
           job: submitData.job,
           stack: submitData.stack,
@@ -72,8 +74,12 @@ const SignupPage = () => {
         // console.log(data.data.refreshToken);
         // sessionStorage.setItem("accesstoken", data.data.accessToken);
         // sessionStorage.setItem("refreshtoken", data.data.refreshToken);
-      } catch (error: any) {
-        return error.message;
+      } catch (error: unknown | any) {
+        if (error.response.status === 400) {
+          alert("이미 가입된 계정입니다. 이메일을 확인해주세요.");
+        }
+        console.log(error.response);
+        return error.response;
       }
     }
   };
@@ -203,12 +209,22 @@ const SignupPage = () => {
             <BoxWrap>
               <GenderBox>
                 성별:
-                <label htmlFor="gender">
-                  <input {...register("gender")} type="radio" value="남자" />
+                <label htmlFor="male">
+                  <input
+                    id="male"
+                    {...register("gender")}
+                    type="radio"
+                    value="남자"
+                  />
                   남자
                 </label>
-                <label htmlFor="gender">
-                  <input {...register("gender")} type="radio" value="여자" />
+                <label htmlFor="female">
+                  <input
+                    id="female"
+                    {...register("gender")}
+                    type="radio"
+                    value="여자"
+                  />
                   여자
                 </label>
               </GenderBox>
@@ -218,15 +234,19 @@ const SignupPage = () => {
                 <Controller
                   control={control}
                   name="birth"
-                  render={(field) => (
+                  render={() => (
                     <DatePicker
                       {...register("birth")}
                       locale={ko}
-                      dateFormat="yyyy/MM/dd"
+                      dateFormat="yyyy - MM - dd"
+                      className="birth-datepicker"
                       selected={startDate}
                       minDate={new Date("1900-01-01")}
                       placeholderText="생년월일을 입력"
-                      onChange={(date: any) => setStartDate(date)}
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
+                      onChange={(date: Date) => setStartDate(date)}
                     />
                   )}
                 />
@@ -242,20 +262,27 @@ const SignupPage = () => {
               </BirthBox>
               <JobBox>
                 직업:
-                <label htmlFor="job">
-                  <input {...register("job")} type="radio" value="취준생" />
+                <label htmlFor="seeker">
+                  <input
+                    id="seeker"
+                    {...register("job")}
+                    type="radio"
+                    value="취준생"
+                  />
                   취준생
                 </label>
-                <label htmlFor="job">
+                <label htmlFor="frontDev">
                   <input
+                    id="frontDev"
                     {...register("job")}
                     type="radio"
                     value="프론트개발자"
                   />
                   프론트개발자
                 </label>
-                <label htmlFor="job">
+                <label htmlFor="backDev">
                   <input
+                    id="backDev"
                     {...register("job")}
                     type="radio"
                     value="백엔드개발자"
@@ -272,31 +299,39 @@ const SignupPage = () => {
                 placeholder="스택을 작성해주세요. ex) /javascript/node"
               /> */}
                 스택:
-                <label htmlFor="stack">
+                <label htmlFor="javaScript">
                   <input
+                    id="javaScript"
                     {...register("stack")}
                     type="checkbox"
                     value="javaScript"
                   />
                   javaScript
                 </label>
-                <label htmlFor="stack">
-                  <input {...register("stack")} type="checkbox" value="React" />
+                <label htmlFor="React">
+                  <input
+                    id="React"
+                    {...register("stack")}
+                    type="checkbox"
+                    value="React"
+                  />
                   React
                 </label>
-                <label htmlFor="stack">
+                <label htmlFor="Nodejs">
                   <input
+                    id="Nodejs"
                     {...register("stack")}
                     type="checkbox"
                     value="Node.js"
                   />
                   Node.js
                 </label>
-                <label htmlFor="stack">
+                <label htmlFor="Spring">
                   <input
+                    id="Spring"
                     {...register("stack")}
                     type="checkbox"
-                    value="Node.js"
+                    value="Spring"
                   />
                   Spring
                 </label>

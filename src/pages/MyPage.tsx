@@ -18,6 +18,9 @@ interface IUsers {
 const MyPage = () => {
   const [users, setUsers] = useState<IUsers>();
   const [modify, setModify] = useState(false);
+  const [img, setImg] = useState<any>(
+    "https://i.ibb.co/jwSbV5Z/profile-default.png"
+  );
 
   console.log(users?.job);
   useEffect(() => {
@@ -34,28 +37,44 @@ const MyPage = () => {
   //   }
   //   inputRef.current.click();
   // };
-
+  console.log(users);
   const onChangeImg = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     if (e.target.files) {
-      console.log(e.target.files);
-      const uploadFile = e.target.files[0];
-      console.log(uploadFile);
-      const formData = new FormData();
-      formData.append("profileImg", uploadFile);
+      try {
+        console.log(e.target.files);
+        const uploadFile = e.target.files[0];
+        console.log(uploadFile);
+        const formData = new FormData();
+        formData.append("profileImg", uploadFile);
 
-      await instance({
-        method: "patch",
-        url: "/members/me",
-        data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-    }
+        const { data } = await instance({
+          method: "patch",
+          url: "/members/me",
+          data: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log(data);
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (reader.readyState === 2) {
+            setImg(reader.result);
+          }
+        };
+        reader.readAsDataURL(uploadFile);
+      } catch (e) {
+        console.log(e);
+      }
+    } else return;
   };
 
+  useEffect(() => {
+    users?.img !== undefined && setImg(users.img);
+  }, [users]);
   return (
     <>
       <Layout>
@@ -67,7 +86,7 @@ const MyPage = () => {
                 onClick={onUploadImageButtonClick}
               /> */}
               <FlexCol>
-                <img src={users?.img}></img>
+                <img src={img}></img>
                 <form>
                   <label htmlFor="profileImg" />
                   <input

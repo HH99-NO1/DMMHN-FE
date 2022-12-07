@@ -40,8 +40,26 @@ const Header = () => {
     }
   }, [preAccessToken]);
 
+  // 헤더 배경 등 고정
+  const [isFixed, setIsFixed] = useState(false);
+  const handleShowButton = () => {
+    if (window.scrollY > 0) {
+      setIsFixed(true);
+    } else {
+      setIsFixed(false);
+    }
+  };
+
+  useEffect(() => {
+    handleShowButton();
+    window.addEventListener("scroll", handleShowButton);
+    return () => {
+      window.removeEventListener("scroll", handleShowButton);
+    };
+  }, []);
+
   return (
-    <Ctn>
+    <Ctn isFixed={isFixed}>
       <Wrap>
         <FlexRow gap="10px" justifyContent="space-between">
           <FlexRow gap="10px">
@@ -74,14 +92,41 @@ const Header = () => {
   );
 };
 
-const Ctn = styled.div`
+interface ICtn {
+  isFixed?: boolean;
+}
+
+const Ctn = styled.div<ICtn>`
   position: fixed;
   width: 100%;
-  background-color: transparent;
+
   /* box-shadow: 0px 2px 8px -2px rgba(0, 0, 0, 0.1); */
   /* border-bottom: 1px solid ${(props) => props.theme.__lineGray}; */
   z-index: 2;
   /* border: 1px solid red; */
+  background-color: ${(props) => {
+    if (props.isFixed) {
+      return "#004922";
+    } else {
+      return "transparent";
+    }
+  }};
+  border: none;
+  height: 60px;
+  /* border-bottom: ${(props) => {
+    if (props.isFixed) {
+      return `1px solid ${props.theme.__lineGray}`;
+    } else {
+      return "none";
+    }
+  }}; */
+  /* box-shadow: ${(props) => {
+    if (props.isFixed) {
+      return "0 3px 10px rgba(0,0,0,0.3);";
+    } else {
+      return "none";
+    }
+  }}; */
 `;
 
 const Wrap = styled.div`

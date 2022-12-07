@@ -15,28 +15,35 @@ const TestRecorder = () => {
   const [stream, setStream] = useState<MediaStream | null>();
   const [videoBlob, setVideoBlob] = useState<Blob | null>();
   const [type, setType] = useState<RecordType>("video");
+
   const startRecording = async () => {
     const mediaDevices = navigator.mediaDevices;
     const stream: MediaStream = await mediaDevices.getUserMedia({
-      video: true,
+      video: {
+        width: 400,
+        height: 300,
+        frameRate: 30,
+      },
       audio: true,
     });
     const recorder: RecordRTC = new RecordRTC(stream, {
       type: "video",
     });
-    await recorder.startRecording();
+    if (recorder) recorder.startRecording();
     setRecorder(recorder);
     setStream(stream);
   };
-
-  const stopRecording = async () => {
+  console.log("recorder: ", recorder);
+  const stopRecording = () => {
     if (recorder) {
-      await recorder.stopRecording();
-      (stream as any).stop();
-      const blob: Blob = await recorder.getBlob();
-      setVideoBlob(blob);
-      setStream(null);
-      setRecorder(null);
+      recorder.stopRecording(() => {
+        const blob: Blob = recorder.getBlob();
+        console.log(blob);
+        setVideoBlob(blob);
+        setStream(null);
+        setRecorder(null);
+      });
+      // (stream as any).stop();
     }
   };
 
@@ -52,21 +59,23 @@ const TestRecorder = () => {
     if (videoBlob) {
       const mp4s = new File([videoBlob], "test.mp4", { type: "video" });
       saveAs(mp4s, `${Date.now()}.mp4`);
+    } else {
+      alert("다운로드 할 수 없습니다.");
     }
   };
-
+  console.log(videoBlob);
   return (
     <>
       <RecordTop>
         {/* <button onClick={changeType}>비디오 녹화</button> */}
-        <button onClick={startRecording}>녹화 시작</button>
-        <button onClick={stopRecording}>녹화 중지</button>
-        <button onClick={downloadVid} disabled={!!!videoBlob}>
-          다운받기
-        </button>
+        <button onClick={() => startRecording()}>녹화 시작</button>
+        <button onClick={() => stopRecording()}>녹화 중지</button>
+        <button onClick={downloadVid}>다운받기</button>
         <div style={{ width: "600px", height: "600px" }}>
-          {!!videoBlob && (
+          {videoBlob ? (
             <Player src={window.URL.createObjectURL(videoBlob)} />
+          ) : (
+            "blob is false"
           )}
         </div>
       </RecordTop>

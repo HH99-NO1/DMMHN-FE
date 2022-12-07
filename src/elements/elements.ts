@@ -72,7 +72,6 @@ export const Gap = styled.div<IGap>`
 export const HeaderBox = styled(Gap)`
   height: 60px;
   background-color: #004922;
-  border-bottom: 1px solid ${(props) => props.theme.__lineGray};
 `;
 // HeaderBox element 끝
 // --------------------------

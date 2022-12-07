@@ -4,7 +4,11 @@ import { instance } from "../recoil/instance";
 const SnsLoginPage = () => {
   const onClick = async () => {
     try {
-      const { data } = await instance.post("google/isGoogle");
+      // console.log(process.env.REACT_APP_GOOGLE_CLIENT_SECRET);
+      const { data } = await instance.post(
+        "social/google/isGoogle"
+        // process.env.REACT_APP_GOOGLE_CLIENT_SECRET
+      );
       console.log(data);
       return data;
     } catch (e) {

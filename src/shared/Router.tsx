@@ -17,6 +17,7 @@ import RoomDetail from "../components/meeting/RoomDetail";
 import NaverTTS from "../components/simulation/NaverTTS";
 import TestRecorder from "../components/simulation/TestRecorder";
 import SnsLoginPage from "../pages/SnsLoginPage";
+import LoginPage from "../pages/LoginPage";
 
 const Router = () => {
   const onLogin = useRecoilValue(onLoginState);
@@ -29,6 +30,7 @@ const Router = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/meeting" element={<MeetingPage />} />
           <Route path="/meeting2/:roomName" element={<MeetingTest />} />

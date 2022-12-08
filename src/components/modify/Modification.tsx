@@ -3,6 +3,10 @@ import styled from "styled-components";
 import { FlexRow, FlexCol, Text, Gap } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
 import React, { useEffect, useState } from "react";
+import { Controller, useForm, useFormState } from "react-hook-form";
+import DatePicker, { ReactDatePicker } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import ko from "date-fns/locale/ko";
 
 interface IUsers {
   memeberName: string;
@@ -34,6 +38,7 @@ const MyPage = ({ users, setModify }: IProps) => {
   const [birth, setBirth] = useState(users?.birth);
   const [job, setJob] = useState(users?.job);
   const [stack, setStack] = useState(users?.stack);
+  const [startDate, setStartDate] = useState(new Date());
   // const [, ] = useState(users?.phoneNum);
 
   const onChangeEmail = (e: any) => {
@@ -51,6 +56,20 @@ const MyPage = ({ users, setModify }: IProps) => {
   // const  = (e: any) => {
   //   (e?.currentTarget.value);
   // };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    control,
+  } = useForm<IProps>({
+    // defaultValues: {
+    //   email: "@naver.com",
+    // },
+    // mode: "onChange",
+    // criteriaMode: "firstError",
+  });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -94,7 +113,26 @@ const MyPage = ({ users, setModify }: IProps) => {
             <Rows>
               <RowOne>생년월일</RowOne>
               <RowTwo>
-                <input type="text" value={birth || ""} onChange={onBirth} />
+                {/* <input type="text" value={birth || ""} onChange={onBirth} /> */}
+                <Controller
+                  control={control}
+                  name="users.birth"
+                  render={() => (
+                    <DatePicker
+                      {...register("users.birth")}
+                      locale={ko}
+                      dateFormat="yyyy - MM - dd"
+                      className="birth-datepicker"
+                      selected={startDate}
+                      minDate={new Date("1900-01-01")}
+                      placeholderText="생년월일을 입력"
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
+                      onChange={(date: Date) => setStartDate(date)}
+                    />
+                  )}
+                />
               </RowTwo>
             </Rows>
             <Rows>
@@ -170,7 +208,26 @@ const RowOne = styled.div`
 const RowTwo = styled(RowOne)`
   width: 600px;
   input {
-    width: 300px;
-    height: 40px;
+    width: 50%;
+    height: 50px;
+    padding: 8px 20px;
+    border-radius: 67px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid ${(props) => props.theme.__grayLight};
+    :focus {
+      outline: 1px solid ${(props) => props.theme.__grayMedium};
+    }
+  }
+`;
+
+const Input = styled.input`
+  width: 50%;
+  height: 50px;
+  padding: 8px 20px;
+  border-radius: 67px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid ${(props) => props.theme.__grayLight};
+  :focus {
+    outline: 1px solid ${(props) => props.theme.__grayMedium};
   }
 `;

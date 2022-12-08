@@ -202,9 +202,9 @@ const MyPage = () => {
                   <Rows>
                     <RowOne>스택</RowOne>
                     <RowTwo>
-                      {/* {users?.stack === undefined
-                          ? `입력값이 없습니다. 빈칸을 수정해주세요.`
-                          : users?.stack} */}
+                      {users?.stack === undefined
+                        ? `입력값이 없습니다. 빈칸을 수정해주세요.`
+                        : users?.stack}
                     </RowTwo>
                   </Rows>
                 </FlexCol>

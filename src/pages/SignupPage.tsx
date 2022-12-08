@@ -1,14 +1,15 @@
 import { Controller, useForm, useFormState } from "react-hook-form";
-import axios from "axios";
-import { instance, UserApi } from "../recoil/instance";
+import { UserApi } from "../recoil/instance";
 import styled from "styled-components";
-import { FlexCol, Gap, HeaderBox, Text } from "../elements/elements";
+import { FlexCol, HeaderBox, Text } from "../elements/elements";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineAlert } from "react-icons/ai";
-import DatePicker, { ReactDatePicker } from "react-datepicker";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ko from "date-fns/locale/ko";
+import { useSetRecoilState } from "recoil";
+import { onLoginState } from "../recoil/atoms/atoms";
 
 interface IForm {
   memberEmail: string;
@@ -31,6 +32,7 @@ interface IForm {
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const setOnLogin = useSetRecoilState(onLoginState);
   const [startDate, setStartDate] = useState(new Date());
   const [isChecked, setIsChecked] = useState(false);
   console.log(startDate);
@@ -100,26 +102,30 @@ const SignupPage = () => {
         );
       } else {
         try {
+          const year = startDate.getFullYear();
+          const month = ("0" + (startDate.getMonth() + 1)).slice(-2);
+          const day = ("0" + startDate.getDate()).slice(-2);
+          const dateString = year + "년 " + month + "월 " + day + "일";
           const req = {
             memberName: submitData.memberName,
             memberEmail: submitData.memberEmail,
             password: submitData.password,
             confirmPw: submitData.confirmPw,
-            birth: startDate.toDateString(),
+            birth: dateString,
             gender: submitData.gender,
             job: submitData.job,
             stack: submitData.stack,
             validate: process.env.REACT_APP_CHECK_SIGNUP_KEY,
           };
-          console.log(req);
+          // console.log(req);
+
           const { data } = await UserApi.post(`members/signup`, req);
           console.log(data.message);
           if (data.message) {
-            return (window.location.href = `/login`);
+            alert("회원가입이 완료되었습니다.");
+            navigate("/");
+            return setOnLogin(true);
           }
-          // console.log(data.data.refreshToken);
-          // sessionStorage.setItem("accesstoken", data.data.accessToken);
-          // sessionStorage.setItem("refreshtoken", data.data.refreshToken);
         } catch (error: unknown | any) {
           if (error.response.status === 400) {
             alert("이미 가입된 계정입니다. 이메일을 확인해주세요.");

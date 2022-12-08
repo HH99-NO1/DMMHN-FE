@@ -14,7 +14,6 @@ import {
   onLoginState,
   userState,
 } from "../../recoil/atoms/atoms";
-import axios from "axios";
 import jwt_decode from "jwt-decode";
 
 interface IForm {
@@ -112,14 +111,14 @@ const LoginModal = () => {
   return (
     <Portal>
       <BGBlack>
-        <Ctn ref={modalRef}>
-          <LoginCtn>
+        <Ctn>
+          <LoginCtn ref={modalRef}>
             <CloseBtn onClick={() => setOnLogin(false)}>
               <GrClose size={16} />
             </CloseBtn>
             <LoginHeader>이메일로 로그인</LoginHeader>
             <LoginBody onSubmit={handleSubmit(onValid)}>
-              <FlexCol gap="30px">
+              <FlexCol gap="10px">
                 <InputBox>
                   <Input
                     {...register("memberEmail", {
@@ -140,22 +139,25 @@ const LoginModal = () => {
                     placeholder="비밀번호"
                   />
                   <CheckBox>
-                    {errors?.memberEmail?.message ? (
-                      <ErrorMsg>
-                        <AiOutlineAlert
-                          fill="tomato"
-                          stroke="tomato"
-                          strokeWidth={30}
-                          size={16}
-                        />
-                        {errors?.memberEmail?.message}
-                      </ErrorMsg>
-                    ) : (
-                      <>
-                        <input id="login_is" type="checkbox" />
-                        <label htmlFor="login_is">로그인 상태 유지</label>
-                      </>
-                    )}
+                    {
+                      errors?.memberEmail?.message ? (
+                        <ErrorMsg>
+                          <AiOutlineAlert
+                            fill="tomato"
+                            stroke="tomato"
+                            strokeWidth={30}
+                            size={16}
+                          />
+                          {errors?.memberEmail?.message}
+                        </ErrorMsg>
+                      ) : null
+                      // (
+                      //   <>
+                      //     <input id="login_is" type="checkbox" />
+                      //     <label htmlFor="login_is">로그인 상태 유지</label>
+                      //   </>
+                      // )
+                    }
                   </CheckBox>
                 </InputBox>
                 <LoginBtn>로그인</LoginBtn>
@@ -164,10 +166,28 @@ const LoginModal = () => {
             </LoginBody>
             <Or>또는</Or>
             <SocialItemBox>
-              <Img border={true} src="/img/apple.png" alt="apple" />
-              <Img border={true} src="/img/google.png" alt="google" />
-              <Img src="/img/kakao.png" alt="kakao" />
-              <Img src="/img/naver.png" alt="naver" />
+              <Img
+                onClick={() => errorNotYet()}
+                border={true}
+                src="/img/apple.png"
+                alt="apple"
+              />
+              <Img
+                onClick={() => errorNotYet()}
+                border={true}
+                src="/img/google.png"
+                alt="google"
+              />
+              <Img
+                onClick={() => errorNotYet()}
+                src="/img/kakao.png"
+                alt="kakao"
+              />
+              <Img
+                onClick={() => errorNotYet()}
+                src="/img/naver.png"
+                alt="naver"
+              />
             </SocialItemBox>
             <Liner />
             <LoginFooter>
@@ -175,7 +195,14 @@ const LoginModal = () => {
                 아이디/비밀번호 찾기
               </TextEl>
               <TextOr />
-              <TextEl onClick={() => navigate("/signup")}>회원가입</TextEl>
+              <TextEl
+                onClick={() => {
+                  setOnLogin(false);
+                  navigate("/signup");
+                }}
+              >
+                회원가입
+              </TextEl>
             </LoginFooter>
           </LoginCtn>
         </Ctn>
@@ -231,6 +258,7 @@ const LoginCtn = styled.div`
   position: relative;
   border: 1px solid #ebebeb;
   border-radius: 10px;
+  margin: 0% 3%;
 `;
 
 // 모달 닫기 버튼
@@ -267,7 +295,7 @@ const LoginHeader = styled.h3`
 // form 객체 지정
 const LoginBody = styled.form`
   height: 100%;
-  padding: 30px 60px;
+  padding: 30px 10%;
   overflow-y: auto;
 `;
 
@@ -296,7 +324,7 @@ const InputBox = styled.div`
 
 const CheckBox = styled(FlexRow)`
   gap: 10px;
-  height: 40px;
+  height: 36.8px;
 `;
 
 // 에러 메세지
@@ -318,7 +346,7 @@ const LoginBtn = styled.button`
   font-size: 16px;
   font-weight: 600;
   width: 100%;
-  padding: 20px 30px;
+  padding: 20px 10%;
   border-radius: 30px;
   cursor: pointer;
   transition: all, 0.2s;
@@ -336,7 +364,8 @@ const Or = styled.span`
 
 // 소셜로그인 영역
 const SocialItemBox = styled(FlexRow)`
-  padding: 30px 60px;
+  width: 100%;
+  padding: 30px 10%;
   gap: 10px;
   justify-content: space-between;
 `;
@@ -345,8 +374,11 @@ interface IImg {
   border?: boolean;
 }
 const Img = styled.img<IImg>`
-  width: 70px;
-  height: 70px;
+  max-width: 70px;
+  min-width: 30px;
+  width: 100%;
+  max-height: 70px;
+  height: 100%;
   border-radius: 50%;
   border: ${(props) =>
     props.border === undefined
@@ -361,7 +393,7 @@ const Img = styled.img<IImg>`
 
 // 푸터 영역
 const LoginFooter = styled(FlexRow)`
-  padding: 30px 60px;
+  padding: 30px 10%;
   gap: 20px;
   justify-content: center;
 `;

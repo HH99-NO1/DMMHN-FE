@@ -1,9 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { FlexRow, Gap, HeaderBox } from "../../elements/elements";
 import { onLoginState } from "../../recoil/atoms/atoms";
 
 const Home = () => {
+  const navigate = useNavigate();
   const onLogin = useSetRecoilState(onLoginState);
   return (
     <>
@@ -20,7 +22,7 @@ const Home = () => {
             <br />
             소통하고, 협업하고, 함께 더욱 많은 것을 해내세요.
           </SubText>
-          <LoginBtn onClick={() => onLogin(true)}>모의면접</LoginBtn>
+          <LoginBtn onClick={() => navigate("/simulation")}>모의면접</LoginBtn>
         </MainCenter>
 
         <Img src="/img/mainPage.png" alt="mainImg2" />
@@ -41,7 +43,7 @@ const Ctn = styled(FlexRow)`
   gap: 20px;
   justify-content: space-between;
   align-items: center;
-  @media screen and (max-height: 800px) {
+  @media screen and (max-height: 600px) {
     position: relative;
     top: auto;
     left: auto;
@@ -56,6 +58,9 @@ const Img = styled.img`
   max-width: 600px;
   width: 100%;
   height: auto;
+  @media screen and (max-height: 800px) {
+    max-width: 400px;
+  }
 `;
 
 const MainCenter = styled.div`
@@ -69,6 +74,9 @@ const MainText = styled.h2`
   margin-bottom: 25px;
   color: white;
   @media screen and (max-width: 800px) {
+    font-size: 24px;
+  }
+  @media screen and (max-height: 800px) {
     font-size: 24px;
   }
 `;
@@ -86,6 +94,9 @@ const SubText = styled.p`
   @media screen and (max-width: 800px) {
     font-size: 16px;
   }
+  @media screen and (max-height: 800px) {
+    font-size: 16px;
+  }
 `;
 const LoginBtn = styled.button`
   background-color: ${(props) => props.theme.__yellowLight};
@@ -93,7 +104,7 @@ const LoginBtn = styled.button`
   border: none;
   font-size: 30px;
   font-weight: 600;
-  margin: 30px auto 30px auto;
+  margin: 30px auto 10px auto;
   max-width: 240px;
   width: 100%;
   padding: 10px 30px;
@@ -104,6 +115,9 @@ const LoginBtn = styled.button`
     box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.5) inset;
   }
   @media screen and (max-width: 800px) {
+    font-size: 24px;
+  }
+  @media screen and (max-height: 800px) {
     font-size: 24px;
   }
 `;

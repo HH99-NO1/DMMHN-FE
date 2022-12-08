@@ -339,7 +339,7 @@ const Simulation = () => {
                 <TimeIndicatorBox>
                   <TotalTimeTitle>현재 질문 답변시간</TotalTimeTitle>
                   <TimeBlackBox>
-                    <TimeGreenBox bgColor="#397055">
+                    <TimeGreenBox bgColor="#181818">
                       <TotalTime>{stopwatchTime(nextLap.lapTime)}</TotalTime>
                     </TimeGreenBox>
                   </TimeBlackBox>

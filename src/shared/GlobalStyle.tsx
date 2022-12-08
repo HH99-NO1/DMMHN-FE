@@ -76,11 +76,24 @@ a {
   color: inherit;
 }
 
+.react-datepicker-wrapper{
+  width: 50%;
+}
+
 .birth-datepicker {
   border: none;
 }
 .react-datepicker {
   border: 1px solid red;
+}
+
+.react-datepicker__input-container{
+  input{
+    padding: 8px 20px;
+  border-radius: 67px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid ${(props) => props.theme.__grayLight};
+  }
 }
 `;
 

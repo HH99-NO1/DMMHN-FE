@@ -2,11 +2,18 @@ import Layout from "../components/home/Layout";
 import styled from "styled-components";
 import { FlexRow, FlexCol, Text, Gap, HeaderBox } from "../elements/elements";
 import { instance } from "../recoil/instance";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Modification from "../components/modify/Modification";
 import { useRecoilState } from "recoil";
 import { userState } from "../recoil/atoms/atoms";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface IUsers {
   memberEmail: string;
@@ -19,6 +26,8 @@ interface IUsers {
 }
 
 const MyPage = () => {
+  const navigate = useNavigate();
+
   const [users, setUsers] = useState<IUsers>();
   const [modify, setModify] = useState(false);
   const [img, setImg] = useState<any>(
@@ -90,6 +99,28 @@ const MyPage = () => {
           }
         };
         reader.readAsDataURL(uploadFile);
+      } catch (e) {
+        console.log(e);
+      }
+    } else return;
+  };
+
+  // 회원탈퇴 영역
+  const [password, setPassword] = useState<string | undefined>();
+  const onChanghPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.currentTarget.value);
+  };
+  const deleteUserState = async () => {
+    if (window.confirm("정말 회원탈퇴하시겠습니까?")) {
+      try {
+        const preAccessToken = sessionStorage.getItem("accessToken");
+
+        const { data } = await instance.delete(`/members/me`, {
+          password: password,
+        });
+        console.log(data);
+        alert("회원탈퇴가 완료되었습니다.");
+        navigate("/");
       } catch (e) {
         console.log(e);
       }
@@ -202,9 +233,9 @@ const MyPage = () => {
                   <Rows>
                     <RowOne>스택</RowOne>
                     <RowTwo>
-                      {/* {users?.stack === undefined
-                          ? `입력값이 없습니다. 빈칸을 수정해주세요.`
-                          : users?.stack} */}
+                      {users?.stack === undefined
+                        ? `입력값이 없습니다. 빈칸을 수정해주세요.`
+                        : users?.stack}
                     </RowTwo>
                   </Rows>
                 </FlexCol>
@@ -214,6 +245,13 @@ const MyPage = () => {
         ) : (
           <Modification users={users} setModify={(bool) => setModify(bool)} />
         )}
+        <input
+          type="password"
+          placeholder="회원탈퇴를 위한 비밀번호 입력"
+          value={password}
+          onChange={onChanghPassword}
+        />
+        <button onClick={() => deleteUserState()}>회원탈퇴</button>
       </Container>
     </>
   );
@@ -299,6 +337,7 @@ const Button = styled.button`
 const Img = styled.img`
   box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.25);
   border-radius: 50%;
+  object-fit: cover;
 `;
 const ImgBox = styled(FlexCol)`
   position: relative;

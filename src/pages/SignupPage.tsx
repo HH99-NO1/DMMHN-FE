@@ -1,14 +1,15 @@
 import { Controller, useForm, useFormState } from "react-hook-form";
-import axios from "axios";
-import { instance, UserApi } from "../recoil/instance";
+import { UserApi } from "../recoil/instance";
 import styled from "styled-components";
-import { FlexCol, Gap, HeaderBox, Text } from "../elements/elements";
+import { FlexCol, HeaderBox, Text } from "../elements/elements";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineAlert } from "react-icons/ai";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ko from "date-fns/locale/ko";
+import { useSetRecoilState } from "recoil";
+import { onLoginState } from "../recoil/atoms/atoms";
 
 interface IForm {
   memberEmail: string;
@@ -31,6 +32,7 @@ interface IForm {
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const setOnLogin = useSetRecoilState(onLoginState);
   const [startDate, setStartDate] = useState(new Date());
   const [isChecked, setIsChecked] = useState(false);
   console.log(startDate);
@@ -100,23 +102,30 @@ const SignupPage = () => {
         );
       } else {
         try {
+          const year = startDate.getFullYear();
+          const month = ("0" + (startDate.getMonth() + 1)).slice(-2);
+          const day = ("0" + startDate.getDate()).slice(-2);
+          const dateString = year + "년 " + month + "월 " + day + "일";
           const req = {
             memberName: submitData.memberName,
             memberEmail: submitData.memberEmail,
             password: submitData.password,
             confirmPw: submitData.confirmPw,
-            birth: startDate.toDateString(),
+            birth: dateString,
             gender: submitData.gender,
             job: submitData.job,
             stack: submitData.stack,
             validate: process.env.REACT_APP_CHECK_SIGNUP_KEY,
           };
-          console.log(req);
+          // console.log(req);
+
           const { data } = await UserApi.post(`members/signup`, req);
-          console.log(data);
-          // console.log(data.data.refreshToken);
-          // sessionStorage.setItem("accesstoken", data.data.accessToken);
-          // sessionStorage.setItem("refreshtoken", data.data.refreshToken);
+          console.log(data.message);
+          if (data.message) {
+            alert("회원가입이 완료되었습니다.");
+            navigate("/");
+            return setOnLogin(true);
+          }
         } catch (error: unknown | any) {
           if (error.response.status === 400) {
             alert("이미 가입된 계정입니다. 이메일을 확인해주세요.");
@@ -282,8 +291,8 @@ const SignupPage = () => {
               </InputBox>
               <BoxWrap>
                 <GenderBox>
-                  성별:
-                  <label htmlFor="male">
+                  <span>성별:</span>
+                  <Label htmlFor="male">
                     <input
                       id="male"
                       {...register("gender")}
@@ -291,8 +300,8 @@ const SignupPage = () => {
                       value="남자"
                     />
                     남자
-                  </label>
-                  <label htmlFor="female">
+                  </Label>
+                  <Label htmlFor="female">
                     <input
                       id="female"
                       {...register("gender")}
@@ -300,11 +309,10 @@ const SignupPage = () => {
                       value="여자"
                     />
                     여자
-                  </label>
+                  </Label>
                 </GenderBox>
                 <BirthBox>
                   <span>생년월일:</span>
-
                   <Controller
                     control={control}
                     name="birth"
@@ -335,34 +343,36 @@ const SignupPage = () => {
                   /> */}
                 </BirthBox>
                 <JobBox>
-                  직업:
-                  <label htmlFor="seeker">
-                    <input
-                      id="seeker"
-                      {...register("job")}
-                      type="radio"
-                      value="취준생"
-                    />
-                    취준생
-                  </label>
-                  <label htmlFor="frontDev">
-                    <input
-                      id="frontDev"
-                      {...register("job")}
-                      type="radio"
-                      value="프론트개발자"
-                    />
-                    프론트개발자
-                  </label>
-                  <label htmlFor="backDev">
-                    <input
-                      id="backDev"
-                      {...register("job")}
-                      type="radio"
-                      value="백엔드개발자"
-                    />
-                    백엔드개발자
-                  </label>
+                  <span>직업:</span>
+                  <SelectDiv>
+                    <Label htmlFor="seeker">
+                      <input
+                        id="seeker"
+                        {...register("job")}
+                        type="radio"
+                        value="취준생"
+                      />
+                      취준생
+                    </Label>
+                    <Label htmlFor="frontDev">
+                      <input
+                        id="frontDev"
+                        {...register("job")}
+                        type="radio"
+                        value="프론트개발자"
+                      />
+                      프론트개발자
+                    </Label>
+                    <Label htmlFor="backDev">
+                      <input
+                        id="backDev"
+                        {...register("job")}
+                        type="radio"
+                        value="백엔드개발자"
+                      />
+                      백엔드개발자
+                    </Label>
+                  </SelectDiv>
                 </JobBox>
                 <StackBox>
                   {/* <Input
@@ -372,43 +382,47 @@ const SignupPage = () => {
                   })}
                   placeholder="스택을 작성해주세요. ex) /javascript/node"
                 /> */}
-                  스택:
-                  <label htmlFor="javaScript">
-                    <input
-                      id="javaScript"
-                      {...register("stack")}
-                      type="checkbox"
-                      value="javaScript"
-                    />
-                    javaScript
-                  </label>
-                  <label htmlFor="React">
-                    <input
-                      id="React"
-                      {...register("stack")}
-                      type="checkbox"
-                      value="React"
-                    />
-                    React
-                  </label>
-                  <label htmlFor="Nodejs">
-                    <input
-                      id="Nodejs"
-                      {...register("stack")}
-                      type="checkbox"
-                      value="Node.js"
-                    />
-                    Node.js
-                  </label>
-                  <label htmlFor="Spring">
-                    <input
-                      id="Spring"
-                      {...register("stack")}
-                      type="checkbox"
-                      value="Spring"
-                    />
-                    Spring
-                  </label>
+                  <span>스택:</span>
+                  <SelectDiv>
+                    <Label htmlFor="javaScript">
+                      <input
+                        id="javaScript"
+                        {...register("stack")}
+                        type="checkbox"
+                        value="javaScript"
+                      />
+                      javaScript
+                    </Label>
+                    <Label htmlFor="React">
+                      <input
+                        id="React"
+                        {...register("stack")}
+                        type="checkbox"
+                        value="React"
+                      />
+                      React
+                    </Label>
+                  </SelectDiv>
+                  <SelectDiv>
+                    <Label htmlFor="Nodejs">
+                      <input
+                        id="Nodejs"
+                        {...register("stack")}
+                        type="checkbox"
+                        value="Node.js"
+                      />
+                      Node.js
+                    </Label>
+                    <Label htmlFor="Spring">
+                      <input
+                        id="Spring"
+                        {...register("stack")}
+                        type="checkbox"
+                        value="Spring"
+                      />
+                      Spring
+                    </Label>
+                  </SelectDiv>
                 </StackBox>
               </BoxWrap>
               <Height30>
@@ -424,7 +438,6 @@ const SignupPage = () => {
                   </ErrorMsg>
                 )}
               </Height30>
-
               <SignupBtn>가입하기</SignupBtn>
             </FlexCol>
           </form>
@@ -438,7 +451,6 @@ export default SignupPage;
 
 const Container = styled.div`
   width: 100%;
-
   height: 100%;
 `;
 
@@ -469,6 +481,13 @@ const Input = styled.input`
     outline: 1px solid ${(props) => props.theme.__grayMedium};
   }
 `;
+
+const Label = styled.label`
+  margin-right: 10px;
+  :last-child {
+    margin-left: 0;
+  }
+`;
 const InputBox = styled.div`
   position: relative;
   display: flex;
@@ -494,7 +513,7 @@ const ErrorMsg = styled.div`
 const BoxWrap = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 30px;
 `;
 
 const SignupBtn = styled.button`
@@ -512,25 +531,28 @@ const SignupBtn = styled.button`
 
 const GenderBox = styled.div`
   width: 400px;
-  margin-top: 5px;
   display: flex;
-  justify-content: left;
-  color: #747373;
-  label {
-    color: #747373;
+
+  span {
+    width: 90px;
+    font-weight: bold;
   }
 `;
 
 const JobBox = styled(GenderBox)``;
 
+const SelectDiv = styled.div`
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
 const StackBox = styled(GenderBox)``;
 
 const BirthBox = styled(GenderBox)`
-  span {
-    width: 80px;
-    color: #747373;
-  }
+  align-items: center;
 `;
+
 const Height30 = styled.div`
   width: 100%;
   height: 30px;

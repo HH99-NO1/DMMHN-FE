@@ -27,6 +27,9 @@ const LayoutCtn = styled.div`
     #058841 70%,
     #ffffff 70%
   );
+  @media screen and (max-height: 600px) {
+    height: 100%;
+  }
 `;
 
 export default Layout;

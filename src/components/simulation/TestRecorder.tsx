@@ -30,6 +30,7 @@ const TestRecorder = () => {
     setRecorder(recorder);
     setStream(stream);
   };
+
   const stopRecording = () => {
     if (recorder) {
       recorder.stopRecording(() => {
@@ -56,7 +57,7 @@ const TestRecorder = () => {
         <button onClick={() => startRecording()}>녹화 시작</button>
         <button onClick={() => stopRecording()}>녹화 중지</button>
         <button onClick={downloadVid}>다운받기</button>
-        <div style={{ width: "600px", height: "600px" }}>
+        <div style={{ width: "500px" }}>
           {videoBlob ? (
             <Player src={window.URL.createObjectURL(videoBlob)} />
           ) : (

@@ -121,3 +121,9 @@ export const LocalVideoState = atom({
 // 		return toDos.filter((toDo) => toDo.category === category);
 // 	},
 // });
+
+// 모의면접 커스텀 질문페이지 상태
+export const isCustom = atom({
+  key: "isCustom",
+  default: false,
+});

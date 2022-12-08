@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { FlexRow, HeaderBox } from "../../elements/elements";
+import { isCustom } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
 import Post from "./Post";
 
 const MySimulation = () => {
   const navigate = useNavigate();
+  const setIsCustomState = useSetRecoilState(isCustom);
   const init = [
     {
       category: "",
@@ -38,6 +41,9 @@ const MySimulation = () => {
       <HeaderBox />
       <Ctn>
         <TitleBar>나의 모의면접 현황</TitleBar>
+        <button onClick={() => setIsCustomState(true)}>
+          나만의 모의면접 질문
+        </button>
         <FlexRow style={{ flexWrap: "wrap" }} gap="1.7%">
           {mySimulations.map((post) => (
             <LinkBtn

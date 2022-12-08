@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
   FlexCol,
@@ -12,6 +12,7 @@ import { instance } from "../../recoil/instance";
 
 const MySimulationDetail = () => {
   const { postId } = useParams();
+  const navigate = useNavigate();
   const init = {
     category: "",
     createdAt: "",
@@ -39,7 +40,22 @@ const MySimulationDetail = () => {
       console.log(e);
     }
   };
-
+  const deleteMySimulation = async () => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      try {
+        const { data } = await instance.delete(
+          `mockInterview/detail/${postId}`
+        );
+        console.log(data);
+        alert("모의 면접 결과가 정상적으로 삭제되었습니다.");
+        navigate("/mysimulation");
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      return;
+    }
+  };
   useEffect(() => {
     getMySimulation();
   }, []);
@@ -72,6 +88,7 @@ const MySimulationDetail = () => {
             alignItem="flex-end"
           >
             <TitleBar>모의면접 결과</TitleBar>
+            <button onClick={() => deleteMySimulation()}>삭제 버튼</button>
             <Text>{dateChange(mySimulation.createdAt)}</Text>
           </FlexRow>
           <FlexCol width="100%" gap="20px">

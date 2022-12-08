@@ -39,7 +39,9 @@ instance.interceptors.response.use(
               console.log("checkToken 중...");
               return await axios
                 .get("https://chamchimayo.shop/members/me", {
-                  Authorization: preAccessToken,
+                  headers: {
+                    Authorization: preAccessToken,
+                  },
                 })
                 .then(async (res) => {
                   console.log(res);

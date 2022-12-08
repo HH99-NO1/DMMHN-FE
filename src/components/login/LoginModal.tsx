@@ -133,6 +133,7 @@ const LoginModal = () => {
                   />
                   <Input
                     type="password"
+                    pattern="[A-Za-z\d@!%*#?&]*"
                     {...register("password", {
                       required: "비밀번호를 입력해주세요.",
                     })}

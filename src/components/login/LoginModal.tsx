@@ -9,17 +9,30 @@ import { useForm } from "react-hook-form";
 import { FlexCol, FlexRow, Liner, Text } from "../../elements/elements";
 import errorNotYet from "../errors/errorNotYet";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { isLoginState, onLoginState } from "../../recoil/atoms/atoms";
+import {
+  isLoginState,
+  onLoginState,
+  userState,
+} from "../../recoil/atoms/atoms";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 interface IForm {
   memberEmail: string;
   password: string;
 }
 
+interface IUserState {
+  memberName: string;
+  img: string;
+  iat: number;
+  exp: number;
+}
+
 const LoginModal = () => {
   const setOnLogin = useSetRecoilState(onLoginState);
   const setIsLogin = useSetRecoilState(isLoginState);
+  const setLoginUserState = useSetRecoilState(userState);
   const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
 
@@ -47,6 +60,13 @@ const LoginModal = () => {
       console.log(data);
       setOnLogin(false);
       setIsLogin(true);
+      const preAccessToken = sessionStorage.getItem("accessToken");
+      if (preAccessToken) {
+        const decodeUserState: IUserState = jwt_decode(preAccessToken);
+        sessionStorage.setItem("userName", decodeUserState.memberName);
+        sessionStorage.setItem("userImg", decodeUserState.img);
+        setLoginUserState(decodeUserState);
+      }
       // return window.location.reload();
       return;
     } catch (error: any) {

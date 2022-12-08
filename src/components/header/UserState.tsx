@@ -7,11 +7,10 @@ import { userState } from "../../recoil/atoms/atoms";
 const UserState = () => {
   const loginUserState = useRecoilValue(userState);
   console.log(loginUserState);
-
   return (
     <>
-      <FlexRow>
-        <Img src={loginUserState?.img} />
+      <FlexRow gap="10px">
+        <Img src={`${loginUserState?.img}`} />
         <Text fontSize="14px" color="white">
           {loginUserState?.memberName}
         </Text>

@@ -92,7 +92,8 @@ const Img = styled.img`
 `;
 
 const StyledSwiper = styled(Swiper)`
-  width: 500px;
+  max-width: 500px;
+  width: 100%;
   position: relative;
 `;
 

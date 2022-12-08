@@ -27,15 +27,18 @@ const checkDefaultLoginState = preAccessToken ? true : false;
 // console.log(checkDefaultLoginState);
 
 export interface IUserState {
-  memberName: string;
-  img: string;
-  iat: number;
-  exp: number;
+  memberName: string | null;
+  img: string | ArrayBuffer | null;
 }
 
+const userName = sessionStorage.getItem("userName");
+const userImg = sessionStorage.getItem("userImg");
 export const userState = atom<IUserState>({
   key: "userState",
-  default: undefined,
+  default: {
+    memberName: userName,
+    img: userImg,
+  },
 });
 
 export const isLoginState = atom({

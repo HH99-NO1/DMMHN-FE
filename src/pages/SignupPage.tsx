@@ -2,8 +2,8 @@ import { Controller, useForm, useFormState } from "react-hook-form";
 import axios from "axios";
 import { instance, UserApi } from "../recoil/instance";
 import styled from "styled-components";
-import { FlexCol, Gap, HeaderBox } from "../elements/elements";
-import { useEffect, useState } from "react";
+import { FlexCol, Gap, HeaderBox, Text } from "../elements/elements";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineAlert } from "react-icons/ai";
 import DatePicker from "react-datepicker";
@@ -32,8 +32,48 @@ interface IForm {
 const SignupPage = () => {
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState(new Date());
-
+  const [isChecked, setIsChecked] = useState(false);
   console.log(startDate);
+  const [userEmail, setUserEmail] = useState("");
+  const [serverCode, setServerCode] = useState("");
+  const [checkCode, setCheckCode] = useState("");
+  const [checkSucceed, setCheckSucceed] = useState(false);
+  const onChangeUserEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserEmail(event.currentTarget.value);
+  };
+  const onChangeCheckCode = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckCode(event.currentTarget.value);
+  };
+
+  const checkEmail = async () => {
+    if (userEmail.trim() === "") {
+      return alert("이메일을 입력해주세요.");
+    } else {
+      try {
+        const { data } = await UserApi.post("/members/sendAuthCode", {
+          memberEmail: userEmail,
+        });
+        setServerCode(data.data);
+        alert(`${userEmail}로 인증 메일을 발송했습니다.`);
+        setIsChecked(true);
+      } catch (e: any | unknown) {
+        console.log(e.response.status);
+        if (e.response.status === 400) {
+          alert("이미 가입된 이메일입니다.");
+        }
+      }
+    }
+  };
+  const checkServerCode = () => {
+    console.log("serverCode: ", serverCode);
+    console.log("checkCode: ", checkCode);
+    if (serverCode + "" === checkCode) {
+      alert("인증이 완료되었습니다.");
+      return setCheckSucceed(true);
+    } else {
+      return alert("잘못된 코드입니다. 다시 확인해주세요.");
+    }
+  };
 
   const {
     register,
@@ -51,37 +91,42 @@ const SignupPage = () => {
 
   const onValid = async (submitData: IForm) => {
     console.log(submitData);
-    if (submitData.password !== submitData.confirmPw) {
-      setError(
-        "confirmPw",
-        { message: "비밀번호가 일치하지 않습니다." },
-        { shouldFocus: true }
-      );
-    } else {
-      try {
-        const req = {
-          memberName: submitData.memberName,
-          memberEmail: submitData.memberEmail,
-          password: submitData.password,
-          confirmPw: submitData.confirmPw,
-          birth: startDate.toDateString(),
-          gender: submitData.gender,
-          job: submitData.job,
-          stack: submitData.stack,
-        };
-        console.log(req);
-        const { data } = await UserApi.post(`members/signup`, req);
-        console.log(data);
-        // console.log(data.data.refreshToken);
-        // sessionStorage.setItem("accesstoken", data.data.accessToken);
-        // sessionStorage.setItem("refreshtoken", data.data.refreshToken);
-      } catch (error: unknown | any) {
-        if (error.response.status === 400) {
-          alert("이미 가입된 계정입니다. 이메일을 확인해주세요.");
+    if (checkSucceed) {
+      if (submitData.password !== submitData.confirmPw) {
+        setError(
+          "confirmPw",
+          { message: "비밀번호가 일치하지 않습니다." },
+          { shouldFocus: true }
+        );
+      } else {
+        try {
+          const req = {
+            memberName: submitData.memberName,
+            memberEmail: submitData.memberEmail,
+            password: submitData.password,
+            confirmPw: submitData.confirmPw,
+            birth: startDate.toDateString(),
+            gender: submitData.gender,
+            job: submitData.job,
+            stack: submitData.stack,
+            validate: process.env.REACT_APP_CHECK_SIGNUP_KEY,
+          };
+          console.log(req);
+          const { data } = await UserApi.post(`members/signup`, req);
+          console.log(data);
+          // console.log(data.data.refreshToken);
+          // sessionStorage.setItem("accesstoken", data.data.accessToken);
+          // sessionStorage.setItem("refreshtoken", data.data.refreshToken);
+        } catch (error: unknown | any) {
+          if (error.response.status === 400) {
+            alert("이미 가입된 계정입니다. 이메일을 확인해주세요.");
+          }
+          console.log(error.response);
+          return error.response;
         }
-        console.log(error.response);
-        return error.response;
       }
+    } else {
+      alert("이메일 인증이 필요합니다.");
     }
   };
 
@@ -136,8 +181,67 @@ const SignupPage = () => {
                     },
                   })}
                   placeholder="이메일"
+                  value={userEmail}
+                  onChange={onChangeUserEmail}
+                  disabled={checkSucceed}
                 />
+                <CheckEmailBtn
+                  type="button"
+                  disabled={checkSucceed}
+                  onClick={() => {
+                    checkEmail();
+                  }}
+                  checkSucceed={checkSucceed}
+                >
+                  {!checkSucceed
+                    ? !isChecked
+                      ? "인증코드 요청"
+                      : "인증코드 재요청"
+                    : "인증 완료"}
+                </CheckEmailBtn>
               </InputBox>
+
+              <InputBox>
+                {!checkSucceed ? (
+                  <>
+                    <Input
+                      //
+                      onInput={(e) => {
+                        if (
+                          e.currentTarget.value.length >
+                          e.currentTarget.maxLength
+                        )
+                          e.currentTarget.value = e.currentTarget.value.slice(
+                            0,
+                            e.currentTarget.maxLength
+                          );
+                      }}
+                      type="number"
+                      maxLength={6}
+                      value={checkCode}
+                      onChange={onChangeCheckCode}
+                      placeholder="이메일 인증번호"
+                      disabled={!isChecked}
+                    />
+                    {isChecked && (
+                      <CheckEmailBtn
+                        type="button"
+                        onClick={() => {
+                          checkServerCode();
+                        }}
+                        disabled={!isChecked}
+                      >
+                        인증코드 확인
+                      </CheckEmailBtn>
+                    )}
+                  </>
+                ) : (
+                  <CheckSucceedText>
+                    이메일 인증이 완료되었습니다.
+                  </CheckSucceedText>
+                )}
+              </InputBox>
+
               <InputBox>
                 <Input
                   {...register("memberName", {
@@ -358,7 +462,6 @@ const Title = styled.div`
 const Input = styled.input`
   height: 50px;
   padding: 8px 20px;
-  margin-top: 5px;
   border-radius: 67px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
   border: 1px solid ${(props) => props.theme.__grayLight};
@@ -384,7 +487,7 @@ const ErrorMsg = styled.div`
   background: rgba(210, 18, 18, 0.1);
   border: 1px solid #ffffff;
   border-radius: 67px;
-  padding: 0 10px;
+  padding: 0;
   color: #747373;
 `;
 
@@ -431,4 +534,42 @@ const BirthBox = styled(GenderBox)`
 const Height30 = styled.div`
   width: 100%;
   height: 30px;
+`;
+
+interface ICheck {
+  checkSucceed?: boolean;
+}
+const CheckEmailBtn = styled.button<ICheck>`
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: ${(props) => {
+    if (props.checkSucceed) {
+      return props.theme.__greenMidium;
+    } else {
+      return "white";
+    }
+  }};
+  color: ${(props) => {
+    if (props.checkSucceed) {
+      return "white";
+    } else {
+      return "black";
+    }
+  }};
+  border: 1px solid ${(props) => props.theme.__greenMidium};
+  border-radius: 20px;
+  padding: 4px 12px;
+  cursor: ${(props) => {
+    if (props.checkSucceed) {
+      return "auto";
+    } else {
+      return "pointer";
+    }
+  }};
+`;
+const CheckSucceedText = styled(Text)`
+  display: flex;
+  justify-content: center;
 `;

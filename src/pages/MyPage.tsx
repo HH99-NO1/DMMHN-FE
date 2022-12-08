@@ -207,7 +207,7 @@ const MyPage = () => {
               <InnerWrap>
                 <FlexCol alignItem="left">
                   <Rows>
-                    <RowOne>소셜계정</RowOne>
+                    <RowOne>계정</RowOne>
                     <RowTwo>
                       {users?.memberEmail === undefined
                         ? `입력값이 없습니다. 빈칸을 수정해주세요.`

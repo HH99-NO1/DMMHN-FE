@@ -11,6 +11,7 @@ interface IFlex {
   bgColor?: string;
   padding?: string;
   borderRadius?: string;
+  fontSize?: string;
 }
 
 export const FlexRow = styled.div<IFlex>`

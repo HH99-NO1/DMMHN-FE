@@ -10,6 +10,10 @@ import PersonItem from "../../elements/PersonItem";
 import ResultIconItem from "../../elements/ResultIconItem";
 import useStopwatch from "../../hooks/useStopwatch";
 import stopwatchTime from "../stopwatch/utils/stopwatchTime";
+import TestRecorder from "./TestRecorder";
+import { Player } from "video-react";
+import "video-react/dist/video-react.css";
+import { saveAs } from "file-saver";
 
 let count = 0;
 
@@ -17,11 +21,9 @@ const Simulation = () => {
   const navigate = useNavigate();
   const [isStart, setIsStart] = useState(false);
   const [isResult, setIsResult] = useState(false);
-  console.log(isResult);
 
   const setSimulation = useSetRecoilState(isSimulationState);
   const testSimulation = useRecoilValue(test);
-  console.log(testSimulation);
 
   //recordrtc
   const [stream, setStream] = useState<MediaStream>();
@@ -45,44 +47,44 @@ const Simulation = () => {
     }
   };
 
-  const stopStreamedVideo = (myVideoRef: any) => {
-    const stream = myVideoRef.current.srcObject;
-    const tracks = stream.getTracks();
+  // const stopStreamedVideo = (myVideoRef: any) => {
+  //   const stream = myVideoRef.current.srcObject;
+  //   const tracks = stream.getTracks();
 
-    tracks.forEach(function (track: MediaStreamTrack) {
-      track.stop();
-    });
+  //   tracks.forEach(function (track: MediaStreamTrack) {
+  //     track.stop();
+  //   });
 
-    myVideoRef.current.srcObject = null;
-  };
+  //   myVideoRef.current.srcObject = null;
+  // };
 
-  const handleRecording = async () => {
-    const mediaStream = await navigator.mediaDevices.getDisplayMedia({
-      video: {
-        width: 800,
-        height: 600,
-        frameRate: 60,
-      },
-      audio: true,
-    });
+  // const handleRecording = async () => {
+  //   const mediaStream = await navigator.mediaDevices.getDisplayMedia({
+  //     video: {
+  //       width: 800,
+  //       height: 600,
+  //       frameRate: 60,
+  //     },
+  //     audio: true,
+  //   });
 
-    setStream(mediaStream);
-    recorderRef.current = new RecordRTC(mediaStream, { type: "video" });
-    recorderRef.current.startRecording();
-  };
+  //   setStream(mediaStream);
+  //   recorderRef.current = new RecordRTC(mediaStream, { type: "video" });
+  //   recorderRef.current.startRecording();
+  // };
 
-  const handleStop = () => {
-    if (recorderRef.current) {
-      recorderRef.current.stopRecording(() => {
-        stopStreamedVideo(myVideoRef);
-        setBlob(recorderRef?.current?.getBlob() as Blob);
-      });
-    }
-  };
+  // const handleStop = () => {
+  //   if (recorderRef.current) {
+  //     recorderRef.current.stopRecording(() => {
+  //       stopStreamedVideo(myVideoRef);
+  //       setBlob(recorderRef?.current?.getBlob() as Blob);
+  //     });
+  //   }
+  // };
 
-  const handleSave = () => {
-    invokeSaveAsDialog(blob as Blob);
-  };
+  // const handleSave = () => {
+  //   invokeSaveAsDialog(blob as Blob);
+  // };
 
   useEffect(() => {
     if (!refVideo.current) {
@@ -101,9 +103,6 @@ const Simulation = () => {
     Array<{ question: string; time: string }>
   >([]);
 
-  console.log(`result.length: ${result.length}`);
-  console.log(`count: ${count}`);
-
   const requestAudioFile = async (event: any) => {
     isStop && stop();
 
@@ -120,8 +119,6 @@ const Simulation = () => {
     //   return;
     // }
 
-    console.log("request Audio");
-
     try {
       const config = {
         question: value,
@@ -133,12 +130,10 @@ const Simulation = () => {
           responseType: "arraybuffer",
         }
       );
-      console.log("response : ", response);
 
       // let arr = toArrayBuffer(response.data);
       // makeAudio(arr);
       const audioContext = getAudioContext();
-      console.log("실행하기 전에 상태 :", audioContext.state);
       // makeAudio(response)
       const audioBuffer = await audioContext.decodeAudioData(response.data);
 
@@ -154,14 +149,11 @@ const Simulation = () => {
       event.target.disabled = true;
       event.target.style.backgroundColor = "black";
 
-      console.log("source : ", source.buffer.duration);
       setTimeout(() => {
         event.target.disabled = false;
         event.target.style.backgroundColor = "#092304";
         console.log("버튼 사용 가능");
       }, source.buffer.duration * 1000 + 500);
-
-      console.log("source : ", source);
 
       let resultEl = {
         question: currValue,
@@ -310,21 +302,15 @@ const Simulation = () => {
             {/* 중간 컨텐츠 영역 */}
             <SimulationContent>
               <ContentWrap>
-                {blob ? (
-                  <Video
-                    src={URL.createObjectURL(blob)}
-                    controls
-                    autoPlay
-                    ref={refVideo}
-                  />
+                {!blob && currValue === "모의 면접이 종료되었습니다." ? (
+                  <TestRecorder />
                 ) : (
-                  <Video ref={myVideoRef} autoPlay />
+                  <>
+                    <Video ref={myVideoRef} autoPlay />
+                  </>
                 )}
-                <FlexRow gap="10px" justifyContent="space-between">
-                  <SmallBtn onClick={handleRecording}>시작</SmallBtn>
-                  <SmallBtn onClick={handleStop}>멈춤</SmallBtn>
-                  <SmallBtn onClick={handleSave}>저장</SmallBtn>
-                </FlexRow>
+
+                <FlexRow gap="10px" justifyContent="space-between"></FlexRow>
               </ContentWrap>
               <ContentWrap>
                 <TimeIndicatorBox>
@@ -393,12 +379,13 @@ const Simulation = () => {
 };
 const BGBlack = styled.div`
   width: 100%;
-  height: calc(100vh);
+  height: 100%;
   background: #092001;
 `;
 const Padding20 = styled.div`
   padding: 0 20px;
   margin-top: 50px;
+  padding-bottom: 50px;
 `;
 const Ctn = styled.div`
   position: relative;
@@ -412,13 +399,13 @@ const Ctn = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 20px;
-  color: white;
+  color: #fff;
 `;
 const CategoryArea = styled(Text)`
   position: absolute;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid #fff;
   top: 30px;
-  color: white;
+  color: #fff;
   padding-bottom: 10px;
   width: auto;
   font-size: 20px;
@@ -479,7 +466,7 @@ const TextEl = styled(Text)`
   color: white;
 `;
 const Video = styled.video`
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
   height: auto;
   border-radius: 20px;
@@ -490,9 +477,8 @@ const ResultArea = styled(FlexCol)`
   right: 20px;
   bottom: 90px;
   z-index: 5;
-  background-color: white;
+  background-color: #fff;
   width: 400px;
-  height: 300px;
   border-radius: 10px;
   padding: 15px;
 `;
@@ -523,7 +509,7 @@ const TimeIndicatorBox = styled(FlexCol)`
   align-items: flex-start;
 `;
 const TotalTimeTitle = styled(Text)`
-  color: white;
+  color: #fff;
   font-weight: 400;
 `;
 

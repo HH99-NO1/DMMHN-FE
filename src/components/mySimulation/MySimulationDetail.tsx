@@ -92,7 +92,7 @@ const MySimulationDetail = () => {
             <Text>{dateChange(mySimulation.createdAt)}</Text>
           </FlexRow>
           <FlexCol width="100%" gap="20px">
-            <FlexRow width="100%" gap="10px" justifyContent="space-between">
+            <FlexCol width="100%" gap="10px" alignItem="none">
               <MiddleTitle>카테고리</MiddleTitle>
               <OptionBox>
                 <Text>
@@ -101,19 +101,14 @@ const MySimulationDetail = () => {
                     : category.node}
                 </Text>
               </OptionBox>
-            </FlexRow>
-            <FlexRow width="100%" gap="10px" justifyContent="space-between">
+            </FlexCol>
+            <FlexCol width="100%" gap="10px" alignItem="none">
               <MiddleTitle>문항 수</MiddleTitle>
               <OptionBox>
                 <Text>{mySimulation.number} 개</Text>
               </OptionBox>
-            </FlexRow>
-            <FlexRow
-              width="100%"
-              gap="10px"
-              justifyContent="space-between"
-              alignItem="flex-start"
-            >
+            </FlexCol>
+            <FlexCol width="100%" gap="10px" alignItem="none">
               <MiddleTitle style={{ marginTop: "10px" }}>
                 모의면접 결과
               </MiddleTitle>
@@ -126,7 +121,7 @@ const MySimulationDetail = () => {
                     <Text>질문별 소요시간</Text>
                     <Liner />
                     <FlexCol width="100%" gap="10px" alignItem="flex-start">
-                      <FlexCol width="100%" gap="5px" alignItem="flex-start">
+                      <FlexCol width="100%" gap="10px" alignItem="flex-start">
                         {mySimulation.resultsArr.map((arr, index) => (
                           <FlexRow
                             width="100%"
@@ -145,8 +140,8 @@ const MySimulationDetail = () => {
                   </FlexCol>
                 </OptionScrollBox2>
               </OptionScrollBox>
-            </FlexRow>
-            <FlexRow width="100%" gap="10px" alignItem="flex-start">
+            </FlexCol>
+            {/* <FlexRow width="100%" gap="10px" alignItem="flex-start">
               <MiddleTitle style={{ marginTop: "10px" }}>
                 모의면접 영상
               </MiddleTitle>
@@ -154,7 +149,7 @@ const MySimulationDetail = () => {
                 src="https://www.youtube.com/watch?v=CATSTw3CRMk"
                 autoPlay
               />
-            </FlexRow>
+            </FlexRow> */}
           </FlexCol>
         </FlexCol>
       </Ctn>
@@ -164,9 +159,9 @@ const MySimulationDetail = () => {
 const Ctn = styled.div`
   /* border: 1px solid red; */
   padding: 20px;
-  max-width: 800px;
+  max-width: 500px;
   width: 100%;
-  margin: 0 auto;
+  margin: 30px auto;
 `;
 const TitleBar = styled.div`
   padding: 10px 20px;
@@ -186,33 +181,31 @@ const MiddleTitle = styled.h3`
   min-width: 150px;
   font-size: 20px;
   font-weight: 400;
+  padding-left: 10px;
 `;
 const OptionBox = styled.div`
   position: relative;
   min-height: 44px;
   width: 100%;
-  border: 3px solid ${(props) => props.theme.__grayMedium};
+  border: 2px solid ${(props) => props.theme.__grayMedium};
   border-radius: 22px;
   box-sizing: border-box;
   padding: 10px 20px;
 `;
 const OptionScrollBox = styled(OptionBox)`
   min-height: 150px;
-  max-height: 300px;
-
   padding: 0;
   overflow: hidden;
 `;
 const OptionScrollBox2 = styled.div`
   min-height: 150px;
-  max-height: 300px;
   overflow: auto;
-  padding: 10px 20px;
+  padding: 20px;
 `;
 const Question = styled.span`
-  font-size: 12px;
+  font-size: 14px;
   display: flex;
-  gap: 10px;
+  gap: 15px;
 `;
 const NumberArea = styled.span`
   font-size: inherit;

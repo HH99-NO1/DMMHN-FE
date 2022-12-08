@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Modification from "../components/modify/Modification";
 import { useRecoilState } from "recoil";
 import { userState } from "../recoil/atoms/atoms";
+import axios from "axios";
 
 interface IUsers {
   memberEmail: string;
@@ -28,7 +29,15 @@ const MyPage = () => {
 
   const getUserData = async () => {
     try {
-      const { data } = await instance.get(`/members/me`);
+      const preAccessToken = sessionStorage.getItem("accessToken");
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API_URL}/members/me`,
+        {
+          headers: {
+            Authorization: preAccessToken,
+          },
+        }
+      );
       console.log(data);
       setUsers(data);
     } catch (e) {
@@ -302,6 +311,7 @@ const ImgChangeLabel = styled.label`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 
   border-radius: 50%;
   width: 36px;

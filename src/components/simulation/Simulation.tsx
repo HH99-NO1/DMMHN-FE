@@ -236,6 +236,14 @@ const Simulation = () => {
                 ? "Node.js"
                 : "spring"}
             </CategoryArea>
+            {currValue === "모의 면접이 종료되었습니다." && (
+              <Congratulation>
+                <CongratulationImg
+                  src="img/congratulations.gif"
+                  alt="congratulation"
+                />
+              </Congratulation>
+            )}
             <CheckQuestion>
               {currValue !== "모의 면접이 종료되었습니다."
                 ? `Q${result.length}`
@@ -415,6 +423,15 @@ const CategoryArea = styled(Text)`
   width: auto;
   font-size: 20px;
   font-weight: 400;
+`;
+const Congratulation = styled(CategoryArea)`
+  top: 10px;
+  right: 10px;
+  border-bottom: none;
+`;
+const CongratulationImg = styled.img`
+  width: 100px;
+  height: 100px;
 `;
 const CheckQuestion = styled.div`
   display: flex;

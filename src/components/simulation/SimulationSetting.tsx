@@ -1,17 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import {
-  FlexCol,
-  FlexRow,
-  Gap,
-  HeaderBox,
-  Text,
-} from "../../elements/elements";
-import { HiOutlineChevronUpDown } from "react-icons/hi2";
+import { FlexCol, FlexRow, HeaderBox, Text } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
 import { useSetRecoilState } from "recoil";
 import { isSimulationState, test } from "../../recoil/atoms/atoms";
-import axios from "axios";
 import TitleArea from "../../elements/TitleArea";
 
 const SimulationSetting = () => {
@@ -23,6 +15,7 @@ const SimulationSetting = () => {
   console.log(number);
   console.log(category);
   const setSimulation = useSetRecoilState(isSimulationState);
+
   // 사용자 웹캠에 접근
   const getMedia = async () => {
     try {
@@ -71,7 +64,6 @@ const SimulationSetting = () => {
 
     if (window.confirm("모의면접을 시작하시겠습니까?")) {
       try {
-        // url 바꿔야 함
         const { data } = await instance.post(`/mockInterview`, config);
         console.log(data);
         setTest(data);

@@ -17,11 +17,9 @@ const Simulation = () => {
   const navigate = useNavigate();
   const [isStart, setIsStart] = useState(false);
   const [isResult, setIsResult] = useState(false);
-  console.log(isResult);
 
   const setSimulation = useSetRecoilState(isSimulationState);
   const testSimulation = useRecoilValue(test);
-  console.log(testSimulation);
 
   //recordrtc
   const [stream, setStream] = useState<MediaStream>();
@@ -404,13 +402,13 @@ const Ctn = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 20px;
-  color: white;
+  color: #fff;
 `;
 const CategoryArea = styled(Text)`
   position: absolute;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid #fff;
   top: 30px;
-  color: white;
+  color: #fff;
   padding-bottom: 10px;
   width: auto;
   font-size: 20px;
@@ -462,7 +460,7 @@ const TextEl = styled(Text)`
   color: white;
 `;
 const Video = styled.video`
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
   height: auto;
   border-radius: 20px;
@@ -506,7 +504,7 @@ const TimeIndicatorBox = styled(FlexCol)`
   align-items: flex-start;
 `;
 const TotalTimeTitle = styled(Text)`
-  color: white;
+  color: #fff;
   font-weight: 400;
 `;
 

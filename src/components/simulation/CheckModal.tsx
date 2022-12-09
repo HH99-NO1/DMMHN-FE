@@ -37,7 +37,7 @@ const CheckModal = () => {
             </MainInnerText>{" "}
             버튼을 눌러주세요.
           </TextArea>
-          <Img src="/img/simulationguide.png" alt="guide" />
+          <Img src="/img/simulationGuide.png" alt="guide" />
           <BtnArea>
             <Btn onClick={() => navigate(-1)}>이전으로</Btn>
             <Btn onClick={() => setIsOKState(true)} isOK={true}>

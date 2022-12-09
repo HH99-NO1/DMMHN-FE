@@ -8,17 +8,8 @@ import { Player } from "video-react";
 import "video-react/dist/video-react.css";
 import { saveAs } from "file-saver";
 import { useRecoilValue } from "recoil";
-import {
-  isDownloadVideo,
-  isStartRecording,
-  isStopRecording,
-} from "../../recoil/atoms/atoms";
 
 const TestRecorder = () => {
-  const isStartRecordingState = useRecoilValue(isStartRecording);
-  const isStopRecordingState = useRecoilValue(isStopRecording);
-  const isDownloadVideoState = useRecoilValue(isDownloadVideo);
-
   const [recorder, setRecorder] = useState<RecordRTC | null>();
   const [stream, setStream] = useState<MediaStream | null>();
   const [videoBlob, setVideoBlob] = useState<Blob | null>();
@@ -64,14 +55,7 @@ const TestRecorder = () => {
       alert("다운로드 할 수 없습니다.");
     }
   };
-  console.log("isStartRecordingState: ", isStartRecordingState);
-  console.log("isStopRecordingState: ", isStopRecordingState);
-  console.log("isDownloadVideoState: ", isDownloadVideoState);
-  useEffect(() => {
-    isStartRecordingState && startRecording();
-    isStopRecordingState && stopRecording();
-    isDownloadVideoState && downloadVideo();
-  }, [isStartRecordingState, isStopRecordingState, isDownloadVideoState]);
+
   return (
     <>
       {/* <button onClick={() => startRecording()}>녹화 시작</button>

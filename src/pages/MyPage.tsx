@@ -10,8 +10,8 @@ import React, {
   useState,
 } from "react";
 import Modification from "../components/modify/Modification";
-import { useRecoilState } from "recoil";
-import { userState } from "../recoil/atoms/atoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { isLoginState, userState } from "../recoil/atoms/atoms";
 import axios, { AxiosRequestConfig } from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -27,6 +27,7 @@ interface IUsers {
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const setIsLogin = useSetRecoilState(isLoginState);
 
   const [users, setUsers] = useState<IUsers>();
   const [modify, setModify] = useState(false);
@@ -113,11 +114,17 @@ const MyPage = () => {
   const deleteUserState = async () => {
     if (window.confirm("정말 회원탈퇴하시겠습니까?")) {
       try {
-        const preAccessToken = sessionStorage.getItem("accessToken");
         console.log("password: ", password);
-        const { data } = await instance.delete(`/members/me`);
+        const { data } = await instance.delete(`/members/me`, {
+          data: {
+            password: password,
+          },
+        });
         console.log(data);
         alert("회원탈퇴가 완료되었습니다.");
+        sessionStorage.clear();
+        setIsLogin(false);
+
         navigate("/");
       } catch (e) {
         console.log(e);

@@ -329,6 +329,7 @@ const SignupPage = () => {
                         showYearDropdown
                         dropdownMode="select"
                         onChange={(date: Date) => setStartDate(date)}
+                        isClearable
                       />
                     )}
                   />

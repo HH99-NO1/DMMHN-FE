@@ -127,3 +127,23 @@ export const isCustom = atom({
   key: "isCustom",
   default: false,
 });
+
+// 모의면접 안내 및 영상녹화 동의
+export const isOK = atom({
+  key: "isOK",
+  default: false,
+});
+
+// 모의면접 웹캡 녹화 기능
+export const isStartRecording = atom({
+  key: "isStartRecording",
+  default: false,
+});
+export const isStopRecording = atom({
+  key: "isStopRecording",
+  default: false,
+});
+export const isDownloadVideo = atom({
+  key: "isDownloadVideo",
+  default: false,
+});

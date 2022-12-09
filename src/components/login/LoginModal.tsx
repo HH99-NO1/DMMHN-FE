@@ -51,8 +51,6 @@ const LoginModal = () => {
         password: submitData.password,
       };
       const { data } = await UserApi.post(`/members/login`, req);
-      // console.log(data.data.accessToken);
-      // console.log(data.data.refreshToken);
       sessionStorage.setItem("accessToken", data.data.accessToken);
       sessionStorage.setItem("refreshToken", data.data.refreshToken);
       alert("로그인이 완료되었습니다.");
@@ -66,8 +64,7 @@ const LoginModal = () => {
         sessionStorage.setItem("userImg", decodeUserState.img);
         setLoginUserState(decodeUserState);
       }
-      // return window.location.reload();
-      return;
+      return window.location.reload();
     } catch (error: any) {
       console.log(error.response);
       // console.log(error.message);

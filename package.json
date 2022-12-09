@@ -49,7 +49,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "aws s3 sync ./build s3://itterview --profile=jaeyeonee",
-    "invalidate": "aws cloudfront create-invalidation --profile=jaeyeonee --distribution-id E2N5XM9003XGSU --paths / /index.html /error.html /service-worker.js /manifest.json /favicon.ico"
+    "invalidate": "aws cloudfront create-invalidation --profile=jaeyeonee --distribution-id E2N5XM9003XGSU --paths / /index.html /error.html /service-worker.js /manifest.json /favicon.ico /img/simulationGuide.png"
   },
   "eslintConfig": {
     "extends": [

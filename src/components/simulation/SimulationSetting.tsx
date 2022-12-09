@@ -3,19 +3,13 @@ import styled from "styled-components";
 import { FlexCol, FlexRow, HeaderBox, Text } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  isOK,
-  isSimulationState,
-  isStartRecording,
-  test,
-} from "../../recoil/atoms/atoms";
+import { isOK, isSimulationState, test } from "../../recoil/atoms/atoms";
 import TitleArea from "../../elements/TitleArea";
 import CheckModal from "./CheckModal";
 
 const SimulationSetting = () => {
   const setTest = useSetRecoilState(test);
   const isOKState = useRecoilValue(isOK);
-  const setIsStartRecordingState = useSetRecoilState(isStartRecording);
 
   const myVideoRef = useRef<HTMLVideoElement>(null);
   const [number, setNumber] = useState("");
@@ -76,7 +70,6 @@ const SimulationSetting = () => {
         console.log(data);
         setTest(data);
         setSimulation(true);
-        setIsStartRecordingState(true);
         return;
       } catch (e) {
         console.log(e);

@@ -1,23 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
 import RecordRTC, { invokeSaveAsDialog } from "recordrtc";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  isDownloadVideo,
-  isOK,
-  isSimulationState,
-  isStartRecording,
-  isStopRecording,
-  test,
-} from "../../recoil/atoms/atoms";
+import { isOK, isSimulationState, test } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
 import { useNavigate } from "react-router-dom";
 import PersonItem from "../../elements/PersonItem";
 import ResultIconItem from "../../elements/ResultIconItem";
 import useStopwatch from "../../hooks/useStopwatch";
 import stopwatchTime from "../stopwatch/utils/stopwatchTime";
-import TestRecorder from "./TestRecorder";
 import { Player } from "video-react";
 import "video-react/dist/video-react.css";
 import { saveAs } from "file-saver";
@@ -31,17 +23,10 @@ const Simulation = () => {
 
   const setSimulation = useSetRecoilState(isSimulationState);
   const setIsOKState = useSetRecoilState(isOK);
-  const setIsStopRecordingState = useSetRecoilState(isStopRecording);
   const testSimulation = useRecoilValue(test);
 
-  //recordrtc
-  const [stream, setStream] = useState<MediaStream>();
-  const [blob, setBlob] = useState<Blob | null>();
-  const refVideo = useRef<HTMLVideoElement>(null);
-  const recorderRef = useRef<RecordRTC>();
-  const myVideoRef = useRef<HTMLVideoElement>(null);
-
   // 유저 비디오 연결 테스트
+  const myVideoRef = useRef<HTMLVideoElement>(null);
   const getMedia = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
@@ -56,52 +41,6 @@ const Simulation = () => {
     }
   };
 
-  // 이전 전체 화면녹화 버전
-  // const stopStreamedVideo = (myVideoRef: any) => {
-  //   const stream = myVideoRef.current.srcObject;
-  //   const tracks = stream.getTracks();
-
-  //   tracks.forEach(function (track: MediaStreamTrack) {
-  //     track.stop();
-  //   });
-
-  //   myVideoRef.current.srcObject = null;
-  // };
-
-  // const handleRecording = async () => {
-  //   const mediaStream = await navigator.mediaDevices.getDisplayMedia({
-  //     video: {
-  //       width: 800,
-  //       height: 600,
-  //       frameRate: 60,
-  //     },
-  //     audio: true,
-  //   });
-
-  //   setStream(mediaStream);
-  //   recorderRef.current = new RecordRTC(mediaStream, { type: "video" });
-  //   recorderRef.current.startRecording();
-  // };
-
-  // const handleStop = () => {
-  //   if (recorderRef.current) {
-  //     recorderRef.current.stopRecording(() => {
-  //       stopStreamedVideo(myVideoRef);
-  //       setBlob(recorderRef?.current?.getBlob() as Blob);
-  //     });
-  //   }
-  // };
-
-  // const handleSave = () => {
-  //   invokeSaveAsDialog(blob as Blob);
-  // };
-
-  useEffect(() => {
-    if (!refVideo.current) {
-      return;
-    }
-  }, [stream, refVideo]);
-
   // 스톱워치 영역
   const { seconds, nextLap, start, stop, record } = useStopwatch();
   const [isStop, setIsStop] = useState(false);
@@ -115,19 +54,6 @@ const Simulation = () => {
 
   const requestAudioFile = async (event: any) => {
     isStop && stop();
-
-    // if (!isStart) {
-    //   event.target.disabled = true;
-    //   event.target.style.backgroundColor = "black";
-
-    //   setTimeout(() => {
-    //     event.target.disabled = false;
-    //     event.target.style.backgroundColor = "#092304";
-    //     console.log("버튼 사용 가능");
-    //   }, 3000);
-
-    //   return;
-    // }
 
     try {
       const config = {
@@ -228,12 +154,7 @@ const Simulation = () => {
     }
   };
 
-  const isStartRecordingState = useRecoilValue(isStartRecording);
-  const isStopRecordingState = useRecoilValue(isStopRecording);
-  const isDownloadVideoState = useRecoilValue(isDownloadVideo);
-
   const [recorder, setRecorder] = useState<RecordRTC | null>();
-  const [recordstream, setRecordStream] = useState<MediaStream | null>();
   const [videoBlob, setVideoBlob] = useState<Blob | null>();
 
   const startRecording = async () => {
@@ -252,7 +173,6 @@ const Simulation = () => {
     });
     if (recorder) recorder.startRecording();
     setRecorder(recorder);
-    setRecordStream(stream);
   };
 
   const stopRecording = () => {
@@ -261,7 +181,6 @@ const Simulation = () => {
       recorder.stopRecording(() => {
         const blob: Blob = recorder.getBlob();
         setVideoBlob(blob);
-        setRecordStream(null);
         setRecorder(null);
       });
       // (stream as any).stop();
@@ -277,19 +196,9 @@ const Simulation = () => {
       alert("다운로드 할 수 없습니다.");
     }
   };
-  console.log("isStartRecordingState: ", isStartRecordingState);
-  console.log("isStopRecordingState: ", isStopRecordingState);
-  console.log("isDownloadVideoState: ", isDownloadVideoState);
 
   useEffect(() => {
-    isStartRecordingState && startRecording();
-    isStopRecordingState && stopRecording();
-    isDownloadVideoState && downloadVideo();
-  }, [isStartRecordingState, isStopRecordingState, isDownloadVideoState]);
-
-  useEffect(() => {
-    currValue === "모의 면접이 종료되었습니다." &&
-      setIsStopRecordingState(true);
+    currValue === "모의 면접이 종료되었습니다." && stopRecording();
   }, [currValue]);
 
   useEffect(() => {
@@ -307,7 +216,9 @@ const Simulation = () => {
                 ? "React.js"
                 : testSimulation.category === "node"
                 ? "Node.js"
-                : "spring"}
+                : testSimulation.category === "spring"
+                ? "spring"
+                : "custom"}
             </CategoryArea>
             {currValue === "모의 면접이 종료되었습니다." && (
               <Congratulation>
@@ -383,7 +294,7 @@ const Simulation = () => {
             {/* 중간 컨텐츠 영역 */}
             <SimulationContent>
               <ContentWrap>
-                {!blob && currValue === "모의 면접이 종료되었습니다." ? (
+                {currValue === "모의 면접이 종료되었습니다." ? (
                   <>
                     <VideoBox>
                       {videoBlob ? (
@@ -432,6 +343,7 @@ const Simulation = () => {
                       requestAudioFile(event);
                       // startTotalTime()
                       setIsStart(true);
+                      startRecording();
                       start();
                     }}
                   >

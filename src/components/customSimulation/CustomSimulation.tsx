@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import {
   FlexCol,
@@ -8,6 +9,7 @@ import {
   HeaderBox,
   Liner,
 } from "../../elements/elements";
+import { isSimulationState, test } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
 
 interface IQuestions {
@@ -21,6 +23,7 @@ interface IQuestions {
 }
 
 const CustomSimulation = () => {
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState<IQuestions[]>();
   console.log(questions);
 
@@ -34,12 +37,6 @@ const CustomSimulation = () => {
     }
   };
 
-  // 카테고리 선택 이벤트
-  const [category, setCategory] = useState("");
-  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
-    setCategory(event.currentTarget.value);
-  };
-
   // 질문 입력
   const [inputQuestion, setInputQuestion] = useState("");
   const onChangeInputQuestion = (
@@ -51,12 +48,8 @@ const CustomSimulation = () => {
   const onSubmitQuestion = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (
-      category.trim() === "" ||
-      category === "none" ||
-      inputQuestion.trim() === ""
-    ) {
-      return alert("카테고리 또는 질문을 입력하세요.");
+    if (inputQuestion.trim() === "") {
+      return alert("추가할 질문을 입력하세요.");
     }
 
     const config = {
@@ -65,21 +58,25 @@ const CustomSimulation = () => {
       createdAt: "",
       updatedAt: "",
       __v: 0,
-      category: category,
+      category: "custom",
       question: inputQuestion,
     };
     console.log(config);
 
-    if (window.confirm(`${category}에 질문을 추가하시겠습니까?`)) {
+    if (window.confirm(`질문을 추가하시겠습니까?`)) {
       try {
-        const { data } = await instance.post(`/mockInterview/custom`, config);
+        const { data } = await instance.post(`/mockInterview/custom`, {
+          category: "custom",
+          question: inputQuestion,
+        });
         console.log(data);
         if (questions) {
           setQuestions([...questions, config]);
         } else {
           setQuestions([config]);
         }
-
+        setInputQuestion("");
+        alert("질문이 추가되었습니다.");
         return;
       } catch (e) {
         console.log(e);
@@ -88,15 +85,48 @@ const CustomSimulation = () => {
       return;
     }
   };
+  const setTest = useSetRecoilState(test);
+  const setSimulation = useSetRecoilState(isSimulationState);
+  const goToCustomSimulation = () => {
+    console.log("가즈아");
+    const userName = sessionStorage.getItem("userName");
+    if (
+      window.confirm(
+        `${userName}님의 질문은 총 ${questions?.length}개 입니다.\n커스텀 모의면접을 진행하시겠습니까?`
+      )
+    ) {
+      const questionArr = questions?.map((question) => question.question);
+      if (questionArr) {
+        const customQuestions = {
+          category: "custom",
+          questionArr: questionArr,
+        };
+        console.log(customQuestions);
+        setTest(customQuestions);
+        setSimulation(true);
+        navigate("/simulation");
+      } else {
+        alert("커스텀 모의면접 통신에 문제가 발생했습니다.");
+      }
+    }
+  };
 
-  const deleteMySimulation = async () => {
+  const deleteQuestion = async (id: string) => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       try {
-        const { data } = await instance.delete(`mockInterview/detail/`);
+        const { data } = await instance.delete(`mockInterview/custom/${id}`);
         console.log(data);
-        alert("모의 면접 결과가 정상적으로 삭제되었습니다.");
+
+        const newQuestions = questions?.filter((curr) => {
+          return !(id === curr._id);
+        });
+        console.log(newQuestions);
+        setQuestions(newQuestions);
+
+        alert("커스텀 질문이 정상적으로 삭제되었습니다.");
       } catch (e) {
         console.log(e);
+        alert("커스텀 질문 삭제에 오류가 발생했습니다.");
       }
     } else {
       return;
@@ -118,84 +148,49 @@ const CustomSimulation = () => {
           >
             <TitleBar>나만의 모의면접 질문 현황</TitleBar>
           </FlexRow>
-          <FlexCol width="100%" gap="20px">
+          <FlexCol width="100%" gap="30px">
             <Form onSubmit={onSubmitQuestion}>
               <MiddleTitle>질문 추가하기</MiddleTitle>
-              <OptionBox>
-                <FlexRow gap="5px" justifyContent="space-between">
-                  <Select
-                    name="category"
-                    id="category-select"
-                    value={category}
-                    onInput={onInput}
-                  >
-                    <option value="none">
-                      -- 질문을 추가할 포지션을 선택해주세요 --
-                    </option>
-                    <option value="react">프론트엔드 - React.js</option>
-                    <option value="node">백엔드 - Node.js</option>
-                    <option value="spring">백엔드 - spring</option>
-                  </Select>
-                </FlexRow>
-              </OptionBox>
-
               <InputBox>
-                <>
-                  <Input
-                    //
-                    onInput={(e) => {
-                      if (
-                        e.currentTarget.value.length > e.currentTarget.maxLength
-                      )
-                        e.currentTarget.value = e.currentTarget.value.slice(
-                          0,
-                          e.currentTarget.maxLength
-                        );
-                    }}
-                    type="text"
-                    value={inputQuestion}
-                    onChange={onChangeInputQuestion}
-                    maxLength={50}
-                    placeholder="추가할 질문을 입력하세요."
-                  />
-                  <SubmitBtn>추가하기</SubmitBtn>
-                </>
+                <Input
+                  type="text"
+                  value={inputQuestion}
+                  onChange={onChangeInputQuestion}
+                  maxLength={50}
+                  placeholder="추가할 질문을 입력하세요."
+                />
+                <SubmitBtn>추가하기</SubmitBtn>
               </InputBox>
             </Form>
 
-            <FlexRow
-              width="100%"
-              gap="10px"
-              justifyContent="space-between"
-              alignItem="flex-start"
-            >
+            <FlexCol width="100%" gap="20px">
               <MiddleTitle style={{ marginTop: "10px" }}>
-                모의면접 결과
+                나만의 질문 리스트
               </MiddleTitle>
-              <FlexCol gap="10px" alignItem="flex-start">
-                <Liner />
-                <Gap gap="10px" />
-                <Text>질문별 소요시간</Text>
-                <Liner />
-                <FlexCol width="100%" gap="10px" alignItem="flex-start">
-                  <FlexCol width="100%" gap="5px" alignItem="flex-start">
-                    {/* {mySimulation.resultsArr.map((arr, index) => (
-                          <FlexRow
-                            width="100%"
-                            gap="10px"
-                            justifyContent="space-between"
-                          >
-                            <Question>
-                              <NumberArea>{index + 1}.</NumberArea>{" "}
-                              {arr.question}
-                            </Question>
-                            <Question> - [{arr.time}]</Question>
-                          </FlexRow>
-                        ))} */}
-                  </FlexCol>
-                </FlexCol>
-              </FlexCol>
-            </FlexRow>
+              <QuestionsList gap="10px" width="100%" alignItem="flex-start">
+                {!questions
+                  ? "나만의 질문이 없습니다."
+                  : questions?.map((question, index) => (
+                      <FlexRow
+                        width="100%"
+                        gap="10px"
+                        justifyContent="space-between"
+                        key={index}
+                      >
+                        <Question>
+                          <NumberArea>{index + 1}.</NumberArea>{" "}
+                          {question.question}
+                        </Question>
+                        <button onClick={() => deleteQuestion(question._id)}>
+                          삭제
+                        </button>
+                      </FlexRow>
+                    ))}
+              </QuestionsList>
+              <button onClick={() => goToCustomSimulation()}>
+                커스텀 질문으로 모의면접하기
+              </button>
+            </FlexCol>
           </FlexCol>
         </FlexCol>
       </Ctn>
@@ -227,34 +222,10 @@ const Form = styled.form`
   width: 100%;
   gap: 10px;
 `;
-
-const Text = styled.span`
-  font-size: 16px;
-  color: ${(props) => props.theme.__grayDark};
-`;
 const MiddleTitle = styled.h3`
   min-width: 150px;
   font-size: 20px;
   font-weight: 400;
-`;
-const OptionBox = styled.div`
-  position: relative;
-  min-height: 44px;
-  width: 100%;
-  border: 3px solid ${(props) => props.theme.__grayMedium};
-  border-radius: 22px;
-  box-sizing: border-box;
-  padding: 10px 20px;
-`;
-const Select = styled.select`
-  border: none;
-  overflow: hidden;
-  font-size: 16px;
-  font-weight: 600;
-  appearance: none;
-  width: 100%;
-  background-color: inherit;
-  color: #222222;
 `;
 const Input = styled.input`
   height: 50px;
@@ -306,6 +277,21 @@ const SubmitBtn = styled.button<ISubmitBtn>`
       return "pointer";
     }
   }};
+`;
+const Question = styled.span`
+  font-size: 14px;
+  display: flex;
+  gap: 15px;
+`;
+const NumberArea = styled.span`
+  font-size: inherit;
+  width: 20px;
+  display: flex;
+  justify-content: right;
+`;
+const QuestionsList = styled(FlexCol)`
+  background-color: white;
+  padding: 20px;
 `;
 
 export default CustomSimulation;

@@ -75,6 +75,8 @@ const MySimulationDetail = () => {
   const category = {
     react: "프론트엔드 - React.js",
     node: "백엔드 - Node.js",
+    spring: "백엔드 - spring",
+    custom: "커스텀 질문 - custom",
   };
 
   return (
@@ -98,7 +100,11 @@ const MySimulationDetail = () => {
                 <Text>
                   {mySimulation.category === "react"
                     ? category.react
-                    : category.node}
+                    : mySimulation.category === "node"
+                    ? category.node
+                    : mySimulation.category === "spring"
+                    ? category.spring
+                    : category.custom}
                 </Text>
               </OptionBox>
             </FlexCol>

@@ -24,6 +24,8 @@ const Post = ({ post }: IPost) => {
   const category = {
     react: "프론트엔드 - React.js",
     node: "백엔드 - Node.js",
+    spring: "백엔드 - spring",
+    custom: "커스텀 질문 - custom",
   };
 
   return (
@@ -43,7 +45,13 @@ const Post = ({ post }: IPost) => {
           </SmallText>
         </FlexRow>
         <Text fontSize="20px" fontWeight="400">
-          {post.category === "react" ? category.react : category.node}
+          {post.category === "react"
+            ? category.react
+            : post.category === "node"
+            ? category.node
+            : post.category === "spring"
+            ? category.spring
+            : category.custom}
         </Text>
       </FlexCol>
     </PostCtn>

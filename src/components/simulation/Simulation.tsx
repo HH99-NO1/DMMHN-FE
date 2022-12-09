@@ -3,7 +3,14 @@ import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
 import RecordRTC, { invokeSaveAsDialog } from "recordrtc";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { isSimulationState, test } from "../../recoil/atoms/atoms";
+import {
+  isDownloadVideo,
+  isOK,
+  isSimulationState,
+  isStartRecording,
+  isStopRecording,
+  test,
+} from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
 import { useNavigate } from "react-router-dom";
 import PersonItem from "../../elements/PersonItem";
@@ -23,6 +30,8 @@ const Simulation = () => {
   const [isResult, setIsResult] = useState(false);
 
   const setSimulation = useSetRecoilState(isSimulationState);
+  const setIsOKState = useSetRecoilState(isOK);
+  const setIsStopRecordingState = useSetRecoilState(isStopRecording);
   const testSimulation = useRecoilValue(test);
 
   //recordrtc
@@ -47,6 +56,7 @@ const Simulation = () => {
     }
   };
 
+  // 이전 전체 화면녹화 버전
   // const stopStreamedVideo = (myVideoRef: any) => {
   //   const stream = myVideoRef.current.srcObject;
   //   const tracks = stream.getTracks();
@@ -187,29 +197,100 @@ const Simulation = () => {
   console.log(testSimulation.questionArr.slice(0, count));
 
   const onResult = async () => {
-    if (result) {
-      const newResult = result.slice(1, result.length);
-      const req = {
-        category: testSimulation.category,
-        number: newResult.length,
-        result: newResult,
-        totalTime: stopwatchTime(seconds),
-      };
-      try {
-        const { data } = await instance.post(`/mockInterview/saveResults`, req);
+    if (
+      window.confirm(
+        `모의면접 영상은 결과 저장 후, 확인이 불가합니다.\n모의면접 결과를 제출하시겠습니까?`
+      )
+    ) {
+      if (result) {
+        const newResult = result.slice(1, result.length);
+        const req = {
+          category: testSimulation.category,
+          number: newResult.length,
+          result: newResult,
+          totalTime: stopwatchTime(seconds),
+        };
+        try {
+          const { data } = await instance.post(
+            `/mockInterview/saveResults`,
+            req
+          );
 
-        console.log(data);
-        alert("모의면접의 결과가 정상적으로 저장되었습니다.");
-        setSimulation(false);
-        navigate(`/mysimulation/${data.sequence}`);
-      } catch (e) {
-        console.log(e);
+          console.log(data);
+          alert("모의면접의 결과가 정상적으로 저장되었습니다.");
+          setSimulation(false);
+          setIsOKState(false);
+          navigate(`/mysimulation/${data.sequence}`);
+        } catch (e) {
+          console.log(e);
+        }
       }
     }
   };
-  // useEffect(() => {
-  //   window.speechSynthesis.cancel();
-  // }, []);
+
+  const isStartRecordingState = useRecoilValue(isStartRecording);
+  const isStopRecordingState = useRecoilValue(isStopRecording);
+  const isDownloadVideoState = useRecoilValue(isDownloadVideo);
+
+  const [recorder, setRecorder] = useState<RecordRTC | null>();
+  const [recordstream, setRecordStream] = useState<MediaStream | null>();
+  const [videoBlob, setVideoBlob] = useState<Blob | null>();
+
+  const startRecording = async () => {
+    console.log("start");
+    const mediaDevices = navigator.mediaDevices;
+    const stream: MediaStream = await mediaDevices.getUserMedia({
+      video: {
+        width: 400,
+        height: 300,
+        frameRate: 60,
+      },
+      audio: true,
+    });
+    const recorder: RecordRTC = new RecordRTC(stream, {
+      type: "video",
+    });
+    if (recorder) recorder.startRecording();
+    setRecorder(recorder);
+    setRecordStream(stream);
+  };
+
+  const stopRecording = () => {
+    console.log("stop");
+    if (recorder) {
+      recorder.stopRecording(() => {
+        const blob: Blob = recorder.getBlob();
+        setVideoBlob(blob);
+        setRecordStream(null);
+        setRecorder(null);
+      });
+      // (stream as any).stop();
+    }
+  };
+
+  const downloadVideo = () => {
+    console.log("down");
+    if (videoBlob) {
+      const mp4s = new File([videoBlob], "test.mp4", { type: "video" });
+      saveAs(mp4s, `${Date.now()}.mp4`);
+    } else {
+      alert("다운로드 할 수 없습니다.");
+    }
+  };
+  console.log("isStartRecordingState: ", isStartRecordingState);
+  console.log("isStopRecordingState: ", isStopRecordingState);
+  console.log("isDownloadVideoState: ", isDownloadVideoState);
+
+  useEffect(() => {
+    isStartRecordingState && startRecording();
+    isStopRecordingState && stopRecording();
+    isDownloadVideoState && downloadVideo();
+  }, [isStartRecordingState, isStopRecordingState, isDownloadVideoState]);
+
+  useEffect(() => {
+    currValue === "모의 면접이 종료되었습니다." &&
+      setIsStopRecordingState(true);
+  }, [currValue]);
 
   useEffect(() => {
     getMedia();
@@ -303,7 +384,16 @@ const Simulation = () => {
             <SimulationContent>
               <ContentWrap>
                 {!blob && currValue === "모의 면접이 종료되었습니다." ? (
-                  <TestRecorder />
+                  <>
+                    <VideoBox>
+                      {videoBlob ? (
+                        <Player src={window.URL.createObjectURL(videoBlob)} />
+                      ) : (
+                        "blob is false"
+                      )}
+                    </VideoBox>
+                    <SmallBtn onClick={downloadVideo}>영상 다운로드</SmallBtn>
+                  </>
                 ) : (
                   <>
                     <Video ref={myVideoRef} autoPlay />
@@ -543,7 +633,12 @@ const TotalTime = styled(Text)`
 `;
 const SmallBtn = styled(Button)`
   font-size: 16px;
-  max-width: 100px;
 `;
-
+const VideoBox = styled.div`
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  overflow: hidden;
+`;
 export default Simulation;

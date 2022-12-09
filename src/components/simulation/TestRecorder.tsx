@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 // @ts-ignore
@@ -7,13 +7,24 @@ import RecordRTC from "recordrtc";
 import { Player } from "video-react";
 import "video-react/dist/video-react.css";
 import { saveAs } from "file-saver";
+import { useRecoilValue } from "recoil";
+import {
+  isDownloadVideo,
+  isStartRecording,
+  isStopRecording,
+} from "../../recoil/atoms/atoms";
 
 const TestRecorder = () => {
+  const isStartRecordingState = useRecoilValue(isStartRecording);
+  const isStopRecordingState = useRecoilValue(isStopRecording);
+  const isDownloadVideoState = useRecoilValue(isDownloadVideo);
+
   const [recorder, setRecorder] = useState<RecordRTC | null>();
   const [stream, setStream] = useState<MediaStream | null>();
   const [videoBlob, setVideoBlob] = useState<Blob | null>();
 
   const startRecording = async () => {
+    console.log("start");
     const mediaDevices = navigator.mediaDevices;
     const stream: MediaStream = await mediaDevices.getUserMedia({
       video: {
@@ -32,6 +43,7 @@ const TestRecorder = () => {
   };
 
   const stopRecording = () => {
+    console.log("stop");
     if (recorder) {
       recorder.stopRecording(() => {
         const blob: Blob = recorder.getBlob();
@@ -43,7 +55,8 @@ const TestRecorder = () => {
     }
   };
 
-  const downloadVid = () => {
+  const downloadVideo = () => {
+    console.log("down");
     if (videoBlob) {
       const mp4s = new File([videoBlob], "test.mp4", { type: "video" });
       saveAs(mp4s, `${Date.now()}.mp4`);
@@ -51,23 +64,36 @@ const TestRecorder = () => {
       alert("다운로드 할 수 없습니다.");
     }
   };
+  console.log("isStartRecordingState: ", isStartRecordingState);
+  console.log("isStopRecordingState: ", isStopRecordingState);
+  console.log("isDownloadVideoState: ", isDownloadVideoState);
+  useEffect(() => {
+    isStartRecordingState && startRecording();
+    isStopRecordingState && stopRecording();
+    isDownloadVideoState && downloadVideo();
+  }, [isStartRecordingState, isStopRecordingState, isDownloadVideoState]);
   return (
     <>
-      <div>
-        <button onClick={() => startRecording()}>녹화 시작</button>
+      {/* <button onClick={() => startRecording()}>녹화 시작</button>
         <button onClick={() => stopRecording()}>녹화 중지</button>
-        <button onClick={downloadVid}>다운받기</button>
-        <div style={{ width: "500px" }}>
-          {videoBlob ? (
-            <Player src={window.URL.createObjectURL(videoBlob)} />
-          ) : (
-            "blob is false"
-          )}
-        </div>
-      </div>
+         */}
+      <VideoBox style={{ width: "500px" }}>
+        {videoBlob ? (
+          <Player src={window.URL.createObjectURL(videoBlob)} />
+        ) : (
+          "blob is false"
+        )}
+      </VideoBox>
+      <button onClick={downloadVideo}>다운받기</button>
     </>
   );
 };
+
+const VideoBox = styled.div`
+  max-width: 500px;
+  width: 100%;
+  border-radius: 10px;
+`;
 
 // const RecordTop = styled.div`
 //   position: relative;

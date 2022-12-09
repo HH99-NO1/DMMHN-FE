@@ -114,10 +114,8 @@ const MyPage = () => {
     if (window.confirm("정말 회원탈퇴하시겠습니까?")) {
       try {
         const preAccessToken = sessionStorage.getItem("accessToken");
-
-        const { data } = await instance.delete(`/members/me`, {
-          password: password,
-        });
+        console.log("password: ", password);
+        const { data } = await instance.delete(`/members/me`);
         console.log(data);
         alert("회원탈퇴가 완료되었습니다.");
         navigate("/");

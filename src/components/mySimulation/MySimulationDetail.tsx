@@ -246,6 +246,8 @@ const DelBtn = styled.button`
   width: 100px;
   height: 30px;
   box-sizing: border-box;
+  border: 2px solid tomato;
+  font-weight: 600;
   border-radius: 10px;
 `;
 

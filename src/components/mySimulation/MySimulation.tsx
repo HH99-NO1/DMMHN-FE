@@ -49,7 +49,7 @@ const MySimulation = () => {
         <HeaderBox />
         <Ctn>
           <TitleBar>나의 모의면접 현황</TitleBar>
-          <FlexRow style={{ flexWrap: "wrap" }} gap="1.7%">
+          <GridMob style={{ flexWrap: "wrap", margin: "40px 0" }} gap="1.7%">
             {mySimulations.map((post) => (
               <LinkBtn
                 key={post.sequence}
@@ -58,12 +58,23 @@ const MySimulation = () => {
                 <Post key={post.sequence} post={post} />
               </LinkBtn>
             ))}
-          </FlexRow>
+          </GridMob>
         </Ctn>
       </>
     );
   }
 };
+
+const GridMob = styled(FlexRow)`
+  @media screen and (max-width: 850px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (max-width: 600px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+`;
 
 const Ctn = styled.div`
   /* border: 1px solid red; */
@@ -72,6 +83,7 @@ const Ctn = styled.div`
   width: 100%;
   margin: 0 auto;
 `;
+
 const TitleBar = styled.div`
   padding: 10px 20px;
   margin: 0 auto 30px auto;
@@ -83,9 +95,10 @@ const TitleBar = styled.div`
   font-weight: 600;
   background-color: ${(props) => props.theme.__grayLight};
 `;
+
 const LinkBtn = styled.div`
   width: 32.2%;
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: 850px) {
     width: 100%;
   }
 `;

@@ -54,6 +54,7 @@ const Post = ({ post }: IPost) => {
 };
 
 const PostCtn = styled.div`
+  position: relative;
   width: 100%;
   height: auto;
   padding: 20px;
@@ -65,12 +66,16 @@ const PostCtn = styled.div`
   :hover {
     border: 3px solid ${(props) => props.theme.__greenMidium};
   }
+  @media screen and (max-width: 600px) {
+    margin-bottom: 0;
+  }
 `;
 const PostBox = styled(FlexCol)`
   gap: 20px;
   align-items: flex-start;
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: 600px) {
     flex-direction: row;
+    align-items: flex-end;
   }
 `;
 const PostHeader = styled(FlexRow)`
@@ -78,13 +83,21 @@ const PostHeader = styled(FlexRow)`
   gap: 10px;
   justify-content: space-between;
   align-items: flex-end;
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: 850px) {
     justify-content: left;
+  }
+  @media screen and (max-width: 600px) {
+    width: 150px;
   }
 `;
 
 const SmallText = styled.span`
   color: ${(props) => props.theme.__grayDark};
+  @media screen and (max-width: 600px) {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
 `;
 const TextEl = styled(Text)`
   font-size: 20px;

@@ -220,14 +220,7 @@ const Simulation = () => {
                 ? "spring"
                 : "custom"}
             </CategoryArea>
-            {currValue === "모의 면접이 종료되었습니다." && (
-              <Congratulation>
-                <CongratulationImg
-                  src="img/congratulations.gif"
-                  alt="congratulation"
-                />
-              </Congratulation>
-            )}
+
             <CheckQuestion>
               {currValue !== "모의 면접이 종료되었습니다."
                 ? `Q${result.length}`
@@ -241,7 +234,15 @@ const Simulation = () => {
                     <TextEl fontSize="24px" fontWeight="600">
                       Q{result.length}.
                     </TextEl>
-                  ) : null}
+                  ) : (
+                    <Congratulation>
+                      <CongratulationImg
+                        src="img/congratulations.gif"
+                        alt="congratulation"
+                      />
+                    </Congratulation>
+                  )}
+
                   <TextEl fontSize="30px" fontWeight="600">
                     {currValue}
                   </TextEl>
@@ -256,6 +257,7 @@ const Simulation = () => {
               )}
             </SimulationHeader>
 
+            {/* 모의면접 진행 현황 */}
             <FlexCol gap="10px">
               {isResult && (
                 <ResultArea>
@@ -294,6 +296,24 @@ const Simulation = () => {
             {/* 중간 컨텐츠 영역 */}
             <SimulationContent>
               <ContentWrap>
+                <TimeIndicatorBox>
+                  <TotalTimeTitle>총 모의면접 답변시간</TotalTimeTitle>
+                  <TimeBlackBox>
+                    <TimeGreenBox bgColor="#5ec694">
+                      <TotalTime>{stopwatchTime(seconds)}</TotalTime>
+                    </TimeGreenBox>
+                  </TimeBlackBox>
+                </TimeIndicatorBox>
+                <TimeIndicatorBox>
+                  <TotalTimeTitle>현재 질문 답변시간</TotalTimeTitle>
+                  <TimeBlackBox>
+                    <TimeGreenBox bgColor="#181818">
+                      <TotalTime>{stopwatchTime(nextLap.lapTime)}</TotalTime>
+                    </TimeGreenBox>
+                  </TimeBlackBox>
+                </TimeIndicatorBox>
+              </ContentWrap>
+              <ContentWrapVideo>
                 {currValue === "모의 면접이 종료되었습니다." ? (
                   <>
                     <VideoBox>
@@ -310,28 +330,7 @@ const Simulation = () => {
                     <Video ref={myVideoRef} autoPlay />
                   </>
                 )}
-
-                <FlexRow gap="10px" justifyContent="space-between"></FlexRow>
-              </ContentWrap>
-              <ContentWrap>
-                <TimeIndicatorBox>
-                  <TotalTimeTitle>총 모의면접 답변시간</TotalTimeTitle>
-                  <TimeBlackBox>
-                    <TimeGreenBox bgColor="#5ec694">
-                      <TotalTime>{stopwatchTime(seconds)}</TotalTime>
-                    </TimeGreenBox>
-                  </TimeBlackBox>
-                </TimeIndicatorBox>
-                <Gap gap="30px" />
-                <TimeIndicatorBox>
-                  <TotalTimeTitle>현재 질문 답변시간</TotalTimeTitle>
-                  <TimeBlackBox>
-                    <TimeGreenBox bgColor="#181818">
-                      <TotalTime>{stopwatchTime(nextLap.lapTime)}</TotalTime>
-                    </TimeGreenBox>
-                  </TimeBlackBox>
-                </TimeIndicatorBox>
-              </ContentWrap>
+              </ContentWrapVideo>
             </SimulationContent>
             <Gap gap="20px" />
             {currValue !== "모의 면접이 종료되었습니다." ? (
@@ -413,14 +412,10 @@ const CategoryArea = styled(Text)`
   font-size: 20px;
   font-weight: 400;
 `;
-const Congratulation = styled(CategoryArea)`
-  top: 10px;
-  right: 10px;
-  border-bottom: none;
-`;
+const Congratulation = styled.div``;
 const CongratulationImg = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
 `;
 const CheckQuestion = styled.div`
   display: flex;
@@ -435,16 +430,30 @@ const CheckQuestion = styled.div`
   border: 1px solid #014021;
   background-color: #092304;
   color: white;
+  @media screen and (max-width: 800px) {
+    position: absolute;
+    right: 20px;
+  }
 `;
 const SimulationHeader = styled(FlexCol)`
-  height: 110px;
+  height: 150px;
   gap: 10px;
   justify-content: center;
+  @media screen and (max-width: 800px) {
+    margin-top: 50px;
+    height: 150px;
+  }
 `;
 const SimulationContent = styled(FlexRow)`
-  padding: 0 50px;
-  gap: 20px;
+  padding: 0 3%;
+  flex-direction: row-reverse;
+  gap: 40px;
   justify-content: space-between;
+  @media screen and (max-width: 800px) {
+  }
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+  }
 `;
 
 const Button = styled.button`
@@ -466,6 +475,12 @@ const Button = styled.button`
 `;
 const TextEl = styled(Text)`
   color: white;
+  @media screen and (max-width: 800px) {
+    font-size: 20px;
+  }
+  @media screen and (max-width: 800px) {
+    font-size: 16px;
+  }
 `;
 const Video = styled.video`
   max-width: 500px;
@@ -502,8 +517,23 @@ const IconArea = styled.div`
 
 const ContentWrap = styled(FlexCol)`
   width: 100%;
-  padding: 0 20px;
+  gap: 40px;
+  @media screen and (max-width: 800px) {
+    gap: 20px;
+  }
+  @media screen and (max-width: 500px) {
+    flex-direction: row;
+  }
+`;
+const ContentWrapVideo = styled(ContentWrap)`
   gap: 10px;
+  @media screen and (max-width: 800px) {
+    gap: 10px;
+    padding: 0;
+  }
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+  }
 `;
 const TimeIndicatorBox = styled(FlexCol)`
   width: 100%;
@@ -513,6 +543,9 @@ const TimeIndicatorBox = styled(FlexCol)`
 const TotalTimeTitle = styled(Text)`
   color: #fff;
   font-weight: 400;
+  @media screen and (max-width: 800px) {
+    font-size: 12px;
+  }
 `;
 
 const TimeBlackBox = styled.div`
@@ -538,6 +571,9 @@ const TimeGreenBox = styled.div<ITimeGreenBox>`
   border-radius: 20px;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   padding-left: 20px;
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
 `;
 const TotalTime = styled(Text)`
   color: white;

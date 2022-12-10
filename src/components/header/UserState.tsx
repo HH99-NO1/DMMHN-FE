@@ -1,25 +1,32 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { FlexRow, Text } from "../../elements/elements";
 import { userState } from "../../recoil/atoms/atoms";
 
 const UserState = () => {
+  const navigate = useNavigate();
   const loginUserState = useRecoilValue(userState);
   console.log(loginUserState);
   return (
     <>
-      <FlexRow gap="10px">
+      <UserStateArea onClick={() => navigate("/mypage")}>
         <Img src={`${loginUserState?.img}`} />
         <Text fontSize="14px" color="white">
           {loginUserState?.memberName}
         </Text>
-      </FlexRow>
+      </UserStateArea>
     </>
   );
 };
 
+const UserStateArea = styled(FlexRow)`
+  gap: 10px;
+  cursor: pointer;
+`;
 const Img = styled.img`
+  background-color: ${(props) => props.theme.__grayLight};
   width: 40px;
   height: 40px;
   border-radius: 50%;

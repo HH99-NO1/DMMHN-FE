@@ -6,9 +6,16 @@ const GlobalStyle = createGlobalStyle`
    License: none (public domain)
 */
 
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-style: normal;
+}
+
 * {
   box-sizing: border-box;
-  font-family: 'Noto Sans KR', sans-serif;
+  /* font-family: 'Noto Sans KR', sans-serif; */
+  font-family: 'Pretendard-Regular';
   line-height: 1.2;
   font-weight: 300;
   font-size: 14px;

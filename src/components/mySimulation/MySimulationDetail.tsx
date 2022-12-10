@@ -89,15 +89,16 @@ const MySimulationDetail = () => {
             justifyContent="space-between"
             alignItem="flex-end"
           >
-            <TitleBar>모의면접 결과</TitleBar>
-            <button onClick={() => deleteMySimulation()}>삭제 버튼</button>
-            <Text>{dateChange(mySimulation.createdAt)}</Text>
+            <TitleBar>
+              모의면접 결과
+              <Text>{dateChange(mySimulation.createdAt)}</Text>
+            </TitleBar>
           </FlexRow>
           <FlexCol width="100%" gap="20px">
             <FlexCol width="100%" gap="10px" alignItem="none">
               <MiddleTitle>카테고리</MiddleTitle>
               <OptionBox>
-                <Text>
+                <Text style={{ fontSize: "15px" }}>
                   {mySimulation.category === "react"
                     ? category.react
                     : mySimulation.category === "node"
@@ -111,7 +112,9 @@ const MySimulationDetail = () => {
             <FlexCol width="100%" gap="10px" alignItem="none">
               <MiddleTitle>문항 수</MiddleTitle>
               <OptionBox>
-                <Text>{mySimulation.number} 개</Text>
+                <Text style={{ fontSize: "15px" }}>
+                  {mySimulation.number} 개
+                </Text>
               </OptionBox>
             </FlexCol>
             <FlexCol width="100%" gap="10px" alignItem="none">
@@ -121,10 +124,12 @@ const MySimulationDetail = () => {
               <OptionScrollBox>
                 <OptionScrollBox2>
                   <FlexCol gap="10px" alignItem="flex-start">
-                    <Text>총 소요시간 - {mySimulation.totalTime}</Text>
+                    <Text style={{ fontSize: "15px" }}>
+                      총 소요시간 - {mySimulation.totalTime}
+                    </Text>
                     <Liner />
                     <Gap gap="10px" />
-                    <Text>질문별 소요시간</Text>
+                    <Text style={{ fontSize: "15px" }}>질문별 소요시간</Text>
                     <Liner />
                     <FlexCol width="100%" gap="10px" alignItem="flex-start">
                       <FlexCol width="100%" gap="10px" alignItem="flex-start">
@@ -146,6 +151,9 @@ const MySimulationDetail = () => {
                   </FlexCol>
                 </OptionScrollBox2>
               </OptionScrollBox>
+              <RightDiv>
+                <DelBtn onClick={() => deleteMySimulation()}>삭제</DelBtn>
+              </RightDiv>
             </FlexCol>
             {/* <FlexRow width="100%" gap="10px" alignItem="flex-start">
               <MiddleTitle style={{ marginTop: "10px" }}>
@@ -174,13 +182,15 @@ const TitleBar = styled.div`
   border-radius: 20px;
   max-width: 500px;
   width: 100%;
-  text-align: left;
   font-size: 20px;
   font-weight: 600;
   background-color: ${(props) => props.theme.__grayLight};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 const Text = styled.span`
-  font-size: 16px;
+  font-size: 12px;
   color: ${(props) => props.theme.__grayDark};
 `;
 const MiddleTitle = styled.h3`
@@ -219,11 +229,19 @@ const NumberArea = styled.span`
   display: flex;
   justify-content: right;
 `;
-const Video = styled.video`
-  width: 400px;
-  height: 300px;
-  background-color: black;
-  border-radius: 20px;
+
+const DelBtn = styled.button`
+  cursor: pointer;
+  background: none;
+  width: 100px;
+  height: 30px;
+  box-sizing: border-box;
+  border-radius: 10px;
+`;
+
+const RightDiv = styled.div`
+  text-align: right;
+  margin-top: 10px;
 `;
 
 export default MySimulationDetail;

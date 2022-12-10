@@ -196,23 +196,24 @@ const MyPage = () => {
               </form>
             </ImgBox>
             <FlexCol gap="20px" alignItem="left">
-              <Text>
+              <UserInfo>
                 {users?.memberName === undefined
                   ? `입력값이 없습니다. 빈칸을 수정해주세요.`
                   : users?.memberName}
-              </Text>
-              <Text>
+              </UserInfo>
+              <UserInfo>
                 {users?.memberEmail === undefined
                   ? `입력값이 없습니다. 빈칸을 수정해주세요.`
                   : users?.memberEmail}
-              </Text>
+              </UserInfo>
             </FlexCol>
           </FlexRow>
         </Profile>
-        <SubTitle>개인정보</SubTitle>
+
         {!modify ? (
           <>
             <Modify>
+              <SubTitle>개인정보</SubTitle>
               <Btn onClick={() => setModify(true)}>수정하기</Btn>
             </Modify>
             <Inform>
@@ -257,13 +258,15 @@ const MyPage = () => {
         ) : (
           <Modification users={users} setModify={(bool) => setModify(bool)} />
         )}
-        <input
-          type="password"
-          placeholder="회원탈퇴를 위한 비밀번호 입력"
-          value={password}
-          onChange={onChanghPassword}
-        />
-        <button onClick={() => deleteUserState()}>회원탈퇴</button>
+        <DelUserBox>
+          <DelInput
+            type="password"
+            placeholder="회원탈퇴를 위한 비밀번호 입력"
+            value={password}
+            onChange={onChanghPassword}
+          />
+          <DelUserBtn onClick={() => deleteUserState()}>회원탈퇴</DelUserBtn>
+        </DelUserBox>
       </Container>
     </>
   );
@@ -285,21 +288,27 @@ const Profile = styled.div`
   img {
     width: 120px;
     height: 120px;
+    @media screen and (max-width: 600px) {
+      width: 85px;
+      height: 85px;
+    }
   }
 `;
 
 const Modify = styled.div`
   display: flex;
-  justify-content: right;
-  margin-bottom: 10px;
+  justify-content: space-between;
+  margin: 10px;
+  margin-top: 60px;
 `;
 
 const Btn = styled.button`
   width: 70px;
+  height: 30px;
   text-align: center;
   color: #585858;
   cursor: pointer;
-  background-color: white;
+  background-color: transparent;
   border: 1px solid lightgray;
 `;
 
@@ -320,25 +329,40 @@ const Rows = styled.div`
   flex-basis: 100px;
   gap: 140px;
   padding-left: 50px;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-left: 0;
+  }
 `;
 
 const RowOne = styled.div`
   width: 200px;
   font-size: 20px;
   white-space: pre-line;
+  font-weight: 600;
   &:first-child {
     color: #585858;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 17px;
   }
 `;
 
 const RowTwo = styled(RowOne)`
-  width: 600px;
+  @media screen and (max-width: 600px) {
+    flex-basis: 40px;
+  }
 `;
 
 const SubTitle = styled.div`
-  margin: 40px 0 20px 0;
   font-size: 20px;
   font-weight: 600;
+  @media screen and (max-width: 600px) {
+    font-size: 17px;
+  }
 `;
 
 const Button = styled.button`
@@ -374,6 +398,35 @@ const ImgChangeInput = styled.input`
   /* &::file-selector-button {
     display: none;
   } */
+`;
+
+const DelUserBox = styled.div`
+  margin-top: 20px;
+  text-align: right;
+`;
+
+const DelInput = styled.input`
+  border: none;
+  border-bottom: 1px solid #000;
+  background: transparent;
+  width: 190px;
+  height: 30px;
+  margin-right: 10px;
+  outline: 0;
+`;
+
+const DelUserBtn = styled.button`
+  width: 100px;
+  height: 30px;
+  background: transparent;
+  cursor: pointer;
+  border: 1px solid lightgray;
+`;
+
+const UserInfo = styled(Text)`
+  @media screen and (max-width: 600px) {
+    font-size: 17px;
+  }
 `;
 
 // const Container = styled.div``;

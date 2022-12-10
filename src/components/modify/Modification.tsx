@@ -92,16 +92,17 @@ const MyPage = ({ users, setModify }: IProps) => {
 
   return (
     <>
+      <Modify>
+        <SubTitle>개인정보</SubTitle>
+        <Btn type="button" onClick={() => setModify(false)}>
+          수정완료
+        </Btn>
+      </Modify>
       <Inform onSubmit={onSubmit}>
-        <Modify>
-          <Btn type="button" onClick={() => setModify(false)}>
-            수정완료
-          </Btn>
-        </Modify>
         <InnerWrap>
           <FlexCol alignItem="left">
             <Rows>
-              <RowOne>소셜계정</RowOne>
+              <RowOne>계정</RowOne>
               <RowTwo>
                 <input
                   type="text"
@@ -164,16 +165,25 @@ export default MyPage;
 
 const Modify = styled.div`
   display: flex;
-  justify-content: right;
-  margin-bottom: 10px;
+  justify-content: space-between;
+  margin: 10px;
+  margin-top: 60px;
+`;
+
+const SubTitle = styled.div`
+  font-size: 20px;
+  font-weight: 600;
+  @media screen and (max-width: 600px) {
+    font-size: 17px;
+  }
 `;
 
 const Btn = styled.button`
   width: 70px;
-  text-align: center;
+  height: 30px;
   color: #585858;
   cursor: pointer;
-  background-color: white;
+  background-color: transparent;
   border: 1px solid lightgray;
 `;
 
@@ -194,6 +204,12 @@ const Rows = styled.div`
   flex-basis: 100px;
   gap: 140px;
   padding-left: 50px;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-left: 0;
+  }
 `;
 
 const RowOne = styled.div`
@@ -202,6 +218,9 @@ const RowOne = styled.div`
   white-space: pre-line;
   &:first-child {
     color: #585858;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 17px;
   }
 `;
 

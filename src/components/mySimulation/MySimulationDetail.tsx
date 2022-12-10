@@ -9,8 +9,12 @@ import {
   Liner,
 } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
+import Loading from "../Loading";
 
 const MySimulationDetail = () => {
+  // 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(false);
+
   const { postId } = useParams();
   const navigate = useNavigate();
   const init = {
@@ -31,6 +35,7 @@ const MySimulationDetail = () => {
 
   const getMySimulation = async () => {
     try {
+      setIsLoading(true);
       const { data } = await instance.get(
         `mockInterview/getResultDetails/${postId}`
       );
@@ -38,6 +43,8 @@ const MySimulationDetail = () => {
       setMySimulation(data);
     } catch (e) {
       console.log(e);
+    } finally {
+      setIsLoading(false);
     }
   };
   const deleteMySimulation = async () => {
@@ -78,84 +85,86 @@ const MySimulationDetail = () => {
     spring: "백엔드 - spring",
     custom: "커스텀 질문 - custom",
   };
-
-  return (
-    <>
-      <HeaderBox />
-      <Ctn>
-        <FlexCol width="100%" gap="20px">
-          <FlexRow
-            width="100%"
-            justifyContent="space-between"
-            alignItem="flex-end"
-          >
-            <TitleBar>
-              모의면접 결과
-              <Text>{dateChange(mySimulation.createdAt)}</Text>
-            </TitleBar>
-          </FlexRow>
+  if (isLoading) {
+    return <Loading />;
+  } else {
+    return (
+      <>
+        <HeaderBox />
+        <Ctn>
           <FlexCol width="100%" gap="20px">
-            <FlexCol width="100%" gap="10px" alignItem="none">
-              <MiddleTitle>카테고리</MiddleTitle>
-              <OptionBox>
-                <Text style={{ fontSize: "15px" }}>
-                  {mySimulation.category === "react"
-                    ? category.react
-                    : mySimulation.category === "node"
-                    ? category.node
-                    : mySimulation.category === "spring"
-                    ? category.spring
-                    : category.custom}
-                </Text>
-              </OptionBox>
-            </FlexCol>
-            <FlexCol width="100%" gap="10px" alignItem="none">
-              <MiddleTitle>문항 수</MiddleTitle>
-              <OptionBox>
-                <Text style={{ fontSize: "15px" }}>
-                  {mySimulation.number} 개
-                </Text>
-              </OptionBox>
-            </FlexCol>
-            <FlexCol width="100%" gap="10px" alignItem="none">
-              <MiddleTitle style={{ marginTop: "10px" }}>
+            <FlexRow
+              width="100%"
+              justifyContent="space-between"
+              alignItem="flex-end"
+            >
+              <TitleBar>
                 모의면접 결과
-              </MiddleTitle>
-              <OptionScrollBox>
-                <OptionScrollBox2>
-                  <FlexCol gap="10px" alignItem="flex-start">
-                    <Text style={{ fontSize: "15px" }}>
-                      총 소요시간 - {mySimulation.totalTime}
-                    </Text>
-                    <Liner />
-                    <Gap gap="10px" />
-                    <Text style={{ fontSize: "15px" }}>질문별 소요시간</Text>
-                    <Liner />
-                    <FlexCol width="100%" gap="10px" alignItem="flex-start">
+                <Text>{dateChange(mySimulation.createdAt)}</Text>
+              </TitleBar>
+            </FlexRow>
+            <FlexCol width="100%" gap="20px">
+              <FlexCol width="100%" gap="10px" alignItem="none">
+                <MiddleTitle>카테고리</MiddleTitle>
+                <OptionBox>
+                  <Text style={{ fontSize: "15px" }}>
+                    {mySimulation.category === "react"
+                      ? category.react
+                      : mySimulation.category === "node"
+                      ? category.node
+                      : mySimulation.category === "spring"
+                      ? category.spring
+                      : category.custom}
+                  </Text>
+                </OptionBox>
+              </FlexCol>
+              <FlexCol width="100%" gap="10px" alignItem="none">
+                <MiddleTitle>문항 수</MiddleTitle>
+                <OptionBox>
+                  <Text style={{ fontSize: "15px" }}>
+                    {mySimulation.number} 개
+                  </Text>
+                </OptionBox>
+              </FlexCol>
+              <FlexCol width="100%" gap="10px" alignItem="none">
+                <MiddleTitle style={{ marginTop: "10px" }}>
+                  모의면접 결과
+                </MiddleTitle>
+                <OptionScrollBox>
+                  <OptionScrollBox2>
+                    <FlexCol gap="10px" alignItem="flex-start">
+                      <Text style={{ fontSize: "15px" }}>
+                        총 소요시간 - {mySimulation.totalTime}
+                      </Text>
+                      <Liner />
+                      <Gap gap="10px" />
+                      <Text style={{ fontSize: "15px" }}>질문별 소요시간</Text>
+                      <Liner />
                       <FlexCol width="100%" gap="10px" alignItem="flex-start">
-                        {mySimulation.resultsArr.map((arr, index) => (
-                          <FlexRow
-                            width="100%"
-                            gap="10px"
-                            justifyContent="space-between"
-                          >
-                            <Question>
-                              <NumberArea>{index + 1}.</NumberArea>{" "}
-                              {arr.question}
-                            </Question>
-                            <Question> - [{arr.time}]</Question>
-                          </FlexRow>
-                        ))}
+                        <FlexCol width="100%" gap="10px" alignItem="flex-start">
+                          {mySimulation.resultsArr.map((arr, index) => (
+                            <FlexRow
+                              width="100%"
+                              gap="10px"
+                              justifyContent="space-between"
+                            >
+                              <Question>
+                                <NumberArea>{index + 1}.</NumberArea>{" "}
+                                {arr.question}
+                              </Question>
+                              <Question> - [{arr.time}]</Question>
+                            </FlexRow>
+                          ))}
+                        </FlexCol>
                       </FlexCol>
                     </FlexCol>
-                  </FlexCol>
-                </OptionScrollBox2>
-              </OptionScrollBox>
-              <RightDiv>
-                <DelBtn onClick={() => deleteMySimulation()}>삭제</DelBtn>
-              </RightDiv>
-            </FlexCol>
-            {/* <FlexRow width="100%" gap="10px" alignItem="flex-start">
+                  </OptionScrollBox2>
+                </OptionScrollBox>
+                <RightDiv>
+                  <DelBtn onClick={() => deleteMySimulation()}>삭제</DelBtn>
+                </RightDiv>
+              </FlexCol>
+              {/* <FlexRow width="100%" gap="10px" alignItem="flex-start">
               <MiddleTitle style={{ marginTop: "10px" }}>
                 모의면접 영상
               </MiddleTitle>
@@ -164,11 +173,12 @@ const MySimulationDetail = () => {
                 autoPlay
               />
             </FlexRow> */}
+            </FlexCol>
           </FlexCol>
-        </FlexCol>
-      </Ctn>
-    </>
-  );
+        </Ctn>
+      </>
+    );
+  }
 };
 const Ctn = styled.div`
   /* border: 1px solid red; */

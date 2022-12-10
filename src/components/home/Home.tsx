@@ -6,7 +6,6 @@ import { onLoginState } from "../../recoil/atoms/atoms";
 
 const Home = () => {
   const navigate = useNavigate();
-  const onLogin = useSetRecoilState(onLoginState);
   return (
     <>
       {/* <CustomGap /> */}
@@ -33,24 +32,26 @@ const Home = () => {
 
 const Ctn = styled(FlexRow)`
   position: absolute;
-  padding: 20px;
+  padding: 0 20px;
   max-width: 1200px;
   width: 100%;
+  height: 100%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  margin: 10px auto 0 auto;
+  margin: 0 auto;
   gap: 20px;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
+  @media screen and (max-width: 1180px) {
+    flex-direction: column;
+  }
   @media screen and (max-height: 600px) {
     position: relative;
+    flex-direction: column;
     top: auto;
     left: auto;
     transform: translate(0, 0);
-  }
-  @media screen and (max-width: 1180px) {
-    flex-direction: column;
   }
 `;
 

@@ -56,6 +56,9 @@ const HamburgerMenu = ({ setIsClick }: IHamburgerMenu) => {
           <MenuBox onClick={() => navigate("/mysimulation")}>
             나의 모의면접 현황
           </MenuBox>
+          <MenuBox onClick={() => navigate("/custom")}>
+            나만의 질문 만들기
+          </MenuBox>
           <MenuLine />
           <MenuBox onClick={() => navigate("/mypage")}>My page</MenuBox>
           <MenuBox

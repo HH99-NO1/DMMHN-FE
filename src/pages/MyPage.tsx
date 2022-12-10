@@ -1,19 +1,13 @@
-import Layout from "../components/home/Layout";
 import styled from "styled-components";
-import { FlexRow, FlexCol, Text, Gap, HeaderBox } from "../elements/elements";
+import { FlexRow, FlexCol, Text, HeaderBox } from "../elements/elements";
 import { instance } from "../recoil/instance";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useState } from "react";
 import Modification from "../components/modify/Modification";
 import { useRecoilState } from "recoil";
 import { isLoginState, userState } from "../recoil/atoms/atoms";
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Loading from "../components/Loading";
 
 interface IUsers {
   memberEmail: string;
@@ -26,6 +20,9 @@ interface IUsers {
 }
 
 const MyPage = () => {
+  // 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
 
@@ -39,6 +36,7 @@ const MyPage = () => {
 
   const getUserData = async () => {
     try {
+      setIsLoading(true);
       const preAccessToken = sessionStorage.getItem("accessToken");
       const { data } = await axios.get(
         `${process.env.REACT_APP_API_URL}/members/me`,
@@ -52,6 +50,8 @@ const MyPage = () => {
       setUsers(data);
     } catch (e) {
       console.log(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -74,6 +74,7 @@ const MyPage = () => {
   //   inputRef.current.click();
   // };
   console.log(users);
+
   const onChangeImg = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
@@ -145,131 +146,136 @@ const MyPage = () => {
   useEffect(() => {
     users?.img !== undefined && setImg(users.img);
   }, [users]);
-  return (
-    <>
-      <HeaderBox />
-      <Container>
-        <Profile>
-          <FlexRow gap="45px">
-            {/* <Button
+
+  if (isLoading) {
+    return <Loading />;
+  } else {
+    return (
+      <>
+        <HeaderBox />
+        <Container>
+          <Profile>
+            <FlexRow gap="45px">
+              {/* <Button
                 label="이미지 업로드"
                 onClick={onUploadImageButtonClick}
               /> */}
-            <ImgBox>
-              <Img src={img} alt="userImg" />
-              <form>
-                <ImgChangeLabel htmlFor="profileImg">
-                  <svg
-                    width="22"
-                    height="22"
-                    viewBox="0 0 22 22"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M9.25798 7H12.258M5.51798 21H15.998C18.758 21 19.858 19.31 19.988 17.25L20.508 8.99C20.5404 8.47783 20.4674 7.96446 20.2936 7.48161C20.1197 6.99876 19.8487 6.5567 19.4972 6.18275C19.1458 5.80879 18.7213 5.51089 18.2502 5.30746C17.779 5.10403 17.2712 4.99939 16.758 5C16.148 5 15.588 4.65 15.308 4.11L14.588 2.66C14.128 1.75 12.928 1 11.908 1H9.61798C8.58798 1 7.38798 1.75 6.92798 2.66L6.20798 4.11C5.92798 4.65 5.36798 5 4.75798 5C2.58798 5 0.86798 6.83 1.00798 8.99L1.52798 17.25C1.64798 19.31 2.75798 21 5.51798 21Z"
-                      stroke="#9F9F9F"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M10.7578 17C12.5478 17 14.0078 15.54 14.0078 13.75C14.0078 11.96 12.5478 10.5 10.7578 10.5C8.96781 10.5 7.50781 11.96 7.50781 13.75C7.50781 15.54 8.96781 17 10.7578 17Z"
-                      stroke="#9F9F9F"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </ImgChangeLabel>
-                <ImgChangeInput
-                  type="file"
-                  id="profileImg"
-                  accept="image/*"
-                  // style={{ display: "none" }}
-                  // ref={inputRef}
-                  onChange={onChangeImg}
-                />
-                {/* <button id="profileImg" onClick={onUploadImageButtonClick}>
+              <ImgBox>
+                <Img src={img} alt="userImg" />
+                <form>
+                  <ImgChangeLabel htmlFor="profileImg">
+                    <svg
+                      width="22"
+                      height="22"
+                      viewBox="0 0 22 22"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M9.25798 7H12.258M5.51798 21H15.998C18.758 21 19.858 19.31 19.988 17.25L20.508 8.99C20.5404 8.47783 20.4674 7.96446 20.2936 7.48161C20.1197 6.99876 19.8487 6.5567 19.4972 6.18275C19.1458 5.80879 18.7213 5.51089 18.2502 5.30746C17.779 5.10403 17.2712 4.99939 16.758 5C16.148 5 15.588 4.65 15.308 4.11L14.588 2.66C14.128 1.75 12.928 1 11.908 1H9.61798C8.58798 1 7.38798 1.75 6.92798 2.66L6.20798 4.11C5.92798 4.65 5.36798 5 4.75798 5C2.58798 5 0.86798 6.83 1.00798 8.99L1.52798 17.25C1.64798 19.31 2.75798 21 5.51798 21Z"
+                        stroke="#9F9F9F"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M10.7578 17C12.5478 17 14.0078 15.54 14.0078 13.75C14.0078 11.96 12.5478 10.5 10.7578 10.5C8.96781 10.5 7.50781 11.96 7.50781 13.75C7.50781 15.54 8.96781 17 10.7578 17Z"
+                        stroke="#9F9F9F"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </ImgChangeLabel>
+                  <ImgChangeInput
+                    type="file"
+                    id="profileImg"
+                    accept="image/*"
+                    // style={{ display: "none" }}
+                    // ref={inputRef}
+                    onChange={onChangeImg}
+                  />
+                  {/* <button id="profileImg" onClick={onUploadImageButtonClick}>
                     저장하기
                   </button> */}
-              </form>
-            </ImgBox>
-            <FlexCol gap="20px" alignItem="left">
-              <UserInfo>
-                {users?.memberName === undefined
-                  ? `입력값이 없습니다. 빈칸을 수정해주세요.`
-                  : users?.memberName}
-              </UserInfo>
-              <UserInfo>
-                {users?.memberEmail === undefined
-                  ? `입력값이 없습니다. 빈칸을 수정해주세요.`
-                  : users?.memberEmail}
-              </UserInfo>
-            </FlexCol>
-          </FlexRow>
-        </Profile>
+                </form>
+              </ImgBox>
+              <FlexCol gap="20px" alignItem="left">
+                <UserInfo>
+                  {users?.memberName === undefined
+                    ? `입력값이 없습니다. 빈칸을 수정해주세요.`
+                    : users?.memberName}
+                </UserInfo>
+                <UserInfo>
+                  {users?.memberEmail === undefined
+                    ? `입력값이 없습니다. 빈칸을 수정해주세요.`
+                    : users?.memberEmail}
+                </UserInfo>
+              </FlexCol>
+            </FlexRow>
+          </Profile>
 
-        {!modify ? (
-          <>
-            <Modify>
-              <SubTitle>개인정보</SubTitle>
-              <Btn onClick={() => setModify(true)}>수정하기</Btn>
-            </Modify>
-            <Inform>
-              <InnerWrap>
-                <FlexCol alignItem="left">
-                  <Rows>
-                    <RowOne>계정</RowOne>
-                    <RowTwo>
-                      {users?.memberEmail === undefined
-                        ? `입력값이 없습니다. 빈칸을 수정해주세요.`
-                        : users?.memberEmail}
-                    </RowTwo>
-                  </Rows>
-                  <Rows>
-                    <RowOne>생년월일</RowOne>
-                    <RowTwo>
-                      {users?.birth === undefined
-                        ? `입력값이 없습니다. 빈칸을 수정해주세요.`
-                        : users?.birth}
-                    </RowTwo>
-                  </Rows>
-                  <Rows>
-                    <RowOne>직업</RowOne>
-                    <RowTwo>
-                      {users?.job === undefined
-                        ? `입력값이 없습니다. 빈칸을 수정해주세요.`
-                        : users?.job}
-                    </RowTwo>
-                  </Rows>
-                  <Rows>
-                    <RowOne>스택</RowOne>
-                    <RowTwo>
-                      {users?.stack === undefined
-                        ? `입력값이 없습니다. 빈칸을 수정해주세요.`
-                        : users?.stack}
-                    </RowTwo>
-                  </Rows>
-                </FlexCol>
-              </InnerWrap>
-            </Inform>
-          </>
-        ) : (
-          <Modification users={users} setModify={(bool) => setModify(bool)} />
-        )}
-        <DelUserBox>
-          <DelInput
-            type="password"
-            placeholder="회원탈퇴를 위한 비밀번호 입력"
-            value={password}
-            onChange={onChanghPassword}
-          />
-          <DelUserBtn onClick={() => deleteUserState()}>회원탈퇴</DelUserBtn>
-        </DelUserBox>
-      </Container>
-    </>
-  );
+          {!modify ? (
+            <>
+              <Modify>
+                <SubTitle>개인정보</SubTitle>
+                <Btn onClick={() => setModify(true)}>수정하기</Btn>
+              </Modify>
+              <Inform>
+                <InnerWrap>
+                  <FlexCol alignItem="left">
+                    <Rows>
+                      <RowOne>계정</RowOne>
+                      <RowTwo>
+                        {users?.memberEmail === undefined
+                          ? `입력값이 없습니다. 빈칸을 수정해주세요.`
+                          : users?.memberEmail}
+                      </RowTwo>
+                    </Rows>
+                    <Rows>
+                      <RowOne>생년월일</RowOne>
+                      <RowTwo>
+                        {users?.birth === undefined
+                          ? `입력값이 없습니다. 빈칸을 수정해주세요.`
+                          : users?.birth}
+                      </RowTwo>
+                    </Rows>
+                    <Rows>
+                      <RowOne>직업</RowOne>
+                      <RowTwo>
+                        {users?.job === undefined
+                          ? `입력값이 없습니다. 빈칸을 수정해주세요.`
+                          : users?.job}
+                      </RowTwo>
+                    </Rows>
+                    <Rows>
+                      <RowOne>스택</RowOne>
+                      <RowTwo>
+                        {users?.stack === undefined
+                          ? `입력값이 없습니다. 빈칸을 수정해주세요.`
+                          : users?.stack}
+                      </RowTwo>
+                    </Rows>
+                  </FlexCol>
+                </InnerWrap>
+              </Inform>
+            </>
+          ) : (
+            <Modification users={users} setModify={(bool) => setModify(bool)} />
+          )}
+          <DelUserBox>
+            <DelInput
+              type="password"
+              placeholder="회원탈퇴를 위한 비밀번호 입력"
+              value={password}
+              onChange={onChanghPassword}
+            />
+            <DelUserBtn onClick={() => deleteUserState()}>회원탈퇴</DelUserBtn>
+          </DelUserBox>
+        </Container>
+      </>
+    );
+  }
 };
 export default MyPage;
 

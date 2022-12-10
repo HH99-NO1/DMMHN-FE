@@ -17,6 +17,7 @@ import RoomDetail from "../components/meeting/RoomDetail";
 import NaverTTS from "../components/simulation/NaverTTS";
 import TestRecorder from "../components/simulation/TestRecorder";
 import SnsLoginPage from "../pages/SnsLoginPage";
+import CustomPage from "../pages/CustomPage";
 
 const Router = () => {
   const onLogin = useRecoilValue(onLoginState);
@@ -44,6 +45,7 @@ const Router = () => {
             element={<MySimulationDetail />}
           />
           <Route path="/stopwatch" element={<Stopwatch />} />
+          <Route path="/custom" element={<CustomPage />} />
         </Routes>
       </BrowserRouter>
     </>

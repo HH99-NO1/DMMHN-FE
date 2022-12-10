@@ -173,7 +173,7 @@ const Signup = () => {
             style={{
               display: "flex",
               flexDirection: "column",
-              width: "400px",
+              width: "100%",
               margin: "0 auto",
             }}
             onSubmit={handleSubmit(onValid)}
@@ -411,16 +411,22 @@ export default Signup;
 const Container = styled.div`
   width: 100%;
   height: 100%;
+  padding: 0 20px;
 `;
 
 const InnerWrap = styled.div`
   margin: 20px auto;
-  padding: 20px;
-  width: 550px;
+  padding: 40px;
+  max-width: 550px;
+  width: 100%;
   height: 100%;
   border: 1px solid lightgray;
   border-radius: 15px;
   background-color: white;
+  box-sizing: border-box;
+  @media screen and (max-width: 600px) {
+    padding: 20px;
+  }
 `;
 
 const Title = styled.div`
@@ -431,6 +437,7 @@ const Title = styled.div`
 `;
 
 const Input = styled.input`
+  width: 100%;
   height: 50px;
   padding: 8px 20px;
   border-radius: 67px;
@@ -449,10 +456,11 @@ const Label = styled.label`
 `;
 const InputBox = styled.div`
   position: relative;
+  width: 100%;
   display: flex;
   flex-direction: column;
   min-height: 50px;
-  min-width: 400px;
+  min-width: 250px;
 `;
 const ErrorMsg = styled.div`
   display: flex;
@@ -473,10 +481,11 @@ const BoxWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
+  width: 100%;
 `;
 
 const SignupBtn = styled.button`
-  width: 400px;
+  width: 100%;
   height: 50px;
   bottom: 40px;
   border: none;
@@ -489,7 +498,7 @@ const SignupBtn = styled.button`
 `;
 
 const GenderBox = styled.div`
-  width: 400px;
+  width: 100%;
   display: flex;
 
   span {
@@ -549,8 +558,4 @@ const CheckEmailBtn = styled.button<ICheck>`
       return "pointer";
     }
   }};
-`;
-const CheckSucceedText = styled(Text)`
-  display: flex;
-  justify-content: center;
 `;

@@ -96,12 +96,40 @@ a {
 
 .react-datepicker__input-container{
   input{
+    position: relative;
     padding: 8px 20px;
-  border-radius: 67px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-  border: 1px solid ${(props) => props.theme.__grayLight};
+    border-radius: 67px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid ${(props) => props.theme.__grayLight};
   }
+  position: relative;
+  width: auto;
 }
+.react-datepicker__close-icon {
+  right: 0
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	-webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+input:autofill,
+input:autofill:hover,
+input:autofill:focus,
+input:autofill:active {
+	-webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+
 `;
 
 export default GlobalStyle;

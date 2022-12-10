@@ -70,6 +70,9 @@ const PostCtn = styled.div`
   :hover {
     border: 3px solid ${(props) => props.theme.__greenMidium};
   }
+  @media screen and (max-width: 820px) {
+    margin-bottom: 0;
+  }
 `;
 const SmallText = styled.span`
   color: ${(props) => props.theme.__grayDark};

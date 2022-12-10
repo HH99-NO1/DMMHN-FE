@@ -478,9 +478,9 @@ const TextEl = styled(Text)`
   @media screen and (max-width: 800px) {
     font-size: 20px;
   }
-  @media screen and (max-width: 800px) {
+  /* @media screen and (max-width: 500px) {
     font-size: 16px;
-  }
+  } */
 `;
 const Video = styled.video`
   max-width: 500px;
@@ -498,6 +498,9 @@ const ResultArea = styled(FlexCol)`
   width: 400px;
   border-radius: 10px;
   padding: 15px;
+  @media screen and (max-width: 500px) {
+    width: 90%;
+  }
 `;
 const IconArea = styled.div`
   position: absolute;

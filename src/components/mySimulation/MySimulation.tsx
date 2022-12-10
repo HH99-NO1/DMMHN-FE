@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { FlexRow, HeaderBox } from "../../elements/elements";
-import { isCustom } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
+import Loading from "../Loading";
 import Post from "./Post";
 
 const MySimulation = () => {
+  // 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
-  const setIsCustomState = useSetRecoilState(isCustom);
   const init = [
     {
       category: "",
@@ -25,38 +26,43 @@ const MySimulation = () => {
 
   const getMySimulations = async () => {
     try {
+      setIsLoading(true);
       const { data } = await instance.get("/mockInterview/getResults");
       console.log(data);
       setMySimulations(data);
     } catch (e) {
       console.log(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     getMySimulations();
   }, []);
-  return (
-    <>
-      <HeaderBox />
-      <Ctn>
-        <TitleBar>나의 모의면접 현황</TitleBar>
-        <button onClick={() => setIsCustomState(true)}>
-          나만의 모의면접 질문
-        </button>
-        <FlexRow style={{ flexWrap: "wrap" }} gap="1.7%">
-          {mySimulations.map((post) => (
-            <LinkBtn
-              key={post.sequence}
-              onClick={() => navigate(`/mysimulation/${post.sequence}`)}
-            >
-              <Post key={post.sequence} post={post} />
-            </LinkBtn>
-          ))}
-        </FlexRow>
-      </Ctn>
-    </>
-  );
+
+  if (isLoading) {
+    return <Loading />;
+  } else {
+    return (
+      <>
+        <HeaderBox />
+        <Ctn>
+          <TitleBar>나의 모의면접 현황</TitleBar>
+          <FlexRow style={{ flexWrap: "wrap" }} gap="1.7%">
+            {mySimulations.map((post) => (
+              <LinkBtn
+                key={post.sequence}
+                onClick={() => navigate(`/mysimulation/${post.sequence}`)}
+              >
+                <Post key={post.sequence} post={post} />
+              </LinkBtn>
+            ))}
+          </FlexRow>
+        </Ctn>
+      </>
+    );
+  }
 };
 
 const Ctn = styled.div`
@@ -79,6 +85,9 @@ const TitleBar = styled.div`
 `;
 const LinkBtn = styled.div`
   width: 32.2%;
+  @media screen and (max-width: 1000px) {
+    width: 100%;
+  }
 `;
 
 export default MySimulation;

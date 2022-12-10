@@ -30,21 +30,16 @@ const Post = ({ post }: IPost) => {
 
   return (
     <PostCtn>
-      <FlexCol gap="20px" alignItem="left">
-        <FlexRow
-          width="100%"
-          gap="10px"
-          justifyContent="space-between"
-          alignItem="flex-end"
-        >
+      <PostBox>
+        <PostHeader>
           <Text fontSize="30px" fontWeight="600">
             {dateChange(post.createdAt)}
           </Text>
           <SmallText>
             {post.totalTime} / {post.number} 문항
           </SmallText>
-        </FlexRow>
-        <Text fontSize="20px" fontWeight="400">
+        </PostHeader>
+        <TextEl>
           {post.category === "react"
             ? category.react
             : post.category === "node"
@@ -52,8 +47,8 @@ const Post = ({ post }: IPost) => {
             : post.category === "spring"
             ? category.spring
             : category.custom}
-        </Text>
-      </FlexCol>
+        </TextEl>
+      </PostBox>
     </PostCtn>
   );
 };
@@ -71,8 +66,30 @@ const PostCtn = styled.div`
     border: 3px solid ${(props) => props.theme.__greenMidium};
   }
 `;
+const PostBox = styled(FlexCol)`
+  gap: 20px;
+  align-items: flex-start;
+  @media screen and (max-width: 1000px) {
+    flex-direction: row;
+  }
+`;
+const PostHeader = styled(FlexRow)`
+  width: 100%;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: flex-end;
+  @media screen and (max-width: 1000px) {
+    justify-content: left;
+  }
+`;
+
 const SmallText = styled.span`
   color: ${(props) => props.theme.__grayDark};
+`;
+const TextEl = styled(Text)`
+  font-size: 20px;
+  font-weight: 400;
+  width: 100%;
 `;
 
 export default Post;

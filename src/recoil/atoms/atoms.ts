@@ -133,3 +133,27 @@ export const isOK = atom({
   key: "isOK",
   default: false,
 });
+
+// 이메일 인증 모달 처리
+export const isCheckEmail = atom({
+  key: "isCheckEmail",
+  default: false,
+});
+
+// 이메일 인증 서버코드
+export const serverCodeNumber = atom({
+  key: "serverCodeNumber",
+  default: 0,
+});
+
+// 인증코드를 발송한 유저 이메일
+export const userEmailValue = atom({
+  key: "userEmailValue",
+  default: "",
+});
+
+// 이메일 체크 성공여부
+export const checkSucceedState = atom({
+  key: "checkSucceedState",
+  default: false,
+});

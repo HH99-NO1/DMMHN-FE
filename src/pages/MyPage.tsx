@@ -10,7 +10,7 @@ import React, {
   useState,
 } from "react";
 import Modification from "../components/modify/Modification";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { isLoginState, userState } from "../recoil/atoms/atoms";
 import axios, { AxiosRequestConfig } from "axios";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +27,7 @@ interface IUsers {
 
 const MyPage = () => {
   const navigate = useNavigate();
-  const setIsLogin = useSetRecoilState(isLoginState);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
 
   const [users, setUsers] = useState<IUsers>();
   const [modify, setModify] = useState(false);
@@ -54,6 +54,13 @@ const MyPage = () => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    if (!isLogin) {
+      alert("잘못된 접근 경로입니다.");
+      return navigate(-1);
+    } else return;
+  });
 
   useEffect(() => {
     getUserData();

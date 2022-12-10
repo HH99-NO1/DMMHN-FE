@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
@@ -13,8 +14,31 @@ const HamburgerMenu = ({ setIsClick }: IHamburgerMenu) => {
   const setOnLogin = useSetRecoilState(onLoginState);
   const navigate = useNavigate();
   console.log(isLogin);
+
+  // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 이벤트 핸들러 함수
+    const handler = (event: any) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setIsClick(false);
+      }
+    };
+
+    // 이벤트 핸들러 등록
+    document.addEventListener("mousedown", handler);
+    // document.addEventListener('touchstart', handler); // 모바일 대응
+
+    return () => {
+      // 이벤트 핸들러 해제
+      document.removeEventListener("mousedown", handler);
+      // document.removeEventListener('touchstart', handler); // 모바일 대응
+    };
+  });
+
   return (
-    <Ctn onClick={() => setIsClick(false)}>
+    <Ctn ref={modalRef} onClick={() => setIsClick(false)}>
       {!isLogin ? (
         // 로그인이 되어있지 않을 때
         <>
@@ -56,6 +80,22 @@ const HamburgerMenu = ({ setIsClick }: IHamburgerMenu) => {
   );
 };
 
+// 모달 배경화면
+const BGTransparent = styled.div`
+  z-index: 4;
+  width: 100%;
+  height: calc(100vh);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
+// 모달 바디
 const Ctn = styled.div`
   position: absolute;
   z-index: 5;

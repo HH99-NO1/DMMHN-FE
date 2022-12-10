@@ -1,21 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { GrClose } from "react-icons/gr";
-import { AiOutlineAlert } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
-import { instance, UserApi } from "../../recoil/instance";
-import { useForm } from "react-hook-form";
-import { FlexCol, FlexRow, Liner, Text } from "../../elements/elements";
-import errorNotYet from "../errors/errorNotYet";
+import { FlexCol, Text } from "../../elements/elements";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   checkSucceedState,
   isCheckEmail,
-  isLoginState,
-  onLoginState,
   serverCodeNumber,
   userEmailValue,
-  userState,
 } from "../../recoil/atoms/atoms";
 
 const CheckEmailModal = () => {
@@ -100,7 +92,6 @@ const CheckEmailModal = () => {
               >
                 인증코드 확인
               </CheckBtn>
-              {/* <span>{errors?.extraError?.message}</span> */}
             </FlexCol>
           </CheckBody>
         </CheckCtn>

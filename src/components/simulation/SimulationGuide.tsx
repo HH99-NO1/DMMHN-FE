@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
 import "swiper/css/pagination";
-import { FlexCol, FlexRow, HeaderBox } from "../../elements/elements";
+import { FlexCol, FlexRow, Gap, HeaderBox } from "../../elements/elements";
 import { useSetRecoilState } from "recoil";
 import { onLoginState } from "../../recoil/atoms/atoms";
 import Layout from "../home/Layout";
@@ -19,6 +19,7 @@ const SimulationGuide = () => {
 
   return (
     <Layout>
+      <Gap />
       <Ctn>
         <MainCenter>
           <MainText>
@@ -84,7 +85,7 @@ const Ctn = styled(FlexCol)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  margin: 10px auto 0 auto;
+  margin: 0 auto 0 auto;
   gap: 20px;
   justify-content: space-between;
   align-items: center;

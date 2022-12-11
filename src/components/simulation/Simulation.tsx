@@ -154,6 +154,7 @@ const Simulation = () => {
     }
   };
 
+  // 레코더(화면녹화) 영역
   const [recorder, setRecorder] = useState<RecordRTC | null>();
   const [videoBlob, setVideoBlob] = useState<Blob | null>();
 
@@ -380,13 +381,17 @@ const Simulation = () => {
 };
 const BGBlack = styled.div`
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
+  height: calc(100vh);
   background: #092001;
+  overflow: hidden;
 `;
 const Padding20 = styled.div`
   padding: 0 20px;
   margin-top: 50px;
   padding-bottom: 50px;
+  height: 100%;
+  overflow: auto;
 `;
 const Ctn = styled.div`
   position: relative;

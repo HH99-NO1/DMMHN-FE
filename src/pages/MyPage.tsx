@@ -60,7 +60,7 @@ const MyPage = () => {
       alert("잘못된 접근 경로입니다.");
       return navigate(-1);
     } else return;
-  });
+  }, []);
 
   useEffect(() => {
     getUserData();
@@ -130,10 +130,9 @@ const MyPage = () => {
         });
         console.log(data);
         alert("회원탈퇴가 완료되었습니다.");
+        navigate("/");
         sessionStorage.clear();
         setIsLogin(false);
-
-        navigate("/");
       } catch (e) {
         console.log(e);
       }

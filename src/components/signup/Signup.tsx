@@ -226,7 +226,7 @@ const Signup = () => {
                       value:
                         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,16}$/,
                       message:
-                        "8~16자 영문 대소문자, 숫자, 특수문자 한 자 이상 조합",
+                        "8~16자 영문 대소문자, 숫자, 특수문자(@!%*#?&) 한 자 이상 조합",
                     },
                   })}
                   placeholder="비밀번호"
@@ -241,7 +241,7 @@ const Signup = () => {
                       value:
                         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,16}$/,
                       message:
-                        "8~16자 영문 대소문자, 숫자, 특수문자 한 자 이상 조합",
+                        "8~16자 영문 대소문자, 숫자, 특수문자(@!%*#?&) 한 자 이상 조합",
                     },
                   })}
                   placeholder="비밀번호 확인"
@@ -466,15 +466,18 @@ const ErrorMsg = styled.div`
   display: flex;
   gap: 5px;
   align-items: center;
-  width: 400px;
-  height: 25px;
+  width: 100%;
+  /* height: 25px; */
   font-size: 13px;
   margin-top: 5px;
   background: rgba(210, 18, 18, 0.1);
   border: 1px solid #ffffff;
   border-radius: 67px;
-  padding: 0;
+  padding: 4px 10px;
   color: #747373;
+  & svg {
+    min-width: 16px;
+  }
 `;
 
 const BoxWrap = styled.div`

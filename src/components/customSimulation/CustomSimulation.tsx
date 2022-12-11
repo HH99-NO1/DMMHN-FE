@@ -171,25 +171,20 @@ const CustomSimulation = () => {
                 {!questions
                   ? "나만의 질문이 없습니다."
                   : questions?.map((question, index) => (
-                      <FlexRow
-                        width="100%"
-                        gap="10px"
-                        justifyContent="space-between"
-                        key={index}
-                      >
+                      <QuestionBox key={index}>
                         <Question>
                           <NumberArea>{index + 1}.</NumberArea>{" "}
                           {question.question}
                         </Question>
-                        <button onClick={() => deleteQuestion(question._id)}>
+                        <DeleteBtn onClick={() => deleteQuestion(question._id)}>
                           삭제
-                        </button>
-                      </FlexRow>
+                        </DeleteBtn>
+                      </QuestionBox>
                     ))}
               </QuestionsList>
-              <button onClick={() => goToCustomSimulation()}>
-                커스텀 질문으로 모의면접하기
-              </button>
+              <SignupBtn onClick={() => goToCustomSimulation()}>
+                나만의 질문으로 모의면접하기
+              </SignupBtn>
             </FlexCol>
           </FlexCol>
         </FlexCol>
@@ -245,38 +240,21 @@ const InputBox = styled.div`
   width: 100%;
   min-width: 400px;
 `;
-interface ISubmitBtn {
-  checkSucceed?: boolean;
-}
-const SubmitBtn = styled.button<ISubmitBtn>`
+const SubmitBtn = styled.button`
   position: absolute;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: ${(props) => {
-    if (props.checkSucceed) {
-      return props.theme.__greenMidium;
-    } else {
-      return "white";
-    }
-  }};
-  color: ${(props) => {
-    if (props.checkSucceed) {
-      return "white";
-    } else {
-      return "black";
-    }
-  }};
+  background-color: white;
+  color: black;
   border: 1px solid ${(props) => props.theme.__greenMidium};
   border-radius: 20px;
   padding: 4px 12px;
-  cursor: ${(props) => {
-    if (props.checkSucceed) {
-      return "auto";
-    } else {
-      return "pointer";
-    }
-  }};
+  cursor: pointer;
+`;
+const DeleteBtn = styled(SubmitBtn)`
+  right: 0;
+  border: 1px solid tomato;
 `;
 const Question = styled.span`
   font-size: 14px;
@@ -291,7 +269,28 @@ const NumberArea = styled.span`
 `;
 const QuestionsList = styled(FlexCol)`
   background-color: white;
-  padding: 20px;
+  padding: 20px 10px;
+  gap: 20px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+`;
+const SignupBtn = styled.button`
+  width: 100%;
+  height: 50px;
+  bottom: 40px;
+  border: none;
+  background-color: #025729;
+  border-radius: 67px;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+`;
+const QuestionBox = styled(FlexRow)`
+  position: relative;
+  width: 100%;
+  gap: 10px;
+  justify-content: space-between;
 `;
 
 export default CustomSimulation;

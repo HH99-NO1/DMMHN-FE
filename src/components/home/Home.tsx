@@ -9,6 +9,7 @@ const Home = () => {
   return (
     <>
       {/* <CustomGap /> */}
+      <Gap />
       <Ctn>
         <MainCenter>
           <MainText>
@@ -32,7 +33,7 @@ const Home = () => {
 
 const Ctn = styled(FlexRow)`
   position: absolute;
-  padding: 0 20px;
+  padding: 0 20px 50px 20px;
   max-width: 1200px;
   width: 100%;
   height: 100%;
@@ -40,14 +41,16 @@ const Ctn = styled(FlexRow)`
   left: 50%;
   transform: translate(-50%, -50%);
   margin: 0 auto;
-  gap: 20px;
-  justify-content: space-around;
+  gap: 10%;
+  justify-content: center;
   align-items: center;
+  overflow: auto;
   @media screen and (max-width: 1180px) {
     flex-direction: column;
   }
   @media screen and (max-height: 600px) {
     position: relative;
+    gap: 40px;
     flex-direction: column;
     top: auto;
     left: auto;

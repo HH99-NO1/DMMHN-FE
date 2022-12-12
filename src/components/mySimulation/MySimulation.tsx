@@ -3,9 +3,13 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FlexRow, HeaderBox } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
+import Loading from "../Loading";
 import Post from "./Post";
 
 const MySimulation = () => {
+  // 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const init = [
     {
@@ -22,36 +26,55 @@ const MySimulation = () => {
 
   const getMySimulations = async () => {
     try {
+      setIsLoading(true);
       const { data } = await instance.get("/mockInterview/getResults");
       console.log(data);
       setMySimulations(data);
     } catch (e) {
       console.log(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     getMySimulations();
   }, []);
-  return (
-    <>
-      <HeaderBox />
-      <Ctn>
-        <TitleBar>나의 모의면접 현황</TitleBar>
-        <FlexRow style={{ flexWrap: "wrap" }} gap="1.7%">
-          {mySimulations.map((post) => (
-            <LinkBtn
-              key={post.sequence}
-              onClick={() => navigate(`/mysimulation/${post.sequence}`)}
-            >
-              <Post key={post.sequence} post={post} />
-            </LinkBtn>
-          ))}
-        </FlexRow>
-      </Ctn>
-    </>
-  );
+
+  if (isLoading) {
+    return <Loading />;
+  } else {
+    return (
+      <>
+        <HeaderBox />
+        <Ctn>
+          <TitleBar>나의 모의면접 현황</TitleBar>
+          <GridMob style={{ flexWrap: "wrap", margin: "40px 0" }} gap="1.7%">
+            {mySimulations.map((post) => (
+              <LinkBtn
+                key={post.sequence}
+                onClick={() => navigate(`/mysimulation/${post.sequence}`)}
+              >
+                <Post key={post.sequence} post={post} />
+              </LinkBtn>
+            ))}
+          </GridMob>
+        </Ctn>
+      </>
+    );
+  }
 };
+
+const GridMob = styled(FlexRow)`
+  @media screen and (max-width: 850px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (max-width: 600px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+`;
 
 const Ctn = styled.div`
   /* border: 1px solid red; */
@@ -60,6 +83,7 @@ const Ctn = styled.div`
   width: 100%;
   margin: 0 auto;
 `;
+
 const TitleBar = styled.div`
   padding: 10px 20px;
   margin: 0 auto 30px auto;
@@ -71,8 +95,12 @@ const TitleBar = styled.div`
   font-weight: 600;
   background-color: ${(props) => props.theme.__grayLight};
 `;
+
 const LinkBtn = styled.div`
   width: 32.2%;
+  @media screen and (max-width: 850px) {
+    width: 100%;
+  }
 `;
 
 export default MySimulation;

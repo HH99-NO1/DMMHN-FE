@@ -24,33 +24,37 @@ const Post = ({ post }: IPost) => {
   const category = {
     react: "프론트엔드 - React.js",
     node: "백엔드 - Node.js",
+    spring: "백엔드 - spring",
+    custom: "커스텀 질문 - custom",
   };
 
   return (
     <PostCtn>
-      <FlexCol gap="20px" alignItem="left">
-        <FlexRow
-          width="100%"
-          gap="10px"
-          justifyContent="space-between"
-          alignItem="flex-end"
-        >
+      <PostBox>
+        <PostHeader>
           <Text fontSize="30px" fontWeight="600">
             {dateChange(post.createdAt)}
           </Text>
           <SmallText>
             {post.totalTime} / {post.number} 문항
           </SmallText>
-        </FlexRow>
-        <Text fontSize="20px" fontWeight="400">
-          {post.category === "react" ? category.react : category.node}
-        </Text>
-      </FlexCol>
+        </PostHeader>
+        <TextEl>
+          {post.category === "react"
+            ? category.react
+            : post.category === "node"
+            ? category.node
+            : post.category === "spring"
+            ? category.spring
+            : category.custom}
+        </TextEl>
+      </PostBox>
     </PostCtn>
   );
 };
 
 const PostCtn = styled.div`
+  position: relative;
   width: 100%;
   height: auto;
   padding: 20px;
@@ -62,9 +66,43 @@ const PostCtn = styled.div`
   :hover {
     border: 3px solid ${(props) => props.theme.__greenMidium};
   }
+  @media screen and (max-width: 600px) {
+    margin-bottom: 0;
+  }
 `;
+const PostBox = styled(FlexCol)`
+  gap: 20px;
+  align-items: flex-start;
+  @media screen and (max-width: 600px) {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+`;
+const PostHeader = styled(FlexRow)`
+  width: 100%;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: flex-end;
+  @media screen and (max-width: 850px) {
+    justify-content: left;
+  }
+  @media screen and (max-width: 600px) {
+    width: 150px;
+  }
+`;
+
 const SmallText = styled.span`
   color: ${(props) => props.theme.__grayDark};
+  @media screen and (max-width: 600px) {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+`;
+const TextEl = styled(Text)`
+  font-size: 20px;
+  font-weight: 400;
+  width: 100%;
 `;
 
 export default Post;

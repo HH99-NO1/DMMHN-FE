@@ -1,15 +1,18 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
-import RecordRTC, { invokeSaveAsDialog } from "recordrtc";
+import RecordRTC from "recordrtc";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { isSimulationState, test } from "../../recoil/atoms/atoms";
+import { isOK, isSimulationState, test } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
 import { useNavigate } from "react-router-dom";
 import PersonItem from "../../elements/PersonItem";
 import ResultIconItem from "../../elements/ResultIconItem";
 import useStopwatch from "../../hooks/useStopwatch";
 import stopwatchTime from "../stopwatch/utils/stopwatchTime";
+import { Player } from "video-react";
+import "video-react/dist/video-react.css";
+import { saveAs } from "file-saver";
 
 let count = 0;
 
@@ -17,20 +20,13 @@ const Simulation = () => {
   const navigate = useNavigate();
   const [isStart, setIsStart] = useState(false);
   const [isResult, setIsResult] = useState(false);
-  console.log(isResult);
 
   const setSimulation = useSetRecoilState(isSimulationState);
+  const setIsOKState = useSetRecoilState(isOK);
   const testSimulation = useRecoilValue(test);
-  console.log(testSimulation);
-
-  //recordrtc
-  const [stream, setStream] = useState<MediaStream>();
-  const [blob, setBlob] = useState<Blob | null>();
-  const refVideo = useRef<HTMLVideoElement>(null);
-  const recorderRef = useRef<RecordRTC>();
-  const myVideoRef = useRef<HTMLVideoElement>(null);
 
   // 유저 비디오 연결 테스트
+  const myVideoRef = useRef<HTMLVideoElement>(null);
   const getMedia = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
@@ -45,54 +41,8 @@ const Simulation = () => {
     }
   };
 
-  const stopStreamedVideo = (myVideoRef: any) => {
-    const stream = myVideoRef.current.srcObject;
-    const tracks = stream.getTracks();
-
-    tracks.forEach(function (track: MediaStreamTrack) {
-      track.stop();
-    });
-
-    myVideoRef.current.srcObject = null;
-  };
-
-  const handleRecording = async () => {
-    const mediaStream = await navigator.mediaDevices.getDisplayMedia({
-      video: {
-        width: 800,
-        height: 600,
-        frameRate: 60,
-      },
-      audio: true,
-    });
-
-    setStream(mediaStream);
-    recorderRef.current = new RecordRTC(mediaStream, { type: "video" });
-    recorderRef.current.startRecording();
-  };
-
-  const handleStop = () => {
-    if (recorderRef.current) {
-      recorderRef.current.stopRecording(() => {
-        stopStreamedVideo(myVideoRef);
-        setBlob(recorderRef?.current?.getBlob() as Blob);
-      });
-    }
-  };
-
-  const handleSave = () => {
-    invokeSaveAsDialog(blob as Blob);
-  };
-
-  useEffect(() => {
-    if (!refVideo.current) {
-      return;
-    }
-  }, [stream, refVideo]);
-
   // 스톱워치 영역
-  const { seconds, status, laps, nextLap, start, stop, record, reset } =
-    useStopwatch();
+  const { seconds, nextLap, start, stop, record } = useStopwatch();
   const [isStop, setIsStop] = useState(false);
 
   // naver CLOVA VOICE api
@@ -102,13 +52,12 @@ const Simulation = () => {
     Array<{ question: string; time: string }>
   >([]);
 
-  console.log(`result.length: ${result.length}`);
-  console.log(`count: ${count}`);
-
   const requestAudioFile = async (event: any) => {
-    isStop && stop();
+    // 버튼을 누르자마자 버튼 비활성화
+    event.target.disabled = true;
+    event.target.style.backgroundColor = "black";
 
-    console.log("request Audio");
+    isStop && stop();
 
     try {
       const config = {
@@ -121,12 +70,10 @@ const Simulation = () => {
           responseType: "arraybuffer",
         }
       );
-      console.log("response : ", response);
 
       // let arr = toArrayBuffer(response.data);
       // makeAudio(arr);
       const audioContext = getAudioContext();
-      console.log("실행하기 전에 상태 :", audioContext.state);
       // makeAudio(response)
       const audioBuffer = await audioContext.decodeAudioData(response.data);
 
@@ -137,17 +84,13 @@ const Simulation = () => {
 
       // 오디오 시작
       source.start();
-      event.target.disabled = true;
-      event.target.style.backgroundColor = "black";
 
-      console.log("source : ", source.buffer.duration);
+      // 오디오 재생 중 버튼 비활성화 처리
+
       setTimeout(() => {
         event.target.disabled = false;
-        event.target.style.backgroundColor = "#1b172f";
-        console.log("버튼 사용 가능");
+        event.target.style.backgroundColor = "#092304";
       }, source.buffer.duration * 1000 + 500);
-
-      console.log("source : ", source);
 
       let resultEl = {
         question: currValue,
@@ -168,7 +111,11 @@ const Simulation = () => {
         count++;
       }
     } catch (e) {
+      // 오류가 있든 없든 통신이 끝나면 버튼 활성화
+      event.target.disabled = false;
+      event.target.style.backgroundColor = "#092304";
       console.log(e);
+    } finally {
     }
   };
 
@@ -181,29 +128,84 @@ const Simulation = () => {
   console.log(testSimulation.questionArr.slice(0, count));
 
   const onResult = async () => {
-    if (result) {
-      const newResult = result.slice(1, result.length);
-      const req = {
-        category: testSimulation.category,
-        number: newResult.length,
-        result: newResult,
-        totalTime: stopwatchTime(seconds),
-      };
-      try {
-        const { data } = await instance.post(`/mockInterview/saveResults`, req);
+    if (
+      window.confirm(
+        `모의면접 영상은 결과 저장 후, 확인이 불가합니다.\n모의면접 결과를 제출하시겠습니까?`
+      )
+    ) {
+      if (result) {
+        const newResult = result.slice(1, result.length);
+        const req = {
+          category: testSimulation.category,
+          number: newResult.length,
+          result: newResult,
+          totalTime: stopwatchTime(seconds),
+        };
+        try {
+          const { data } = await instance.post(
+            `/mockInterview/saveResults`,
+            req
+          );
 
-        console.log(data);
-        alert("모의면접의 결과가 정상적으로 저장되었습니다.");
-        setSimulation(false);
-        navigate(`/mysimulation/${data.sequence}`);
-      } catch (e) {
-        console.log(e);
+          console.log(data);
+          alert("모의면접의 결과가 정상적으로 저장되었습니다.");
+          setSimulation(false);
+          setIsOKState(false);
+          navigate(`/mysimulation/${data.sequence}`);
+        } catch (e) {
+          console.log(e);
+        }
       }
     }
   };
-  // useEffect(() => {
-  //   window.speechSynthesis.cancel();
-  // }, []);
+
+  // 레코더(화면녹화) 영역
+  const [recorder, setRecorder] = useState<RecordRTC | null>();
+  const [videoBlob, setVideoBlob] = useState<Blob | null>();
+
+  const startRecording = async () => {
+    console.log("start");
+    const mediaDevices = navigator.mediaDevices;
+    const stream: MediaStream = await mediaDevices.getUserMedia({
+      video: {
+        width: 400,
+        height: 300,
+        frameRate: 60,
+      },
+      audio: true,
+    });
+    const recorder: RecordRTC = new RecordRTC(stream, {
+      type: "video",
+    });
+    if (recorder) recorder.startRecording();
+    setRecorder(recorder);
+  };
+
+  const stopRecording = () => {
+    console.log("stop");
+    if (recorder) {
+      recorder.stopRecording(() => {
+        const blob: Blob = recorder.getBlob();
+        setVideoBlob(blob);
+        setRecorder(null);
+      });
+      // (stream as any).stop();
+    }
+  };
+
+  const downloadVideo = () => {
+    console.log("down");
+    if (videoBlob) {
+      const mp4s = new File([videoBlob], "test.mp4", { type: "video" });
+      saveAs(mp4s, `${Date.now()}.mp4`);
+    } else {
+      alert("다운로드 할 수 없습니다.");
+    }
+  };
+
+  useEffect(() => {
+    currValue === "모의 면접이 종료되었습니다." && stopRecording();
+  }, [currValue]);
 
   useEffect(() => {
     getMedia();
@@ -216,19 +218,37 @@ const Simulation = () => {
           <Ctn>
             <CategoryArea>
               모의면접 -{" "}
-              {testSimulation.category === "react" ? "React.js" : "Node.js"}
+              {testSimulation.category === "react"
+                ? "React.js"
+                : testSimulation.category === "node"
+                ? "Node.js"
+                : testSimulation.category === "spring"
+                ? "spring"
+                : "custom"}
             </CategoryArea>
+
             <CheckQuestion>
-              Q{result.length} / Q{testSimulation.questionArr.length}
+              {currValue !== "모의 면접이 종료되었습니다."
+                ? `Q${result.length}`
+                : `Q${result.length - 1}`}
+              / Q{testSimulation.questionArr.length}
             </CheckQuestion>
             <SimulationHeader>
               {isStart ? (
                 <>
-                  {result.length >= count ? (
+                  {currValue !== "모의 면접이 종료되었습니다." ? (
                     <TextEl fontSize="24px" fontWeight="600">
                       Q{result.length}.
                     </TextEl>
-                  ) : null}
+                  ) : (
+                    <Congratulation>
+                      <CongratulationImg
+                        src="img/congratulations.gif"
+                        alt="congratulation"
+                      />
+                    </Congratulation>
+                  )}
+
                   <TextEl fontSize="30px" fontWeight="600">
                     {currValue}
                   </TextEl>
@@ -243,22 +263,37 @@ const Simulation = () => {
               )}
             </SimulationHeader>
 
-            <Gap gap="20px" />
-
+            {/* 모의면접 진행 현황 */}
             <FlexCol gap="10px">
               {isResult && (
                 <ResultArea>
                   <Text fontSize="20px" fontWeight="600">
                     모의면접 진행 현황
                   </Text>
-                  <FlexCol gap="10px">
-                    {testSimulation.questionArr
-                      .slice(0, count)
-                      .map((v: string, index: number) => (
-                        <FlexRow gap="5px" key={index}>
-                          {index + 1}.<Text key={index}>{v}</Text>
-                        </FlexRow>
-                      ))}
+                  <Gap gap="30px" />
+                  <FlexCol gap="10px" width="100%">
+                    {result &&
+                      result
+                        ?.slice(1, count)
+                        .map(
+                          (
+                            v: { question: string; time: string },
+                            index: number
+                          ) => (
+                            <FlexRow
+                              gap="20px"
+                              width="100%"
+                              justifyContent="space-between"
+                              alignItem="flex-start"
+                              key={index}
+                            >
+                              <Text key={index}>
+                                Q{index + 1}.{v.question}
+                              </Text>
+                              <Text>{v.time}</Text>
+                            </FlexRow>
+                          )
+                        )}
                   </FlexCol>
                 </ResultArea>
               )}
@@ -266,23 +301,6 @@ const Simulation = () => {
 
             {/* 중간 컨텐츠 영역 */}
             <SimulationContent>
-              <ContentWrap>
-                {blob ? (
-                  <Video
-                    src={URL.createObjectURL(blob)}
-                    controls
-                    autoPlay
-                    ref={refVideo}
-                  />
-                ) : (
-                  <Video ref={myVideoRef} autoPlay />
-                )}
-                <FlexRow gap="10px" justifyContent="space-between">
-                  <SmallBtn onClick={handleRecording}>시작</SmallBtn>
-                  <SmallBtn onClick={handleStop}>멈춤</SmallBtn>
-                  <SmallBtn onClick={handleSave}>저장</SmallBtn>
-                </FlexRow>
-              </ContentWrap>
               <ContentWrap>
                 <TimeIndicatorBox>
                   <TotalTimeTitle>총 모의면접 답변시간</TotalTimeTitle>
@@ -292,26 +310,45 @@ const Simulation = () => {
                     </TimeGreenBox>
                   </TimeBlackBox>
                 </TimeIndicatorBox>
-                <Gap gap="30px" />
                 <TimeIndicatorBox>
                   <TotalTimeTitle>현재 질문 답변시간</TotalTimeTitle>
                   <TimeBlackBox>
-                    <TimeGreenBox bgColor="#397055">
+                    <TimeGreenBox bgColor="#181818">
                       <TotalTime>{stopwatchTime(nextLap.lapTime)}</TotalTime>
                     </TimeGreenBox>
                   </TimeBlackBox>
                 </TimeIndicatorBox>
               </ContentWrap>
+              <ContentWrapVideo>
+                {currValue === "모의 면접이 종료되었습니다." ? (
+                  <>
+                    <VideoBox>
+                      {videoBlob ? (
+                        <Player src={window.URL.createObjectURL(videoBlob)} />
+                      ) : (
+                        "blob is false"
+                      )}
+                    </VideoBox>
+                    <SmallBtn onClick={downloadVideo}>영상 다운로드</SmallBtn>
+                  </>
+                ) : (
+                  <>
+                    <Video ref={myVideoRef} autoPlay />
+                  </>
+                )}
+              </ContentWrapVideo>
             </SimulationContent>
-
+            <Gap gap="20px" />
             {currValue !== "모의 면접이 종료되었습니다." ? (
               <>
                 {!isStart ? (
                   <Button
+                    id="startBtn"
                     onClick={(event) => {
                       requestAudioFile(event);
                       // startTotalTime()
                       setIsStart(true);
+                      startRecording();
                       start();
                     }}
                   >
@@ -349,12 +386,17 @@ const Simulation = () => {
 };
 const BGBlack = styled.div`
   width: 100%;
+  /* height: 100%; */
   height: calc(100vh);
   background: #092001;
+  overflow: hidden;
 `;
 const Padding20 = styled.div`
   padding: 0 20px;
   margin-top: 50px;
+  padding-bottom: 50px;
+  height: 100%;
+  overflow: auto;
 `;
 const Ctn = styled.div`
   position: relative;
@@ -368,17 +410,22 @@ const Ctn = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 20px;
-  color: white;
+  color: #fff;
 `;
 const CategoryArea = styled(Text)`
   position: absolute;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid #fff;
   top: 30px;
-  color: white;
+  color: #fff;
   padding-bottom: 10px;
   width: auto;
   font-size: 20px;
   font-weight: 400;
+`;
+const Congratulation = styled.div``;
+const CongratulationImg = styled.img`
+  width: 80px;
+  height: 80px;
 `;
 const CheckQuestion = styled.div`
   display: flex;
@@ -393,16 +440,30 @@ const CheckQuestion = styled.div`
   border: 1px solid #014021;
   background-color: #092304;
   color: white;
+  @media screen and (max-width: 800px) {
+    position: absolute;
+    right: 20px;
+  }
 `;
 const SimulationHeader = styled(FlexCol)`
-  height: 110px;
+  height: 150px;
   gap: 10px;
   justify-content: center;
+  @media screen and (max-width: 800px) {
+    margin-top: 50px;
+    height: 150px;
+  }
 `;
 const SimulationContent = styled(FlexRow)`
-  padding: 0 50px;
-  gap: 20px;
+  padding: 0 3%;
+  flex-direction: row-reverse;
+  gap: 40px;
   justify-content: space-between;
+  @media screen and (max-width: 800px) {
+  }
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+  }
 `;
 
 const Button = styled.button`
@@ -424,9 +485,15 @@ const Button = styled.button`
 `;
 const TextEl = styled(Text)`
   color: white;
+  @media screen and (max-width: 800px) {
+    font-size: 20px;
+  }
+  /* @media screen and (max-width: 500px) {
+    font-size: 16px;
+  } */
 `;
 const Video = styled.video`
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
   height: auto;
   border-radius: 20px;
@@ -437,11 +504,13 @@ const ResultArea = styled(FlexCol)`
   right: 20px;
   bottom: 90px;
   z-index: 5;
-  background-color: white;
+  background-color: #fff;
   width: 400px;
-  height: 300px;
   border-radius: 10px;
-  padding: 10px;
+  padding: 15px;
+  @media screen and (max-width: 500px) {
+    width: 90%;
+  }
 `;
 const IconArea = styled.div`
   position: absolute;
@@ -461,8 +530,23 @@ const IconArea = styled.div`
 
 const ContentWrap = styled(FlexCol)`
   width: 100%;
-  padding: 0 20px;
+  gap: 40px;
+  @media screen and (max-width: 800px) {
+    gap: 20px;
+  }
+  @media screen and (max-width: 500px) {
+    flex-direction: row;
+  }
+`;
+const ContentWrapVideo = styled(ContentWrap)`
   gap: 10px;
+  @media screen and (max-width: 800px) {
+    gap: 10px;
+    padding: 0;
+  }
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+  }
 `;
 const TimeIndicatorBox = styled(FlexCol)`
   width: 100%;
@@ -470,8 +554,11 @@ const TimeIndicatorBox = styled(FlexCol)`
   align-items: flex-start;
 `;
 const TotalTimeTitle = styled(Text)`
-  color: white;
+  color: #fff;
   font-weight: 400;
+  @media screen and (max-width: 800px) {
+    font-size: 12px;
+  }
 `;
 
 const TimeBlackBox = styled.div`
@@ -497,6 +584,9 @@ const TimeGreenBox = styled.div<ITimeGreenBox>`
   border-radius: 20px;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   padding-left: 20px;
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
 `;
 const TotalTime = styled(Text)`
   color: white;
@@ -504,7 +594,12 @@ const TotalTime = styled(Text)`
 `;
 const SmallBtn = styled(Button)`
   font-size: 16px;
-  max-width: 100px;
 `;
-
+const VideoBox = styled.div`
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  overflow: hidden;
+`;
 export default Simulation;

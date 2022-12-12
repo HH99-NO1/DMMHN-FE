@@ -1,24 +1,37 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Portal from "./Portal";
 import styled from "styled-components";
 import { GrClose } from "react-icons/gr";
 import { AiOutlineAlert } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import { instance } from "../../recoil/instance";
+import { UserApi } from "../../recoil/instance";
 import { useForm } from "react-hook-form";
 import { FlexCol, FlexRow, Liner, Text } from "../../elements/elements";
 import errorNotYet from "../errors/errorNotYet";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { isLoginState, onLoginState } from "../../recoil/atoms/atoms";
+import {
+  isLoginState,
+  onLoginState,
+  userState,
+} from "../../recoil/atoms/atoms";
+import jwt_decode from "jwt-decode";
 
 interface IForm {
   memberEmail: string;
   password: string;
 }
 
+interface IUserState {
+  memberName: string;
+  img: string;
+  iat: number;
+  exp: number;
+}
+
 const LoginModal = () => {
   const setOnLogin = useSetRecoilState(onLoginState);
   const setIsLogin = useSetRecoilState(isLoginState);
+  const setLoginUserState = useSetRecoilState(userState);
   const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
 
@@ -37,21 +50,28 @@ const LoginModal = () => {
         memberEmail: submitData.memberEmail,
         password: submitData.password,
       };
-      // console.log(req);
-      const { data } = await instance.post(`/members/login`, req);
-      // console.log(data.data.accessToken);
-      // console.log(data.data.refreshToken);
+      const { data } = await UserApi.post(`/members/login`, req);
       sessionStorage.setItem("accessToken", data.data.accessToken);
       sessionStorage.setItem("refreshToken", data.data.refreshToken);
       alert("로그인이 완료되었습니다.");
       console.log(data);
       setOnLogin(false);
       setIsLogin(true);
-      // return window.location.reload();
-      return;
+      const preAccessToken = sessionStorage.getItem("accessToken");
+      if (preAccessToken) {
+        const decodeUserState: IUserState = jwt_decode(preAccessToken);
+        sessionStorage.setItem("userName", decodeUserState.memberName);
+        sessionStorage.setItem("userImg", decodeUserState.img);
+        setLoginUserState(decodeUserState);
+      }
+      return window.location.reload();
     } catch (error: any) {
-      console.log(error.message);
-      return error.message;
+      console.log(error.response);
+      // console.log(error.message);
+      if (error.response.status === 400) {
+        alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+      }
+      return error.response;
     }
   };
 
@@ -88,14 +108,14 @@ const LoginModal = () => {
   return (
     <Portal>
       <BGBlack>
-        <Ctn ref={modalRef}>
-          <LoginCtn>
+        <Ctn>
+          <LoginCtn ref={modalRef}>
             <CloseBtn onClick={() => setOnLogin(false)}>
               <GrClose size={16} />
             </CloseBtn>
             <LoginHeader>이메일로 로그인</LoginHeader>
             <LoginBody onSubmit={handleSubmit(onValid)}>
-              <FlexCol gap="30px">
+              <FlexCol gap="10px">
                 <InputBox>
                   <Input
                     {...register("memberEmail", {
@@ -109,28 +129,32 @@ const LoginModal = () => {
                   />
                   <Input
                     type="password"
+                    pattern="[A-Za-z\d@!%*#?&]*"
                     {...register("password", {
                       required: "비밀번호를 입력해주세요.",
                     })}
                     placeholder="비밀번호"
                   />
                   <CheckBox>
-                    {errors?.memberEmail?.message ? (
-                      <ErrorMsg>
-                        <AiOutlineAlert
-                          fill="tomato"
-                          stroke="tomato"
-                          strokeWidth={30}
-                          size={16}
-                        />
-                        {errors?.memberEmail?.message}
-                      </ErrorMsg>
-                    ) : (
-                      <>
-                        <input id="login_is" type="checkbox" />
-                        <label htmlFor="login_is">로그인 상태 유지</label>
-                      </>
-                    )}
+                    {
+                      errors?.memberEmail?.message ? (
+                        <ErrorMsg>
+                          <AiOutlineAlert
+                            fill="tomato"
+                            stroke="tomato"
+                            strokeWidth={30}
+                            size={16}
+                          />
+                          {errors?.memberEmail?.message}
+                        </ErrorMsg>
+                      ) : null
+                      // (
+                      //   <>
+                      //     <input id="login_is" type="checkbox" />
+                      //     <label htmlFor="login_is">로그인 상태 유지</label>
+                      //   </>
+                      // )
+                    }
                   </CheckBox>
                 </InputBox>
                 <LoginBtn>로그인</LoginBtn>
@@ -138,19 +162,44 @@ const LoginModal = () => {
               </FlexCol>
             </LoginBody>
             <Or>또는</Or>
-            <SocialItemBox>
-              <Img border={true} src="/img/apple.png" alt="apple" />
-              <Img border={true} src="/img/google.png" alt="google" />
-              <Img src="/img/kakao.png" alt="kakao" />
-              <Img src="/img/naver.png" alt="naver" />
-            </SocialItemBox>
+            {/* <SocialItemBox>
+              <Img
+                onClick={() => errorNotYet()}
+                border={true}
+                src="/img/apple.png"
+                alt="apple"
+              />
+              <Img
+                onClick={() => errorNotYet()}
+                border={true}
+                src="/img/google.png"
+                alt="google"
+              />
+              <Img
+                onClick={() => errorNotYet()}
+                src="/img/kakao.png"
+                alt="kakao"
+              />
+              <Img
+                onClick={() => errorNotYet()}
+                src="/img/naver.png"
+                alt="naver"
+              />
+            </SocialItemBox> */}
             <Liner />
             <LoginFooter>
               <TextEl onClick={() => errorNotYet()}>
                 아이디/비밀번호 찾기
               </TextEl>
               <TextOr />
-              <TextEl onClick={() => navigate("/signup")}>회원가입</TextEl>
+              <TextEl
+                onClick={() => {
+                  setOnLogin(false);
+                  navigate("/signup");
+                }}
+              >
+                회원가입
+              </TextEl>
             </LoginFooter>
           </LoginCtn>
         </Ctn>
@@ -206,6 +255,7 @@ const LoginCtn = styled.div`
   position: relative;
   border: 1px solid #ebebeb;
   border-radius: 10px;
+  margin: 0% 3%;
 `;
 
 // 모달 닫기 버튼
@@ -242,7 +292,7 @@ const LoginHeader = styled.h3`
 // form 객체 지정
 const LoginBody = styled.form`
   height: 100%;
-  padding: 30px 60px;
+  padding: 30px 10%;
   overflow-y: auto;
 `;
 
@@ -271,7 +321,7 @@ const InputBox = styled.div`
 
 const CheckBox = styled(FlexRow)`
   gap: 10px;
-  height: 40px;
+  height: 36.8px;
 `;
 
 // 에러 메세지
@@ -293,7 +343,7 @@ const LoginBtn = styled.button`
   font-size: 16px;
   font-weight: 600;
   width: 100%;
-  padding: 20px 30px;
+  padding: 20px 10%;
   border-radius: 30px;
   cursor: pointer;
   transition: all, 0.2s;
@@ -311,7 +361,8 @@ const Or = styled.span`
 
 // 소셜로그인 영역
 const SocialItemBox = styled(FlexRow)`
-  padding: 30px 60px;
+  width: 100%;
+  padding: 30px 10%;
   gap: 10px;
   justify-content: space-between;
 `;
@@ -320,8 +371,11 @@ interface IImg {
   border?: boolean;
 }
 const Img = styled.img<IImg>`
-  width: 70px;
-  height: 70px;
+  max-width: 70px;
+  min-width: 30px;
+  width: 100%;
+  max-height: 70px;
+  height: 100%;
   border-radius: 50%;
   border: ${(props) =>
     props.border === undefined
@@ -336,7 +390,7 @@ const Img = styled.img<IImg>`
 
 // 푸터 영역
 const LoginFooter = styled(FlexRow)`
-  padding: 30px 60px;
+  padding: 30px 10%;
   gap: 20px;
   justify-content: center;
 `;

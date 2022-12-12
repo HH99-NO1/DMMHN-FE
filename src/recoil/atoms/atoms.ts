@@ -2,7 +2,7 @@ import { atom } from "recoil";
 
 interface ITest {
   category: string;
-  questionArr: [string];
+  questionArr: string[];
 }
 
 export const test = atom<ITest>({
@@ -25,6 +25,21 @@ export const onLoginState = atom({
 const preAccessToken = sessionStorage.getItem("accessToken");
 const checkDefaultLoginState = preAccessToken ? true : false;
 // console.log(checkDefaultLoginState);
+
+export interface IUserState {
+  memberName: string | null;
+  img: string | ArrayBuffer | null;
+}
+
+const userName = sessionStorage.getItem("userName");
+const userImg = sessionStorage.getItem("userImg");
+export const userState = atom<IUserState>({
+  key: "userState",
+  default: {
+    memberName: userName,
+    img: userImg,
+  },
+});
 
 export const isLoginState = atom({
   key: "isLogin",
@@ -106,3 +121,39 @@ export const LocalVideoState = atom({
 // 		return toDos.filter((toDo) => toDo.category === category);
 // 	},
 // });
+
+// 모의면접 커스텀 질문페이지 상태
+export const isCustom = atom({
+  key: "isCustom",
+  default: false,
+});
+
+// 모의면접 안내 및 영상녹화 동의
+export const isOK = atom({
+  key: "isOK",
+  default: false,
+});
+
+// 이메일 인증 모달 처리
+export const isCheckEmail = atom({
+  key: "isCheckEmail",
+  default: false,
+});
+
+// 이메일 인증 서버코드
+export const serverCodeNumber = atom({
+  key: "serverCodeNumber",
+  default: 0,
+});
+
+// 인증코드를 발송한 유저 이메일
+export const userEmailValue = atom({
+  key: "userEmailValue",
+  default: "",
+});
+
+// 이메일 체크 성공여부
+export const checkSucceedState = atom({
+  key: "checkSucceedState",
+  default: false,
+});

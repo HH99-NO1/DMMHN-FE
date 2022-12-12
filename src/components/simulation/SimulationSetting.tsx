@@ -1,21 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import {
-  FlexCol,
-  FlexRow,
-  Gap,
-  HeaderBox,
-  Text,
-} from "../../elements/elements";
-import { HiOutlineChevronUpDown } from "react-icons/hi2";
+import { FlexCol, FlexRow, HeaderBox, Text } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
-import { useSetRecoilState } from "recoil";
-import { isSimulationState, test } from "../../recoil/atoms/atoms";
-import axios from "axios";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isOK, isSimulationState, test } from "../../recoil/atoms/atoms";
 import TitleArea from "../../elements/TitleArea";
+import CheckModal from "./CheckModal";
 
 const SimulationSetting = () => {
   const setTest = useSetRecoilState(test);
+  const isOKState = useRecoilValue(isOK);
 
   const myVideoRef = useRef<HTMLVideoElement>(null);
   const [number, setNumber] = useState("");
@@ -23,6 +17,7 @@ const SimulationSetting = () => {
   console.log(number);
   console.log(category);
   const setSimulation = useSetRecoilState(isSimulationState);
+
   // 사용자 웹캠에 접근
   const getMedia = async () => {
     try {
@@ -71,7 +66,6 @@ const SimulationSetting = () => {
 
     if (window.confirm("모의면접을 시작하시겠습니까?")) {
       try {
-        // url 바꿔야 함
         const { data } = await instance.post(`/mockInterview`, config);
         console.log(data);
         setTest(data);
@@ -91,13 +85,18 @@ const SimulationSetting = () => {
 
   return (
     <>
+      {!isOKState && <CheckModal />}
       <HeaderBox />
       <TitleArea>모의면접 입장</TitleArea>
       <BGBlack>
         <Ctn>
           <FlexCol gap="30px">
-            <FlexCol as="form" gap="20px" width="100%" onSubmit={onSubmit}>
-              <FlexRow width="100%" gap="10px" justifyContent="space-between">
+            <FlexCol as="form" gap="30px" width="100%" onSubmit={onSubmit}>
+              <SubTitleMob
+                width="100%"
+                gap="10px"
+                justifyContent="space-between"
+              >
                 <SubTitle>카테고리</SubTitle>
                 <OptionBox>
                   <FlexRow gap="5px" justifyContent="space-between">
@@ -112,11 +111,16 @@ const SimulationSetting = () => {
                       </option>
                       <option value="react">프론트엔드 - React.js</option>
                       <option value="node">백엔드 - Node.js</option>
+                      <option value="spring">백엔드 - spring</option>
                     </Select>
                   </FlexRow>
                 </OptionBox>
-              </FlexRow>
-              <FlexRow width="100%" gap="10px" justifyContent="space-between">
+              </SubTitleMob>
+              <SubTitleMob
+                width="100%"
+                gap="10px"
+                justifyContent="space-between"
+              >
                 <SubTitle>문항 수</SubTitle>
                 <OptionBox>
                   <Input
@@ -130,7 +134,7 @@ const SimulationSetting = () => {
                   />
                   <RightAbs>개</RightAbs>
                 </OptionBox>
-              </FlexRow>
+              </SubTitleMob>
               <Video ref={myVideoRef} muted autoPlay />
               <Text color="white">준비가 완료되면 시작버튼을 클릭해주세요</Text>
               <Button>모의면접 시작</Button>
@@ -145,16 +149,12 @@ const SimulationSetting = () => {
 const BGBlack = styled.div`
   width: 100%;
   height: calc(100vh - 121px);
-  background: radial-gradient(
-    93.71% 307.5% at 86.33% 0%,
-    #1b172f 0%,
-    #1a1a1a 47.92%,
-    #1b172f 100%
-  );
+  background: #092001;
 `;
+
 const Ctn = styled.div`
-  background: #222844;
-  border: 1px solid #5351a5;
+  background: #002c17;
+  border: 1px solid #014021;
   border-radius: 20px;
   position: fixed;
   top: 200px;
@@ -164,14 +164,29 @@ const Ctn = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 30px;
-  color: white;
+  color: #fff;
+  @media screen and (max-width: 500px) {
+    width: 90%;
+  }
 `;
+
+const SubTitleMob = styled(FlexRow)`
+  @media screen and (max-width: 500px) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+`;
+
 const SubTitle = styled(Text)`
   min-width: 70px;
   font-size: 16px;
   font-weight: 400;
-  color: white;
+  color: #fff;
+  @media screen and (max-width: 500px) {
+    padding-left: 10px;
+  }
 `;
+
 const OptionBox = styled.div`
   position: relative;
   min-height: 44px;
@@ -181,6 +196,7 @@ const OptionBox = styled.div`
   box-sizing: border-box;
   padding: 10px;
 `;
+
 const Select = styled.select`
   border: none;
   overflow: hidden;
@@ -191,16 +207,40 @@ const Select = styled.select`
   background-color: inherit;
   color: white;
 `;
+
 const Input = styled.input`
   border: none;
   width: 100%;
   font-size: 16px;
-  background-color: transparent;
+  background-color: transparent !important;
   color: white;
+  :focus {
+    background: transparent;
+  }
 
   ::-webkit-inner-spin-button,
   ::-webkit-outer-spin-button {
     appearance: none;
+  }
+
+  :-webkit-autofill,
+  :-webkit-autofill:hover,
+  :-webkit-autofill:focus,
+  :-webkit-autofill:active {
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  :autofill,
+  :autofill:hover,
+  :autofill:focus,
+  :autofill:active {
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
   }
 `;
 const RightAbs = styled.div`
@@ -219,12 +259,8 @@ const Button = styled.button`
   font-size: 16px;
   font-weight: 600;
   transition: all, 0.2s;
-  background-color: #1b172f;
+  background-color: transparent;
   cursor: pointer;
-  :hover {
-    border: 3px solid #5351a5;
-    /* color: ${(props) => props.theme.__greenMidium}; */
-  }
 `;
 const Video = styled.video`
   width: 240px;

@@ -157,3 +157,37 @@ export const checkSucceedState = atom({
   key: "checkSucceedState",
   default: false,
 });
+
+// 스톱워치 시작 상태
+export const isTimeStartState = atom({
+  key: "isTimeStartState",
+  default: false,
+});
+
+// 스톱워치 정지 상태
+export const isStopState = atom({
+  key: "isStopState",
+  default: false,
+});
+
+// 스톱워치 랩 기록 상태
+export const isRecordState = atom({
+  key: "isRecordState",
+  default: false,
+});
+
+// 스톱워치 seconds 값
+export const timeSecondsValue = atom({
+  key: "timeSecondsValue",
+  default: "",
+});
+
+export const timeLapsValue = atom({
+  key: "timeLapsValue",
+  default: "",
+});
+
+export const countState = atom({
+  key: "countState",
+  default: 0,
+});

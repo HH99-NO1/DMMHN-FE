@@ -24,11 +24,8 @@ const LayoutCtn = styled.div`
     #004922 0%,
     #02632f 40%,
     #058841 70%,
-    #ffffff 70%
+    ${(props) => props.theme.bgColor} 70%
   );
-  @media screen and (max-height: 600px) {
-    height: 100%;
-  }
 `;
 const LayoutBox = styled.div`
   width: 100%;

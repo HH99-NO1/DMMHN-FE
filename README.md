@@ -26,46 +26,31 @@
 
 ## 🌉 아키텍처
 
-<img width="9719" alt="서비스 아키텍처" src="https://user-images.githubusercontent.com/98001726/206996021-1d6871a8-e616-4531-b233-e0c3c6f6c60e.png">
+<img width="100%" alt="서비스 아키텍처" src="https://user-images.githubusercontent.com/98001726/206996021-1d6871a8-e616-4531-b233-e0c3c6f6c60e.png">
 
 &nbsp;
 
 ## 🛠 사용한 기술
 
-• 사용 언어 :  
-<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
-
-• 서버 구축 :
-
-<p>
-<img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white">
-<img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=Express&logoColor=white">
-</p>  
-  
-• 데이터 베이스 :
-<p>
-<img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white">
-</p>
-  
-• 배포 :
-<p>
-<img src="https://img.shields.io/badge/AmazonEC2-FF9900?style=for-the-badge&logo=AmazonEC2&logoColor=white">
-<img src="https://img.shields.io/badge/PM2-2B037A?style=for-the-badge&logo=PM2&logoColor=white">
-<img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
-</p>
-  
-• 기타 :
-<p>
-<img src="https://img.shields.io/badge/Bcrypt-gray?style=for-the-badge&logoColor=white">
-<img src="https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON Web Tokens&logoColor=white">
-<img src="https://img.shields.io/badge/Nodemailer-FFE005?style=for-the-badge&logoColor=white">
-<img src="https://img.shields.io/badge/NodeSchedule-40AEF0?style=for-the-badge&logoColor=white">
-<img src="https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=Jest&logoColor=white">
-<img src="https://img.shields.io/badge/AmazonS3-569A31?style=for-the-badge&logo=AmazonS3&logoColor=white">
-<img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=black">
-<img src="https://img.shields.io/badge/Sentry-362D59?style=for-the-badge&logo=Sentry&logoColor=white">
-<img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white">
-<img src="https://img.shields.io/badge/GithubActions-2088FF?style=for-the-badge&logo=GithubActions&logoColor=white">
+<p align=center>
+  <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white">
+  <img src="https://img.shields.io/badge/html-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+  <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+  <br>
+  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black">
+  <img src="https://img.shields.io/badge/RecordRTC-61DAFB?style=for-the-badge&logo=RecordRTC&logoColor=black">
+  <img src="https://img.shields.io/badge/RECOIL-0550ae?style=for-the-badge&logo=RECOIL&logoColor=black">
+  <img src="https://img.shields.io/badge/React--Hook--Form-EC5990?style=for-the-badge&logo=React-Hook-Form&logoColor=white">
+  <img src="https://img.shields.io/badge/Yarn-2C8EBB?style=for-the-badge&logo=Yarn&logoColor=white">
+  <img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white">
+  <img src="https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white">
+  <img src="https://img.shields.io/badge/
+Axios-5A29E4?style=for-the-badge&logo=
+Axios&logoColor=white">
+<br>
+  <img src="https://img.shields.io/badge/CloudFront-D05C4B?style=for-the-badge&logo=Amazon AWS&logoColor=white">
+  <img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white">
 </p>
 
 🌟 [더 자세한 내용 보러가기](https://fog-cyclone-297.notion.site/b101de37e067486399ae7bf539cd03f7)
@@ -74,55 +59,48 @@
 
 ## ⚽ 트러블 슈팅
 
-### 1) AccessToken, RefreshToken
+### 1. 소요시간 실시간 피드백
 
-|             |                                                                                                                                                                                                                                                                                                                                                                                          |
-| :---------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `문제 상황` | AccessToken만 사용했을 때 제 3자에게 토큰이 탈취되었을 경우<br> 보안에 취약하다는 피드백을 받음                                                                                                                                                                                                                                                                                          |
-|  `선택지`   | Access Token + Refresh Token                                                                                                                                                                                                                                                                                                                                                             |
-| `의견 조율` | • Access Token의 유효 시간을 짧게 하여 공격 면적을 줄이고, <br> Refresh Token의 유효기간을 상대적으로 길게 설정해 사용자의 편의성도 <br>고려하면 좋을 것 같다고 의견이 나옴 <br>• Refresh Token 역시 탈취될 가능성이 있기 때문에 refresh 발급 시 DB에 저장 후 <br> 개인정보 탈취가 의심될 경우에 비밀번호 변경으로 유도한 뒤 변경 시 <br>DB에 저장된 Refresh를 삭제하게 하면 좋다는 의견 |
-| `의견 결정` | 로그인 시 Access Token 과 Refresh Token 두 개를 발급, <br>Refresh Token 발급시 DB에 저장을 하고 개인정보 탈취 의심시 비밀번호 변경으로 유도하여 <br>DB에 있는 Refresh Token을 삭제함으로써 보안적으로 좀 더 강화하였다.                                                                                                                                                                  |
-
-&nbsp;
-
-### 2) 로그 관리
-
-|             |                                                                                                                                                                                                                                         |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `문제 상황` | winston을 사용하여 로깅을 하고 있었으나 <br>일일이 찍어줘야 하는 불편함이 발생하여 다른 기술을 찾아보고자 함                                                                                                                            |
-| `선택지`    | 1안) tracer + morgan <br> 2안) sentry + morgan                                                                                                                                                                                          |
-| `의견 조율` | 1안의 경우 사용했을 때 winston과 별다른 차이점을 느끼지 못했고, <br>2안이 보다 시각적이고 간편하게 에러를 추적할 수 있었다.                                                                                                             |
-| `의견 결정` | 2안(sentry)을 사용했을 때 에러데이터를 쉽게 수집할 수 있고, <br>시각적으로 볼 수 있어 좋아보였다. <br>또 에러가 생겼을 때 슬랙으로 알람이 와서 간편하게 에러를 추적할 수 있고, <br>즉각적으로 대처가 가능하여 2안(sentry)을 채택하였다. |
+| 구분                                         | 설명                                                                                                                                                                                                                                                                                         |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 도입 이유                                    | 모의면접 진행 시, 전체 및 질문별 진행시간을 유저에게 실시간으로 피드백                                                                                                                                                                                                                       |
+| 문제 상황                                    | 브라우저 렌더링 및 부하, 함수 딜레이 등으로 실제 시간과 맞지 않는 오차가 발생하기 시작<br>                                                                                                                                                                                                   |
+| ex) 실제 5초 경과 시, 2초만 흐른 것으로 보임 |
+| 해결 방안                                    | 1안) setInterval()로 일정 시간마다 항상 정확한 시스템 시간을 Date.now() 메서드로 받아와 오차를 줄이는 방법(시간의 정확도는 문제가 없음)<br>                                                                                                                                                  |
+| 2안) moment.js 등 라이브러리를 사용하여 해결 |
+| 의견 조율                                    | • 2안의 경우, 타이머 구현을 위해 라이브러리 사용이 불필요하다고 느끼며, 내부 로직이 setInterval()을 쓰는 것은 같음<br>setInterval()을 자주 사용하면 매번 렌더링이 일어나 성능이 저하될 가능성이 있음<br>• interval이 남아있을 때, 시간을 누르면 전 시각의 값을 가져와 계산하여 오차가 발생함 |
+| 의견 결정                                    | • 불필요한 렌더를 줄이기 위해 컴포넌트 분리 및 커스텀 훅 제작 및 활용                                                                                                                                                                                                                        |
 
 &nbsp;
 
-### 3) 테스트 코드 작성
+### 2. 화면 녹화 기능
 
-|             |                                                                                                                                                                                                                                         |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `문제 상황` | 테스트코드 없이 개발을 했을 때 API가 잘 작동하는지 <br>확인하려면 일일이 직접 입력값을 넣어야 했기 때문에 <br>리팩토링을 하거나 오류가 생겼을 때 수정을 하고 고치는 작업에 <br>시간이 많이 소요가 돼 팀의 생산성이 떨어지는 상황이 발생 |
-| `선택지`    | 1안) Mocha <br> 2안) Jest                                                                                                                                                                                                               |
-| `의견 조율` | 1안의 경우 다른 라이브러리의 설치 및 작업이 필요했고 <br>2안의 경우 1안보다 기능이 적지만 문서화가 잘되어 있고 가볍고 간단하다는 장점이 있다.                                                                                           |
-| `의견 결정` | 시작하기 쉽고 빠르게 적용이 가능한 2안(jest)을 채택하였다.                                                                                                                                                                              |
+| 구분      | 설명                                                                                                                                                                                                                                                                                                                              |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 도입 이유 | 모의면접 시의 내용을 녹화하여 유저에게 제공(억양, 표정, 포즈 등 확인)                                                                                                                                                                                                                                                             |
+| 문제 상황 | • react-media-recorder, react-record-webcam, react-video-recorder는 메모리를 상당히 많이 차지하여, 브라우저가 제대로 뜨지 않는 현상이 발생<br>• 브라우저의 전체 화면을 공유하는 식으로 녹화가 되고 있음<br>• 유저가 면접을 보고 난 후, 다운로드 방식을 서버에 저장해야 할 지, 로컬에 저장해야 할 지에 대한 문제                   |
+| 해결 방안 | 1안) recordRTC를 변경하지 않고, 기존 코드에서 변경<br>2안) recordRTC에 추가적인 라이브러리를 사용                                                                                                                                                                                                                                 |
+| 의견 조율 | • recordRTC를 사용하기로 결정, 기존 자바스크립트로 되어있는 코드를 타입스크립트로 변경<br>• 화면 녹화를 기존 전체 화면 녹화가 아닌 나의 웹캠을 통한 녹화로 하기로 결정<br>• 서버에 저장 시에 유저가 모의 면접을 본 자료들이 당사 서버에 저장이 되어있기 때문에 보안상의 문제와 유저들의 신뢰성 문제가 있어서 로컬에 저장하기로 함 |
+| 의견 결정 | 모의면접 진행 시에 나의 화면이 보이게끔 한 후, 모의 면접이 종료되었을 때 녹화된 화면을 보여지게 함                                                                                                                                                                                                                                |
 
 &nbsp;
 
-### 4) CI/CD 적용
+### 3. TTS(Text-to-speech)
 
-|             |                                                                                                                                                                                                                           |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `문제 상황` | 협업 시 코드 배포를 해야하는 상황이 빈번히 발생하여 <br>배포 하는 데 많은 시간이 소요 되고 불필요하고 반복적인 과정을 줄이고 싶은 <br>필요를 느꼈다.                                                                      |
-| `선택지`    | 1안) Jenkins <br> 2안) Github Actions (CI) + AWS CodeDeploy(CD) <br> 3안) Github Actions (CI/CD)                                                                                                                          |
-| `의견 조율` | 1안: 사용자가 많지만 젠킨스만을 위한 인스턴스가 필요하고 세팅이 복잡하다 <br> 2안: aws 하나로 관리가 가능하지만 요금이 발생하는 단점이 있다. <br> 3안: 툴 설치 없이 바로 github repository에서 관리할 수 있고 설정이 쉽다 |
-| `의견 결정` | 프로젝트 막바지에 적용을 하려다 보니 효율을 고려하지 않을 수 없었다. <br>그렇기 때문에 우선순위를 시간과 접근성에 두고 찾다보니 <br>3안(github action)이 찾던 조건에 가장 부합하여 채택하였다.                            |
+| 구분      | 설명                                                                                                                                                                                                                                                                                                                            |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 도입 이유 | 모의면접을 위해 사용자가 모의면접 환경에 집중할 수 있도록 텍스트 질문을 음성으로 반환                                                                                                                                                                                                                                           |
+| 문제 상황 | • 브라우저 자체 내장 api인 SpeechSynthesis는 브라우저마다, 사용자의 접속 환경(OS)마다 조금씩 다르게 음성을 합성함(peech, rate, lang 등)<br>• SpeechSynthesis는 기계음에 가까워 모의면접에 대한 집중도가 떨어짐                                                                                                                  |
+| 해결 방안 | 1안) google cloud TTS Api를 이용하여 실시간 번역(90일 무료)<br>2안) clova voice Api를 이용하여 실시간 번역(월 9만원)<br>3안) clova dubbing Api를 이용하여 미리 셋팅된 질문을 음성으로 미리 변환하여 사용자에게 오디오 파일로 스트리밍(일부 유료)                                                                                |
+| 의견 조율 | • SpeechSynthesis의 경우, FE만 코드 작성이 필요한 것에 반해, 외부 Api를 이용 시 BE에서 api를 호출할 세팅 및 base64로 음성파일을 FE에 전달하여 송출하여야 하는 형태임.<br>이미 입력된 값만을 음성으로 변환하는 것이 아닌 유저가 직접 입력한 input 값을 음성으로 변환하여 유저와 앱이 상호작용하고 있다는 것을 보여줄 필요가 있음 |
+| 의견 결정 | • 초기 세팅을 SpeechSynthesis로 테스트해보고, clova voice api를 사용.<br>• 프리셋(이미 선정된 질문) 외 유저의 입력값도 변환할 수 있도록 변경함                                                                                                                                                                                  |
 
 &nbsp;
 
 ## 🚩 맡은 역할
 
-| 이름   | 역할                                                                      |
-| ------ | ------------------------------------------------------------------------- |
-| 백지영 | 모의 면접, s3 multer, morgan                                              |
-| 김민섭 | 로그인, 회원정보 수정, 회원 탈퇴, 휴면 회원 관리, 테스트 코드 작성, ci/cd |
-| 장민영 | 회원 가입, 스웨거, 부하테스트 작성                                        |
-| 최예닮 | sentry, 테스트 코드 작성, 부하 테스트 작성                                |
+| 이름   | 역할                                                                            |
+| ------ | ------------------------------------------------------------------------------- |
+| 정재연 | TTS(Text-to-speech), 커스텀 질문, 질문 타이머, aws cloudfront 배포, 에러 핸들링 |
+| 이성훈 | 로그인, 회원 가입, 회원정보 수정, 회원 탈퇴                                     |
+| 이현하 | 화면 녹화, 부하 테스트                                                          |

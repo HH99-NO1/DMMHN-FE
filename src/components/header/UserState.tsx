@@ -12,7 +12,7 @@ const UserState = () => {
   return (
     <>
       <UserStateArea onClick={() => navigate("/mypage")}>
-        <Img src={`${loginUserState?.img}`} />
+        <Img src={`${loginUserState?.img}`} alt="userImg" />
         <Text fontSize="14px" color="white">
           {loginUserState?.memberName}
         </Text>

@@ -49,7 +49,7 @@ const Header = () => {
             {/* <LogoBox onClick={() => navigate("/")}>
               <LogoItem />
             </LogoBox> */}
-            <Img onClick={() => navigate("/")} src="img/logo.png" />
+            <Img onClick={() => navigate("/")} src="img/logo.png" alt="logo" />
 
             {/* <Text fontSize="20px" fontWeight="600" color="white">
               떨면뭐하니

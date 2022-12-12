@@ -1,5 +1,3 @@
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Autoplay, Pagination } from "swiper";
@@ -7,7 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
 import "swiper/css/pagination";
-import { FlexCol, FlexRow, Gap, HeaderBox } from "../../elements/elements";
+import { FlexCol, Gap } from "../../elements/elements";
 import { useSetRecoilState } from "recoil";
 import { onLoginState } from "../../recoil/atoms/atoms";
 import Layout from "../home/Layout";
@@ -37,21 +35,7 @@ const SimulationGuide = () => {
         <LoginBtn onClick={() => onLogin(true)}>모의면접 시작하기</LoginBtn>
         <StyledSwiper
           speed={1000}
-          // navigation={{
-          //   prevEl: PrevRef.current,
-          //   nextEl: NextRef.current,
-          // }}
           navigation={true}
-          // onInit={(swiper) => {
-          //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          //   // @ts-ignore
-          //   // eslint-disable-next-line no-param-reassign
-          //   swiper.params.navigation.prevEl = PrevRef.current;
-          //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          //   // @ts-ignore
-          //   // eslint-disable-next-line no-param-reassign
-          //   swiper.params.navigation.nextEl
-          // }}
           pagination={{ clickable: true }}
           slidesPerView={1}
           autoplay={{ delay: 5000 }}
@@ -146,13 +130,6 @@ const SubText = styled.p`
     font-size: 16px;
   }
 `;
-
-// const ArrowAll = styled.div`
-//   position: absolute;
-//   top: 50%;
-//   transform: translateY(-50%);
-//   z-index: 22;
-// `;
 const LoginBtn = styled.button`
   background-color: ${(props) => props.theme.__yellowLight};
   color: #025729;

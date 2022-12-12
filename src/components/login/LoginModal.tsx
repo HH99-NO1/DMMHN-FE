@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Portal from "./Portal";
 import styled from "styled-components";
 import { GrClose } from "react-icons/gr";
 import { AiOutlineAlert } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import { instance, UserApi } from "../../recoil/instance";
+import { UserApi } from "../../recoil/instance";
 import { useForm } from "react-hook-form";
 import { FlexCol, FlexRow, Liner, Text } from "../../elements/elements";
 import errorNotYet from "../errors/errorNotYet";
@@ -162,7 +162,7 @@ const LoginModal = () => {
               </FlexCol>
             </LoginBody>
             <Or>또는</Or>
-            <SocialItemBox>
+            {/* <SocialItemBox>
               <Img
                 onClick={() => errorNotYet()}
                 border={true}
@@ -185,7 +185,7 @@ const LoginModal = () => {
                 src="/img/naver.png"
                 alt="naver"
               />
-            </SocialItemBox>
+            </SocialItemBox> */}
             <Liner />
             <LoginFooter>
               <TextEl onClick={() => errorNotYet()}>

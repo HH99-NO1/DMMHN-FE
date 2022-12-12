@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
-import RecordRTC, { invokeSaveAsDialog } from "recordrtc";
+import RecordRTC from "recordrtc";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isOK, isSimulationState, test } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
@@ -53,6 +53,10 @@ const Simulation = () => {
   >([]);
 
   const requestAudioFile = async (event: any) => {
+    // 버튼을 누르자마자 버튼 비활성화
+    event.target.disabled = true;
+    event.target.style.backgroundColor = "black";
+
     isStop && stop();
 
     try {
@@ -82,13 +86,10 @@ const Simulation = () => {
       source.start();
 
       // 오디오 재생 중 버튼 비활성화 처리
-      event.target.disabled = true;
-      event.target.style.backgroundColor = "black";
 
       setTimeout(() => {
         event.target.disabled = false;
         event.target.style.backgroundColor = "#092304";
-        console.log("버튼 사용 가능");
       }, source.buffer.duration * 1000 + 500);
 
       let resultEl = {
@@ -110,7 +111,11 @@ const Simulation = () => {
         count++;
       }
     } catch (e) {
+      // 오류가 있든 없든 통신이 끝나면 버튼 활성화
+      event.target.disabled = false;
+      event.target.style.backgroundColor = "#092304";
       console.log(e);
+    } finally {
     }
   };
 

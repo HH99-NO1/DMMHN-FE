@@ -164,15 +164,6 @@ const MySimulationDetail = () => {
                   <DelBtn onClick={() => deleteMySimulation()}>삭제</DelBtn>
                 </RightDiv>
               </FlexCol>
-              {/* <FlexRow width="100%" gap="10px" alignItem="flex-start">
-              <MiddleTitle style={{ marginTop: "10px" }}>
-                모의면접 영상
-              </MiddleTitle>
-              <Video
-                src="https://www.youtube.com/watch?v=CATSTw3CRMk"
-                autoPlay
-              />
-            </FlexRow> */}
             </FlexCol>
           </FlexCol>
         </Ctn>

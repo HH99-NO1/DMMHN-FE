@@ -190,13 +190,8 @@ const MyPage = () => {
                     type="file"
                     id="profileImg"
                     accept="image/*"
-                    // style={{ display: "none" }}
-                    // ref={inputRef}
                     onChange={onChangeImg}
                   />
-                  {/* <button id="profileImg" onClick={onUploadImageButtonClick}>
-                    저장하기
-                  </button> */}
                 </form>
               </ImgBox>
               <FlexCol gap="20px" alignItem="left">
@@ -370,11 +365,6 @@ const SubTitle = styled.div`
   }
 `;
 
-const Button = styled.button`
-  width: 50px;
-  height: 20px;
-`;
-
 const Img = styled.img`
   box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.25);
   border-radius: 50%;
@@ -400,9 +390,6 @@ const ImgChangeLabel = styled.label`
 `;
 const ImgChangeInput = styled.input`
   display: none;
-  /* &::file-selector-button {
-    display: none;
-  } */
 `;
 
 const DelUserBox = styled.div`
@@ -433,7 +420,3 @@ const UserInfo = styled(Text)`
     font-size: 17px;
   }
 `;
-
-// const Container = styled.div``;
-
-// const Container = styled.div``;

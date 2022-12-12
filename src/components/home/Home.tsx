@@ -25,7 +25,7 @@ const Home = () => {
           <LoginBtn onClick={() => navigate("/simulation")}>모의면접</LoginBtn>
         </MainCenter>
 
-        <Img src="/img/mainPage.png" alt="mainImg2" />
+        <Img src="/img/mainPage.png" alt="mainImg" />
       </Ctn>
     </>
   );

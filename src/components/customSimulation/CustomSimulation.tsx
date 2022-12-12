@@ -151,8 +151,8 @@ const CustomSimulation = () => {
               </InputBox>
             </Form>
 
-            <FlexCol width="100%" gap="20px">
-              <MiddleTitle style={{ marginTop: "10px" }}>
+            <FlexCol width="100%" gap="10px" alignItem="flex-start">
+              <MiddleTitle style={{ marginTop: "10px", fontSize: "18px" }}>
                 나만의 질문 리스트
               </MiddleTitle>
               <QuestionsList gap="10px" width="100%" alignItem="flex-start">
@@ -182,32 +182,41 @@ const CustomSimulation = () => {
 };
 const Ctn = styled.div`
   padding: 20px;
-  max-width: 800px;
+  max-width: 500px;
   width: 100%;
-  margin: 0 auto;
+  margin: 30px auto;
 `;
 const TitleBar = styled.div`
   padding: 10px 20px;
   border-radius: 20px;
-  max-width: 500px;
   width: 100%;
   text-align: left;
   font-size: 20px;
   font-weight: 600;
   background-color: ${(props) => props.theme.__grayLight};
+  @media screen and (max-width: 600px) {
+    font-size: 17px;
+  }
 `;
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   gap: 10px;
+  margin-top: 30px;
 `;
 const MiddleTitle = styled.h3`
   min-width: 150px;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 400;
+  padding-left: 15px;
+  @media screen and (max-width: 600px) {
+    min-width: auto;
+    padding-left: 0;
+    font-size: 17px;
+  }
 `;
 const Input = styled.input`
   height: 50px;
@@ -226,6 +235,9 @@ const InputBox = styled.div`
   min-height: 50px;
   width: 100%;
   min-width: 400px;
+  @media screen and (max-width: 600px) {
+    min-width: auto;
+  }
 `;
 const SubmitBtn = styled.button`
   position: absolute;
@@ -238,6 +250,9 @@ const SubmitBtn = styled.button`
   border-radius: 20px;
   padding: 4px 12px;
   cursor: pointer;
+  @media screen and (max-width: 600px) {
+    font-size: 13px;
+  }
 `;
 const DeleteBtn = styled(SubmitBtn)`
   right: 0;
@@ -260,6 +275,9 @@ const QuestionsList = styled(FlexCol)`
   gap: 20px;
   border-radius: 20px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  @media screen and (max-width: 600px) {
+    font-size: 14px;
+  }
 `;
 const SignupBtn = styled.button`
   width: 100%;
@@ -272,6 +290,10 @@ const SignupBtn = styled.button`
   font-size: 20px;
   font-weight: 600;
   cursor: pointer;
+  margin-top: 30px;
+  @media screen and (max-width: 600px) {
+    font-size: 17px;
+  }
 `;
 const QuestionBox = styled(FlexRow)`
   position: relative;

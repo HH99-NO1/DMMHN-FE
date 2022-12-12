@@ -1,6 +1,6 @@
 import Layout from "../home/Layout";
 import styled from "styled-components";
-import { FlexRow, FlexCol, Text, Gap } from "../../elements/elements";
+import { FlexRow, FlexCol, Text } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm, useFormState } from "react-hook-form";
@@ -160,7 +160,7 @@ const SubTitle = styled.div`
   font-size: 20px;
   font-weight: 600;
   @media screen and (max-width: 600px) {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;
 
@@ -175,7 +175,7 @@ const Btn = styled.button`
 
 const Inform = styled.form`
   width: 100%;
-  background-color: white;
+  background-color: #fff;
   border: 1px solid lightgray;
 `;
 
@@ -206,7 +206,7 @@ const RowOne = styled.div`
     color: #585858;
   }
   @media screen and (max-width: 600px) {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;
 

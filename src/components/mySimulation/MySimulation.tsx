@@ -93,6 +93,9 @@ const TitleBar = styled.div`
   font-size: 20px;
   font-weight: 600;
   background-color: ${(props) => props.theme.__grayLight};
+  @media screen and (max-width: 600px) {
+    font-size: 17px;
+  }
 `;
 
 const LinkBtn = styled.div`

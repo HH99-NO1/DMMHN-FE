@@ -21,7 +21,6 @@ const Header = () => {
 
   // 헤더 배경 등 고정
   const [isFixed, setIsFixed] = useState(false);
-  console.log(isFixed);
   const handleShowButton = () => {
     if (window.scrollY > 0) {
       setIsFixed(true);

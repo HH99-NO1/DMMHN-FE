@@ -172,7 +172,6 @@ const MySimulationDetail = () => {
   }
 };
 const Ctn = styled.div`
-  /* border: 1px solid red; */
   padding: 20px;
   max-width: 500px;
   width: 100%;

@@ -294,7 +294,7 @@ const Btn = styled.button`
 
 const Inform = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: #fff;
   border: 1px solid lightgray;
 `;
 
@@ -357,7 +357,7 @@ const ImgChangeLabel = styled.label`
   position: absolute;
   bottom: 0;
   right: 0;
-  background-color: white;
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;

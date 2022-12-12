@@ -272,15 +272,6 @@ const Signup = () => {
                       />
                     )}
                   />
-                  {/* <DatePicker
-                    {...register("birth")}
-                    locale={ko}
-                    dateFormat="yyyy/MM/dd"
-                    selected={startDate}
-                    minDate={new Date("1900-01-01")}
-                    placeholderText="생년월일을 입력"
-                    onChange={(date: any) => setStartDate(date)}
-                  /> */}
                 </BirthBox>
                 <JobBox>
                   <span>직업:</span>
@@ -315,13 +306,6 @@ const Signup = () => {
                   </SelectDiv>
                 </JobBox>
                 <StackBox>
-                  {/* <Input
-                  type="stack"
-                  {...register("stack", {
-                    required: "스택을 작성해주세요.",
-                  })}
-                  placeholder="스택을 작성해주세요. ex) /javascript/node"
-                /> */}
                   <span>스택:</span>
                   <SelectDiv>
                     <Label htmlFor="javaScript">
@@ -331,7 +315,7 @@ const Signup = () => {
                         type="checkbox"
                         value="javaScript"
                       />
-                      javaScript
+                      JavaScript
                     </Label>
                     <Label htmlFor="React">
                       <input
@@ -403,7 +387,7 @@ const InnerWrap = styled.div`
   height: 100%;
   border: 1px solid lightgray;
   border-radius: 15px;
-  background-color: white;
+  background-color: #fff;
   box-sizing: border-box;
   @media screen and (max-width: 600px) {
     padding: 20px;
@@ -448,11 +432,10 @@ const ErrorMsg = styled.div`
   gap: 5px;
   align-items: center;
   width: 100%;
-  /* height: 25px; */
   font-size: 13px;
   margin-top: 5px;
   background: rgba(210, 18, 18, 0.1);
-  border: 1px solid #ffffff;
+  border: 1px solid #fff;
   border-radius: 67px;
   padding: 4px 10px;
   color: #747373;
@@ -475,7 +458,7 @@ const SignupBtn = styled.button`
   border: none;
   background-color: #025729;
   border-radius: 67px;
-  color: white;
+  color: #fff;
   font-size: 20px;
   font-weight: 600;
   cursor: pointer;

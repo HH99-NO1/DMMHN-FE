@@ -11,7 +11,7 @@ const TitleArea = ({ children }: { children: React.ReactNode }) => {
 
 const Ctn = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: #fff;
   border-bottom: 1px solid ${(props) => props.theme.__lineGray};
 `;
 const Title = styled.div`

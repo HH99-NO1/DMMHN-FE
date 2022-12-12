@@ -79,7 +79,7 @@ const Ctn = styled.div`
 `;
 
 const CheckCtn = styled.div`
-  background-color: white;
+  background-color: #fff;
   height: 100%;
   position: relative;
   border: 1px solid #ebebeb;

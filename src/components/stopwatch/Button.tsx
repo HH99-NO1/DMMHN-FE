@@ -29,7 +29,7 @@ const getStyleByType = (props: StyledProps) => {
 
   switch (props.type) {
     case "NORMAL":
-      color = "white";
+      color = "#fff";
       backgroundColor = "#333333";
       break;
     case "SUCCESS":

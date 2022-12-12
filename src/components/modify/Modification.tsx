@@ -1,6 +1,6 @@
 import Layout from "../home/Layout";
 import styled from "styled-components";
-import { FlexRow, FlexCol, Text, Gap } from "../../elements/elements";
+import { FlexRow, FlexCol, Text } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm, useFormState } from "react-hook-form";
@@ -39,7 +39,6 @@ const MyPage = ({ users, setModify }: IProps) => {
   const [job, setJob] = useState(users?.job);
   const [stack, setStack] = useState(users?.stack);
   const [startDate, setStartDate] = useState(new Date());
-  // const [, ] = useState(users?.phoneNum);
 
   const onChangeEmail = (e: any) => {
     setMembersEmail(e?.currentTarget.value);
@@ -53,9 +52,6 @@ const MyPage = ({ users, setModify }: IProps) => {
   const onChangeStack = (e: any) => {
     setStack(e?.currentTarget.value);
   };
-  // const  = (e: any) => {
-  //   (e?.currentTarget.value);
-  // };
 
   const {
     register,
@@ -63,13 +59,7 @@ const MyPage = ({ users, setModify }: IProps) => {
     formState: { errors },
     setError,
     control,
-  } = useForm<IProps>({
-    // defaultValues: {
-    //   email: "@naver.com",
-    // },
-    // mode: "onChange",
-    // criteriaMode: "firstError",
-  });
+  } = useForm<IProps>({});
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -114,12 +104,11 @@ const MyPage = ({ users, setModify }: IProps) => {
             <Rows>
               <RowOne>생년월일</RowOne>
               <RowTwo>
-                {/* <input type="text" value={birth || ""} onChange={onBirth} /> */}
                 <Controller
                   control={control}
                   name="users.birth"
                   render={() => (
-                    <DatePicker
+                    <DatePickerWid
                       {...register("users.birth")}
                       locale={ko}
                       dateFormat="yyyy - MM - dd"
@@ -155,13 +144,10 @@ const MyPage = ({ users, setModify }: IProps) => {
           </FlexCol>
         </InnerWrap>
       </Inform>
-      {/* </Container> */}
     </>
   );
 };
 export default MyPage;
-
-// const Container = styled.form``;
 
 const Modify = styled.div`
   display: flex;
@@ -174,7 +160,7 @@ const SubTitle = styled.div`
   font-size: 20px;
   font-weight: 600;
   @media screen and (max-width: 600px) {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;
 
@@ -189,7 +175,7 @@ const Btn = styled.button`
 
 const Inform = styled.form`
   width: 100%;
-  background-color: white;
+  background-color: #fff;
   border: 1px solid lightgray;
 `;
 
@@ -220,7 +206,7 @@ const RowOne = styled.div`
     color: #585858;
   }
   @media screen and (max-width: 600px) {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;
 
@@ -239,14 +225,6 @@ const RowTwo = styled(RowOne)`
   }
 `;
 
-const Input = styled.input`
-  width: 50%;
-  height: 50px;
-  padding: 8px 20px;
-  border-radius: 67px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-  border: 1px solid ${(props) => props.theme.__grayLight};
-  :focus {
-    outline: 1px solid ${(props) => props.theme.__grayMedium};
-  }
+const DatePickerWid = styled(DatePicker)`
+  width: 100% !important;
 `;

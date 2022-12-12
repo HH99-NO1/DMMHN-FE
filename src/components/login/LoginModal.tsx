@@ -44,7 +44,6 @@ const LoginModal = () => {
 
   // useForm을 통한 제출 이벤트
   const onValid = async (submitData: IForm) => {
-    console.log(submitData);
     try {
       const req = {
         memberEmail: submitData.memberEmail,
@@ -66,8 +65,6 @@ const LoginModal = () => {
       }
       return window.location.reload();
     } catch (error: any) {
-      console.log(error.response);
-      // console.log(error.message);
       if (error.response.status === 400) {
         alert("아이디 또는 비밀번호가 일치하지 않습니다.");
       }
@@ -136,56 +133,23 @@ const LoginModal = () => {
                     placeholder="비밀번호"
                   />
                   <CheckBox>
-                    {
-                      errors?.memberEmail?.message ? (
-                        <ErrorMsg>
-                          <AiOutlineAlert
-                            fill="tomato"
-                            stroke="tomato"
-                            strokeWidth={30}
-                            size={16}
-                          />
-                          {errors?.memberEmail?.message}
-                        </ErrorMsg>
-                      ) : null
-                      // (
-                      //   <>
-                      //     <input id="login_is" type="checkbox" />
-                      //     <label htmlFor="login_is">로그인 상태 유지</label>
-                      //   </>
-                      // )
-                    }
+                    {errors?.memberEmail?.message ? (
+                      <ErrorMsg>
+                        <AiOutlineAlert
+                          fill="tomato"
+                          stroke="tomato"
+                          strokeWidth={30}
+                          size={16}
+                        />
+                        {errors?.memberEmail?.message}
+                      </ErrorMsg>
+                    ) : null}
                   </CheckBox>
                 </InputBox>
                 <LoginBtn>로그인</LoginBtn>
-                {/* <span>{errors?.extraError?.message}</span> */}
               </FlexCol>
             </LoginBody>
             <Or>또는</Or>
-            {/* <SocialItemBox>
-              <Img
-                onClick={() => errorNotYet()}
-                border={true}
-                src="/img/apple.png"
-                alt="apple"
-              />
-              <Img
-                onClick={() => errorNotYet()}
-                border={true}
-                src="/img/google.png"
-                alt="google"
-              />
-              <Img
-                onClick={() => errorNotYet()}
-                src="/img/kakao.png"
-                alt="kakao"
-              />
-              <Img
-                onClick={() => errorNotYet()}
-                src="/img/naver.png"
-                alt="naver"
-              />
-            </SocialItemBox> */}
             <Liner />
             <LoginFooter>
               <TextEl onClick={() => errorNotYet()}>
@@ -234,20 +198,6 @@ const Ctn = styled.div`
   width: 100%;
   margin: 0 auto;
   overflow: hidden;
-
-  /* @media screen and (max-width: 800px) {
-    top: auto;
-    bottom: 0;
-    margin-bottom: -10px;
-    transform: translate(-50%, 0%);
-  }
-  @media screen and (max-height: 620px) {
-    position: relative;
-    height: 100%;
-    top: 0;
-    left: 0;
-    transform: translate(0%, 0%);
-  } */
 `;
 
 const LoginCtn = styled.div`
@@ -338,7 +288,7 @@ const ErrorMsg = styled(FlexRow)`
 
 const LoginBtn = styled.button`
   background-color: ${(props) => props.theme.__greenMidium};
-  color: white;
+  color: #fff;
   border: none;
   font-size: 16px;
   font-weight: 600;

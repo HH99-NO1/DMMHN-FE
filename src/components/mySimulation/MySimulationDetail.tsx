@@ -143,7 +143,7 @@ const MySimulationDetail = () => {
                       <FlexCol width="100%" gap="10px" alignItem="flex-start">
                         <FlexCol width="100%" gap="10px" alignItem="flex-start">
                           {mySimulation.resultsArr.map((arr, index) => (
-                            <FlexRow
+                            <FrowMob
                               width="100%"
                               gap="10px"
                               justifyContent="space-between"
@@ -153,7 +153,7 @@ const MySimulationDetail = () => {
                                 {arr.question}
                               </Question>
                               <Question> - [{arr.time}]</Question>
-                            </FlexRow>
+                            </FrowMob>
                           ))}
                         </FlexCol>
                       </FlexCol>
@@ -172,7 +172,6 @@ const MySimulationDetail = () => {
   }
 };
 const Ctn = styled.div`
-  /* border: 1px solid red; */
   padding: 20px;
   max-width: 500px;
   width: 100%;
@@ -189,7 +188,18 @@ const TitleBar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @media screen and (max-width: 600px) {
+    font-size: 17px;
+  }
 `;
+
+const FrowMob = styled(FlexRow)`
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
 const Text = styled.span`
   font-size: 12px;
   color: ${(props) => props.theme.__grayDark};
@@ -199,6 +209,9 @@ const MiddleTitle = styled.h3`
   font-size: 20px;
   font-weight: 400;
   padding-left: 10px;
+  @media screen and (max-width: 600px) {
+    font-size: 16px;
+  }
 `;
 const OptionBox = styled.div`
   position: relative;

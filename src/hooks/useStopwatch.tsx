@@ -42,42 +42,34 @@ const useStopwatch: () => UseStopwatchReturnType = () => {
 
   const start = React.useCallback(() => {
     if (status !== STATUS.STOP) {
-      console.debug("Status is not STOP");
       return;
     }
 
     setStatus(STATUS.PROCESSING);
-    console.debug("Stopwatch just starts");
   }, [status]);
 
   const stop = React.useCallback(() => {
     if (status !== STATUS.PROCESSING) {
-      console.debug("Status is not PROCESSING");
       return;
     }
 
     setStatus(STATUS.STOP);
-    console.debug("Stopwatch just stops");
   }, [status]);
   const reset = React.useCallback(() => {
     // 이미 상태가 정지일 때야 가능
     if (status !== STATUS.STOP) {
-      console.debug("Status is not STOP");
     }
 
     setSeconds(0);
     setLaps([]);
-    console.debug("Stopwatch just resets");
   }, [status]);
 
   const record = React.useCallback(() => {
     if (status !== STATUS.PROCESSING) {
-      console.debug("Status is not PROCESSING");
       return;
     }
 
     setLaps((prev) => [nextLap, ...prev]); // 배열을 단순히 추가만 하면 안됨. 의존성은 주소를 참조하고 있어서 안 바뀜
-    console.debug("Stopwatch just records");
   }, [status, nextLap]);
 
   React.useEffect(() => {

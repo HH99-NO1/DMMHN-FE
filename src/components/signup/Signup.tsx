@@ -1,6 +1,6 @@
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import { FlexCol, HeaderBox, Text } from "../../elements/elements";
+import { FlexCol, HeaderBox } from "../../elements/elements";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineAlert } from "react-icons/ai";
@@ -27,14 +27,6 @@ interface IForm {
   gender: string;
   stack: string;
 }
-
-// interface IDate {
-//   setModify: (state: boolean) => void;
-// }
-// export const ACCESS_TOKEN = sessionStorage.getItem("accesstoken");
-// export const REFRESH_TOKEN = sessionStorage.getItem("refreshtoken");
-// console.log(ACCESS_TOKEN);
-// console.log(ACCESS_TOKEN);
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -68,7 +60,6 @@ const Signup = () => {
         setIsCheckEmailState(true);
         setIsChecked(true);
       } catch (e: any | unknown) {
-        console.log(e.response.status);
         if (e.response.status === 400) {
           alert("이미 가입된 이메일입니다.");
         }
@@ -82,16 +73,9 @@ const Signup = () => {
     formState: { errors },
     setError,
     control,
-  } = useForm<IForm>({
-    // defaultValues: {
-    //   email: "@naver.com",
-    // },
-    // mode: "onChange",
-    // criteriaMode: "firstError",
-  });
+  } = useForm<IForm>({});
 
   const onValid = async (submitData: IForm) => {
-    console.log(submitData);
     if (checkSucceed) {
       if (submitData.password !== submitData.confirmPw) {
         setError(
@@ -116,10 +100,8 @@ const Signup = () => {
             stack: submitData.stack,
             validate: process.env.REACT_APP_CHECK_SIGNUP_KEY,
           };
-          // console.log(req);
 
           const { data } = await UserApi.post(`members/signup`, req);
-          console.log(data.message);
           if (data.message) {
             alert("회원가입이 완료되었습니다.");
             navigate("/");
@@ -129,7 +111,6 @@ const Signup = () => {
           if (error.response.status === 400) {
             alert("이미 가입된 계정입니다. 이메일을 확인해주세요.");
           }
-          console.log(error.response);
           return error.response;
         }
       }
@@ -162,7 +143,7 @@ const Signup = () => {
       return errors.stack.message;
     }
   };
-  console.log(totalError());
+
   return (
     <>
       <HeaderBox />
@@ -291,15 +272,6 @@ const Signup = () => {
                       />
                     )}
                   />
-                  {/* <DatePicker
-                    {...register("birth")}
-                    locale={ko}
-                    dateFormat="yyyy/MM/dd"
-                    selected={startDate}
-                    minDate={new Date("1900-01-01")}
-                    placeholderText="생년월일을 입력"
-                    onChange={(date: any) => setStartDate(date)}
-                  /> */}
                 </BirthBox>
                 <JobBox>
                   <span>직업:</span>
@@ -334,13 +306,6 @@ const Signup = () => {
                   </SelectDiv>
                 </JobBox>
                 <StackBox>
-                  {/* <Input
-                  type="stack"
-                  {...register("stack", {
-                    required: "스택을 작성해주세요.",
-                  })}
-                  placeholder="스택을 작성해주세요. ex) /javascript/node"
-                /> */}
                   <span>스택:</span>
                   <SelectDiv>
                     <Label htmlFor="javaScript">
@@ -350,7 +315,7 @@ const Signup = () => {
                         type="checkbox"
                         value="javaScript"
                       />
-                      javaScript
+                      JavaScript
                     </Label>
                     <Label htmlFor="React">
                       <input
@@ -422,7 +387,7 @@ const InnerWrap = styled.div`
   height: 100%;
   border: 1px solid lightgray;
   border-radius: 15px;
-  background-color: white;
+  background-color: #fff;
   box-sizing: border-box;
   @media screen and (max-width: 600px) {
     padding: 20px;
@@ -467,11 +432,10 @@ const ErrorMsg = styled.div`
   gap: 5px;
   align-items: center;
   width: 100%;
-  /* height: 25px; */
   font-size: 13px;
   margin-top: 5px;
   background: rgba(210, 18, 18, 0.1);
-  border: 1px solid #ffffff;
+  border: 1px solid #fff;
   border-radius: 67px;
   padding: 4px 10px;
   color: #747373;
@@ -494,7 +458,7 @@ const SignupBtn = styled.button`
   border: none;
   background-color: #025729;
   border-radius: 67px;
-  color: white;
+  color: #fff;
   font-size: 20px;
   font-weight: 600;
   cursor: pointer;

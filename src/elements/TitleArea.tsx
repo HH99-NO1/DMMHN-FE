@@ -11,7 +11,7 @@ const TitleArea = ({ children }: { children: React.ReactNode }) => {
 
 const Ctn = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: #fff;
   border-bottom: 1px solid ${(props) => props.theme.__lineGray};
 `;
 const Title = styled.div`
@@ -24,6 +24,10 @@ const Title = styled.div`
   align-items: center;
   font-size: 20px;
   font-weight: 400;
+  @media screen and (max-width: 600px) {
+    height: 50px;
+    font-size: 16px;
+  }
 `;
 
 export default TitleArea;

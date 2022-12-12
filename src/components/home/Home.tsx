@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { FlexRow, Gap, HeaderBox } from "../../elements/elements";
-import { onLoginState } from "../../recoil/atoms/atoms";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -76,7 +74,7 @@ const MainText = styled.h2`
   font-weight: 700;
   line-height: 1.5;
   margin-bottom: 25px;
-  color: white;
+  color: #fff;
   @media screen and (max-width: 800px) {
     font-size: 24px;
   }
@@ -94,7 +92,7 @@ const SubText = styled.p`
   font-size: 20px;
   font-weight: 200;
   line-height: 1.5;
-  color: white;
+  color: #fff;
   @media screen and (max-width: 800px) {
     font-size: 16px;
   }

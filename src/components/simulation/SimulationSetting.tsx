@@ -205,7 +205,7 @@ const Select = styled.select`
   appearance: none;
   width: 100%;
   background-color: inherit;
-  color: white;
+  color: #fff;
 `;
 
 const Input = styled.input`
@@ -213,7 +213,7 @@ const Input = styled.input`
   width: 100%;
   font-size: 16px;
   background-color: transparent !important;
-  color: white;
+  color: #fff;
   :focus {
     background: transparent;
   }
@@ -227,7 +227,7 @@ const Input = styled.input`
   :-webkit-autofill:hover,
   :-webkit-autofill:focus,
   :-webkit-autofill:active {
-    -webkit-text-fill-color: white;
+    -webkit-text-fill-color: #fff;
     -webkit-box-shadow: 0 0 0px 1000px transparent inset;
     box-shadow: 0 0 0px 1000px transparent inset;
     transition: background-color 5000s ease-in-out 0s;
@@ -237,7 +237,7 @@ const Input = styled.input`
   :autofill:hover,
   :autofill:focus,
   :autofill:active {
-    -webkit-text-fill-color: white;
+    -webkit-text-fill-color: #fff;
     -webkit-box-shadow: 0 0 0px 1000px transparent inset;
     box-shadow: 0 0 0px 1000px transparent inset;
     transition: background-color 5000s ease-in-out 0s;
@@ -250,7 +250,7 @@ const RightAbs = styled.div`
   transform: translateY(-50%);
 `;
 const Button = styled.button`
-  color: white;
+  color: #fff;
   max-width: 240px;
   width: 100%;
   border-radius: 20px;
@@ -266,7 +266,7 @@ const Video = styled.video`
   width: 240px;
   height: 200px;
   border-radius: 10px;
-  background-color: black;
+  background-color: #000;
   box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.5);
   margin-bottom: 30px;
 `;

@@ -12,16 +12,13 @@ const Header = () => {
   const setOnLogin = useSetRecoilState(onLoginState);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   const [isClick, setIsClick] = useState(false);
-  // console.log(isLogin);
   const preAccessToken = sessionStorage.getItem("accessToken");
   const navigate = useNavigate();
 
   useEffect(() => {
     preAccessToken ? setIsLogin(true) : setIsLogin(false);
-    // console.log(userLoginData);
-    // checkLogin();
-    // console.log(checkLogin());
   }, [preAccessToken]);
+
   // 헤더 배경 등 고정
   const [isFixed, setIsFixed] = useState(false);
   console.log(isFixed);
@@ -46,14 +43,7 @@ const Header = () => {
       <Wrap>
         <FlexRow gap="10px" justifyContent="space-between">
           <FlexRow gap="10px">
-            {/* <LogoBox onClick={() => navigate("/")}>
-              <LogoItem />
-            </LogoBox> */}
             <Img onClick={() => navigate("/")} src="img/logo.png" alt="logo" />
-
-            {/* <Text fontSize="20px" fontWeight="600" color="white">
-              떨면뭐하니
-            </Text> */}
           </FlexRow>
           <FlexRow gap="30px">
             <UpWidth500>
@@ -93,13 +83,6 @@ const Ctn = styled.div<ICtn>`
       return "transparent";
     }
   }};
-  /* box-shadow: ${(props) => {
-    if (props.isFixed) {
-      return "0 3px 10px rgba(0,0,0,0.3);";
-    } else {
-      return "none";
-    }
-  }}; */
 `;
 
 const Wrap = styled.div`
@@ -128,7 +111,7 @@ const Btn = styled.button`
   background-color: transparent;
   border: none;
   font-family: 400;
-  color: white;
+  color: #fff;
   cursor: pointer;
 `;
 

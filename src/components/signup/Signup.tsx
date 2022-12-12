@@ -1,6 +1,6 @@
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import { FlexCol, HeaderBox, Text } from "../../elements/elements";
+import { FlexCol, HeaderBox } from "../../elements/elements";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineAlert } from "react-icons/ai";
@@ -27,14 +27,6 @@ interface IForm {
   gender: string;
   stack: string;
 }
-
-// interface IDate {
-//   setModify: (state: boolean) => void;
-// }
-// export const ACCESS_TOKEN = sessionStorage.getItem("accesstoken");
-// export const REFRESH_TOKEN = sessionStorage.getItem("refreshtoken");
-// console.log(ACCESS_TOKEN);
-// console.log(ACCESS_TOKEN);
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -68,7 +60,6 @@ const Signup = () => {
         setIsCheckEmailState(true);
         setIsChecked(true);
       } catch (e: any | unknown) {
-        console.log(e.response.status);
         if (e.response.status === 400) {
           alert("이미 가입된 이메일입니다.");
         }
@@ -82,16 +73,9 @@ const Signup = () => {
     formState: { errors },
     setError,
     control,
-  } = useForm<IForm>({
-    // defaultValues: {
-    //   email: "@naver.com",
-    // },
-    // mode: "onChange",
-    // criteriaMode: "firstError",
-  });
+  } = useForm<IForm>({});
 
   const onValid = async (submitData: IForm) => {
-    console.log(submitData);
     if (checkSucceed) {
       if (submitData.password !== submitData.confirmPw) {
         setError(
@@ -116,10 +100,8 @@ const Signup = () => {
             stack: submitData.stack,
             validate: process.env.REACT_APP_CHECK_SIGNUP_KEY,
           };
-          // console.log(req);
 
           const { data } = await UserApi.post(`members/signup`, req);
-          console.log(data.message);
           if (data.message) {
             alert("회원가입이 완료되었습니다.");
             navigate("/");
@@ -129,7 +111,6 @@ const Signup = () => {
           if (error.response.status === 400) {
             alert("이미 가입된 계정입니다. 이메일을 확인해주세요.");
           }
-          console.log(error.response);
           return error.response;
         }
       }
@@ -162,7 +143,7 @@ const Signup = () => {
       return errors.stack.message;
     }
   };
-  console.log(totalError());
+
   return (
     <>
       <HeaderBox />

@@ -77,7 +77,6 @@ const GridMob = styled(FlexRow)`
 `;
 
 const Ctn = styled.div`
-  /* border: 1px solid red; */
   padding: 20px;
   max-width: 1200px;
   width: 100%;

@@ -39,7 +39,6 @@ const MyPage = ({ users, setModify }: IProps) => {
   const [job, setJob] = useState(users?.job);
   const [stack, setStack] = useState(users?.stack);
   const [startDate, setStartDate] = useState(new Date());
-  // const [, ] = useState(users?.phoneNum);
 
   const onChangeEmail = (e: any) => {
     setMembersEmail(e?.currentTarget.value);
@@ -53,9 +52,6 @@ const MyPage = ({ users, setModify }: IProps) => {
   const onChangeStack = (e: any) => {
     setStack(e?.currentTarget.value);
   };
-  // const  = (e: any) => {
-  //   (e?.currentTarget.value);
-  // };
 
   const {
     register,
@@ -63,13 +59,7 @@ const MyPage = ({ users, setModify }: IProps) => {
     formState: { errors },
     setError,
     control,
-  } = useForm<IProps>({
-    // defaultValues: {
-    //   email: "@naver.com",
-    // },
-    // mode: "onChange",
-    // criteriaMode: "firstError",
-  });
+  } = useForm<IProps>({});
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -114,7 +104,6 @@ const MyPage = ({ users, setModify }: IProps) => {
             <Rows>
               <RowOne>생년월일</RowOne>
               <RowTwo>
-                {/* <input type="text" value={birth || ""} onChange={onBirth} /> */}
                 <Controller
                   control={control}
                   name="users.birth"
@@ -155,13 +144,10 @@ const MyPage = ({ users, setModify }: IProps) => {
           </FlexCol>
         </InnerWrap>
       </Inform>
-      {/* </Container> */}
     </>
   );
 };
 export default MyPage;
-
-// const Container = styled.form``;
 
 const Modify = styled.div`
   display: flex;
@@ -241,16 +227,4 @@ const RowTwo = styled(RowOne)`
 
 const DatePickerWid = styled(DatePicker)`
   width: 100% !important;
-`;
-
-const Input = styled.input`
-  width: 50%;
-  height: 50px;
-  padding: 8px 20px;
-  border-radius: 67px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-  border: 1px solid ${(props) => props.theme.__grayLight};
-  :focus {
-    outline: 1px solid ${(props) => props.theme.__grayMedium};
-  }
 `;

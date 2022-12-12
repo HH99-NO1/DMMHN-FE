@@ -387,7 +387,7 @@ const Simulation = () => {
 const BGBlack = styled.div`
   width: 100%;
   /* height: 100%; */
-  height: calc(100vh);
+  /* height: calc(100vh); */
   background: #092001;
   overflow: hidden;
 `;
@@ -488,9 +488,6 @@ const TextEl = styled(Text)`
   @media screen and (max-width: 800px) {
     font-size: 20px;
   }
-  /* @media screen and (max-width: 500px) {
-    font-size: 16px;
-  } */
 `;
 const Video = styled.video`
   max-width: 500px;

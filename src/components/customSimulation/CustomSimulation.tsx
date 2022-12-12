@@ -2,13 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import {
-  FlexCol,
-  FlexRow,
-  Gap,
-  HeaderBox,
-  Liner,
-} from "../../elements/elements";
+import { FlexCol, FlexRow, HeaderBox } from "../../elements/elements";
 import { isSimulationState, test } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
 
@@ -25,8 +19,6 @@ interface IQuestions {
 const CustomSimulation = () => {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState<IQuestions[]>();
-  console.log(questions);
-
   const getCustomQuestion = async () => {
     try {
       const { data } = await instance.get(`mockInterview/custom/`);
@@ -61,7 +53,6 @@ const CustomSimulation = () => {
       category: "custom",
       question: inputQuestion,
     };
-    console.log(config);
 
     if (window.confirm(`질문을 추가하시겠습니까?`)) {
       try {
@@ -88,7 +79,6 @@ const CustomSimulation = () => {
   const setTest = useSetRecoilState(test);
   const setSimulation = useSetRecoilState(isSimulationState);
   const goToCustomSimulation = () => {
-    console.log("가즈아");
     const userName = sessionStorage.getItem("userName");
     if (
       window.confirm(
@@ -101,7 +91,6 @@ const CustomSimulation = () => {
           category: "custom",
           questionArr: questionArr,
         };
-        console.log(customQuestions);
         setTest(customQuestions);
         setSimulation(true);
         navigate("/simulation");
@@ -120,7 +109,6 @@ const CustomSimulation = () => {
         const newQuestions = questions?.filter((curr) => {
           return !(id === curr._id);
         });
-        console.log(newQuestions);
         setQuestions(newQuestions);
 
         alert("커스텀 질문이 정상적으로 삭제되었습니다.");
@@ -193,7 +181,6 @@ const CustomSimulation = () => {
   );
 };
 const Ctn = styled.div`
-  /* border: 1px solid red; */
   padding: 20px;
   max-width: 800px;
   width: 100%;
@@ -245,8 +232,8 @@ const SubmitBtn = styled.button`
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: white;
-  color: black;
+  background-color: #fff;
+  color: #000;
   border: 1px solid ${(props) => props.theme.__greenMidium};
   border-radius: 20px;
   padding: 4px 12px;
@@ -268,7 +255,7 @@ const NumberArea = styled.span`
   justify-content: right;
 `;
 const QuestionsList = styled(FlexCol)`
-  background-color: white;
+  background-color: #fff;
   padding: 20px 10px;
   gap: 20px;
   border-radius: 20px;
@@ -281,7 +268,7 @@ const SignupBtn = styled.button`
   border: none;
   background-color: #025729;
   border-radius: 67px;
-  color: white;
+  color: #fff;
   font-size: 20px;
   font-weight: 600;
   cursor: pointer;

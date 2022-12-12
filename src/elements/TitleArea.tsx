@@ -24,6 +24,10 @@ const Title = styled.div`
   align-items: center;
   font-size: 20px;
   font-weight: 400;
+  @media screen and (max-width: 600px) {
+    height: 50px;
+    font-size: 16px;
+  }
 `;
 
 export default TitleArea;

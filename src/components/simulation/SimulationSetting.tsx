@@ -150,6 +150,9 @@ const BGBlack = styled.div`
   width: 100%;
   height: calc(100vh - 121px);
   background: #092001;
+  @media screen and (max-width: 600px) {
+    height: calc(100vh);
+  }
 `;
 
 const Ctn = styled.div`
@@ -165,8 +168,12 @@ const Ctn = styled.div`
   margin: 0 auto;
   padding: 30px;
   color: #fff;
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 600px) {
     width: 90%;
+    position: relative;
+    transform: none;
+    left: 0;
+    top: 30px;
   }
 `;
 
@@ -206,6 +213,9 @@ const Select = styled.select`
   width: 100%;
   background-color: inherit;
   color: #fff;
+  @media screen and (max-width: 600px) {
+    font-size: 13px;
+  }
 `;
 
 const Input = styled.input`
@@ -242,12 +252,22 @@ const Input = styled.input`
     box-shadow: 0 0 0px 1000px transparent inset;
     transition: background-color 5000s ease-in-out 0s;
   }
+
+  @media screen and (max-width: 600px) {
+    ::placeholder {
+      font-size: 13px;
+    }
+  }
 `;
 const RightAbs = styled.div`
   position: absolute;
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
+  color: #fff;
+  @media screen and (max-width: 600px) {
+    font-size: 13px;
+  }
 `;
 const Button = styled.button`
   color: #fff;

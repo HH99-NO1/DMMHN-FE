@@ -119,7 +119,7 @@ const MyPage = ({ users, setModify }: IProps) => {
                   control={control}
                   name="users.birth"
                   render={() => (
-                    <DatePicker
+                    <DatePickerWid
                       {...register("users.birth")}
                       locale={ko}
                       dateFormat="yyyy - MM - dd"
@@ -237,6 +237,10 @@ const RowTwo = styled(RowOne)`
       outline: 1px solid ${(props) => props.theme.__grayMedium};
     }
   }
+`;
+
+const DatePickerWid = styled(DatePicker)`
+  width: 100% !important;
 `;
 
 const Input = styled.input`

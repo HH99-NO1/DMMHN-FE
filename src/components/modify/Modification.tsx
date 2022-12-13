@@ -222,6 +222,13 @@ const RowTwo = styled(RowOne)`
     :focus {
       outline: 1px solid ${(props) => props.theme.__grayMedium};
     }
+
+    @media screen and (max-width: 600px) {
+      width: 100%;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    width: auto;
   }
 `;
 

@@ -54,6 +54,10 @@ const Ctn = styled(FlexRow)`
     left: auto;
     transform: translate(0, 0);
   }
+
+  @media screen and (max-width: 600px) {
+    position: relative;
+  }
 `;
 
 const Img = styled.img`
@@ -81,6 +85,10 @@ const MainText = styled.h2`
   @media screen and (max-height: 800px) {
     font-size: 24px;
   }
+
+  @media screen and (max-width: 600px) {
+    font-size: 20px;
+  }
 `;
 
 const MainInnerText = styled.span`
@@ -98,6 +106,10 @@ const SubText = styled.p`
   }
   @media screen and (max-height: 800px) {
     font-size: 16px;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 15px;
   }
 `;
 const LoginBtn = styled.button`
@@ -121,6 +133,11 @@ const LoginBtn = styled.button`
   }
   @media screen and (max-height: 800px) {
     font-size: 24px;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 18px;
+    max-width: 200px;
   }
 `;
 export default Home;

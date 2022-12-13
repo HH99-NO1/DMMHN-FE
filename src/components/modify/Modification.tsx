@@ -1,6 +1,6 @@
 import Layout from "../home/Layout";
 import styled from "styled-components";
-import { FlexRow, FlexCol, Text, Gap } from "../../elements/elements";
+import { FlexRow, FlexCol, Text } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm, useFormState } from "react-hook-form";
@@ -35,6 +35,7 @@ interface IProps {
 
 const MyPage = ({ users, setModify }: IProps) => {
   const [startDate, setStartDate] = useState(new Date());
+
   // const [name, setName] = useState(users?.memberName);
   const [btnChange, setBtnChange] = useState(false);
 
@@ -44,6 +45,7 @@ const MyPage = ({ users, setModify }: IProps) => {
   // const onChangeStack = (e: any) => {
   //   setStack(e?.currentTarget.value);
   // };
+
   const {
     register,
     handleSubmit,
@@ -51,6 +53,7 @@ const MyPage = ({ users, setModify }: IProps) => {
     setError,
     control,
   } = useForm<IProps>({});
+
 
   const onSubmit = async (submitData: IProps) => {
     console.log(submitData);
@@ -216,6 +219,7 @@ const MyPage = ({ users, setModify }: IProps) => {
 };
 export default MyPage;
 
+
 const Container = styled.form``;
 
 const SelectDiv = styled.div`
@@ -232,6 +236,7 @@ const Label = styled.label`
     margin-left: 0;
   }
 `;
+
 
 const Modify = styled.div`
   display: flex;
@@ -259,7 +264,7 @@ const Btn = styled.button`
 
 const Inform = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: #fff;
   border: 1px solid lightgray;
 `;
 
@@ -308,5 +313,15 @@ const RowTwo = styled(RowOne)`
     :focus {
       outline: 1px solid ${(props) => props.theme.__grayMedium};
     }
+    @media screen and (max-width: 600px) {
+      width: 100%;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    width: auto;
   }
 `;
+const DatePickerWid = styled(DatePicker)`
+  width: 100% !important;
+`;
+

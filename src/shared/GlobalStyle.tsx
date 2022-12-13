@@ -83,15 +83,15 @@ a {
   color: inherit;
 }
 
-.react-datepicker-wrapper{
+/* .react-datepicker-wrapper{
   width: 50%;
-}
+} */
 
 .birth-datepicker {
   border: none;
 }
 .react-datepicker {
-  border: 1px solid red;
+  border: 1px solid #ff0000;
 }
 
 .react-datepicker__input-container{
@@ -105,7 +105,10 @@ a {
     border: 1px solid ${(props) => props.theme.__grayLight};
   }
   position: relative;
-  width: auto;
+  width: 300px;
+  @media screen and (max-width: 600px) {
+    width: auto;
+  }
 }
 .react-datepicker__close-icon {
   right: 0
@@ -115,7 +118,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-	-webkit-text-fill-color: black;
+	-webkit-text-fill-color: #000;
     -webkit-box-shadow: 0 0 0px 1000px transparent inset;
     box-shadow: 0 0 0px 1000px transparent inset;
     transition: background-color 5000s ease-in-out 0s;
@@ -125,7 +128,7 @@ input:autofill,
 input:autofill:hover,
 input:autofill:focus,
 input:autofill:active {
-	-webkit-text-fill-color: black;
+	-webkit-text-fill-color: #000;
     -webkit-box-shadow: 0 0 0px 1000px transparent inset;
     box-shadow: 0 0 0px 1000px transparent inset;
     transition: background-color 5000s ease-in-out 0s;

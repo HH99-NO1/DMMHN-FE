@@ -77,7 +77,6 @@ const GridMob = styled(FlexRow)`
 `;
 
 const Ctn = styled.div`
-  /* border: 1px solid red; */
   padding: 20px;
   max-width: 1200px;
   width: 100%;
@@ -94,12 +93,19 @@ const TitleBar = styled.div`
   font-size: 20px;
   font-weight: 600;
   background-color: ${(props) => props.theme.__grayLight};
+  @media screen and (max-width: 600px) {
+    font-size: 17px;
+  }
 `;
 
 const LinkBtn = styled.div`
   width: 32.2%;
+  margin-bottom: 20px;
   @media screen and (max-width: 850px) {
     width: 100%;
+  }
+  @media screen and (max-width: 600px) {
+    margin-bottom: 0;
   }
 `;
 

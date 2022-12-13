@@ -20,8 +20,6 @@ const CheckEmailModal = () => {
   };
   const userEmail = useRecoilValue(userEmailValue);
   const checkServerCode = () => {
-    console.log("serverCode: ", serverCode);
-    console.log("checkCode: ", checkCode);
     if (serverCode + "" === checkCode) {
       alert("인증이 완료되었습니다.");
       setIsCheckEmailState(false);
@@ -129,7 +127,7 @@ const Ctn = styled.div`
 `;
 
 const CheckCtn = styled.div`
-  background-color: white;
+  background-color: #fff;
   position: relative;
   border: 1px solid #ebebeb;
   border-radius: 10px;
@@ -203,7 +201,7 @@ const InputBox = styled.div`
 
 const CheckBtn = styled.button`
   background-color: ${(props) => props.theme.__greenMidium};
-  color: white;
+  color: #fff;
   border: none;
   font-size: 16px;
   font-weight: 600;

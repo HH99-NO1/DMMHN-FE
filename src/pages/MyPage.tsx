@@ -219,14 +219,6 @@ const MyPage = () => {
                 <InnerWrap>
                   <FlexCol alignItem="left">
                     <Rows>
-                      <RowOne>계정</RowOne>
-                      <RowTwo>
-                        {users?.memberEmail === undefined
-                          ? `입력값이 없습니다. 빈칸을 수정해주세요.`
-                          : users?.memberEmail}
-                      </RowTwo>
-                    </Rows>
-                    <Rows>
                       <RowOne>생년월일</RowOne>
                       <RowTwo>
                         {users?.birth === undefined
@@ -237,7 +229,7 @@ const MyPage = () => {
                     <Rows>
                       <RowOne>직업</RowOne>
                       <RowTwo>
-                        {users?.job === undefined
+                        {users?.job === null
                           ? `입력값이 없습니다. 빈칸을 수정해주세요.`
                           : users?.job}
                       </RowTwo>
@@ -245,7 +237,7 @@ const MyPage = () => {
                     <Rows>
                       <RowOne>스택</RowOne>
                       <RowTwo>
-                        {users?.stack === undefined
+                        {users?.stack
                           ? `입력값이 없습니다. 빈칸을 수정해주세요.`
                           : users?.stack}
                       </RowTwo>

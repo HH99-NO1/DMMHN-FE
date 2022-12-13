@@ -100,8 +100,12 @@ const TitleBar = styled.div`
 
 const LinkBtn = styled.div`
   width: 32.2%;
+  margin-bottom: 20px;
   @media screen and (max-width: 850px) {
     width: 100%;
+  }
+  @media screen and (max-width: 600px) {
+    margin-bottom: 0;
   }
 `;
 

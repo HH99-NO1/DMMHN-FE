@@ -83,9 +83,9 @@ a {
   color: inherit;
 }
 
-.react-datepicker-wrapper{
+/* .react-datepicker-wrapper{
   width: 50%;
-}
+} */
 
 .birth-datepicker {
   border: none;
@@ -105,7 +105,10 @@ a {
     border: 1px solid ${(props) => props.theme.__grayLight};
   }
   position: relative;
-  width: auto;
+  width: 300px;
+  @media screen and (max-width: 600px) {
+    width: auto;
+  }
 }
 .react-datepicker__close-icon {
   right: 0

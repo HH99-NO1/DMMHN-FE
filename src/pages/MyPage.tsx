@@ -327,7 +327,7 @@ const RowOne = styled.div`
   }
 
   @media screen and (max-width: 600px) {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;
 
@@ -341,7 +341,7 @@ const SubTitle = styled.div`
   font-size: 20px;
   font-weight: 600;
   @media screen and (max-width: 600px) {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;
 
@@ -397,6 +397,6 @@ const DelUserBtn = styled.button`
 
 const UserInfo = styled(Text)`
   @media screen and (max-width: 600px) {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;

@@ -72,7 +72,11 @@ const LoginModal = () => {
       return window.location.reload();
     } catch (error: any) {
       if (error.response.status === 400) {
-        alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+        alert("비밀번호가 일치하지 않습니다.");
+      } else if (error.response.status === 401) {
+        alert("등록되지 않은 사용자입니다.");
+      } else {
+        console.log("알수 없는 오류입니다.");
       }
       return error.response;
     }

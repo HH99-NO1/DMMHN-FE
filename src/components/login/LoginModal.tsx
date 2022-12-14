@@ -14,11 +14,13 @@ import { FlexCol, FlexRow, Liner, Text } from "../../elements/elements";
 import errorNotYet from "../errors/errorNotYet";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
+  checkSucceedState,
   isLoginState,
   onLoginState,
   userState,
 } from "../../recoil/atoms/atoms";
 import jwt_decode from "jwt-decode";
+import FindPasswordModal from "./FindPasswordModal";
 
 interface IForm {
   memberEmail: string;
@@ -38,7 +40,9 @@ const LoginModal = () => {
   const setLoginUserState = useSetRecoilState(userState);
   const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
+  const [isFindPW, setIsFindPW] = useState(false);
 
+  // 패스워드 보이는 상태
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   // useForm 등록
@@ -84,12 +88,13 @@ const LoginModal = () => {
 
   // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
   const modalRef = useRef<HTMLDivElement>(null);
-
+  const setCheckSucceed = useSetRecoilState(checkSucceedState);
   useEffect(() => {
     // 이벤트 핸들러 함수
     const handler = (event: any) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         setOnLogin(false);
+        setCheckSucceed(false);
       }
     };
 
@@ -116,7 +121,7 @@ const LoginModal = () => {
     <Portal>
       <BGBlack>
         <Ctn>
-          <LoginCtn ref={modalRef}>
+          <LoginCtn ref={modalRef} isFindPW={isFindPW}>
             <CloseBtn onClick={() => setOnLogin(false)}>
               <GrClose size={16} />
             </CloseBtn>
@@ -172,7 +177,7 @@ const LoginModal = () => {
             </LoginBody>
             <Liner />
             <LoginFooter>
-              <TextEl onClick={() => errorNotYet()}>비밀번호 찾기</TextEl>
+              <TextEl onClick={() => setIsFindPW(true)}>비밀번호 찾기</TextEl>
               <TextOr />
               <TextEl
                 onClick={() => {
@@ -183,6 +188,12 @@ const LoginModal = () => {
                 회원가입
               </TextEl>
             </LoginFooter>
+            {isFindPW && (
+              <>
+                <BGBlack2 />
+                <FindPasswordModal setIsFindPW={setIsFindPW} />
+              </>
+            )}
           </LoginCtn>
         </Ctn>
       </BGBlack>
@@ -190,8 +201,21 @@ const LoginModal = () => {
   );
 };
 
+// 비밀번호 찾기가 활성화 되어 있을 때, 활성화
+const BGBlack2 = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 300px;
+  width: 100%;
+  height: 100%;
+  z-index: 7;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
 // 모달 배경화면
 const BGBlack = styled.div`
+  position: relative;
   z-index: 6;
   width: 100%;
   height: calc(100vh);
@@ -218,12 +242,23 @@ const Ctn = styled.div`
   overflow: hidden;
 `;
 
-const LoginCtn = styled.div`
-  background-color: white;
+interface ILoginCtn {
+  isFindPW: boolean;
+}
+const LoginCtn = styled.div<ILoginCtn>`
   position: relative;
-  border: 1px solid #ebebeb;
   border-radius: 10px;
   margin: 0% 3%;
+  background-color: white;
+  border: 1px solid
+    ${(props) => {
+      if (!props.isFindPW) {
+        return "#ebebeb";
+      } else {
+        return "none";
+      }
+    }};
+  overflow: hidden;
 `;
 
 // 모달 닫기 버튼

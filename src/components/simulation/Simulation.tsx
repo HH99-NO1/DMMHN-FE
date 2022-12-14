@@ -210,11 +210,30 @@ const Simulation = () => {
   useEffect(() => {
     getMedia();
   }, []);
+
+  // 배경 비율 조정 props
+  const [isFixed, setIsFixed] = useState(false);
+  const handleShowButton = () => {
+    if (window.scrollY > 0) {
+      setIsFixed(true);
+    } else {
+      setIsFixed(false);
+    }
+  };
+
+  useEffect(() => {
+    handleShowButton();
+    window.addEventListener("scroll", handleShowButton);
+    return () => {
+      window.removeEventListener("scroll", handleShowButton);
+    };
+  }, []);
+
   return (
     <>
       <BGBlack>
         <Gap gap="60px" />
-        <Padding20>
+        <Padding20 isFixed={isFixed}>
           <Ctn>
             <CategoryArea>
               모의면접 -{" "}
@@ -236,19 +255,16 @@ const Simulation = () => {
             <SimulationHeader>
               {isStart ? (
                 <>
-                  {currValue !== "모의 면접이 종료되었습니다." ? (
-                    <TextEl fontSize="24px" fontWeight="600">
-                      Q{result.length}.
-                    </TextEl>
-                  ) : (
-                    <Congratulation>
+                  <Congratulation>
+                    {currValue !== "모의 면접이 종료되었습니다." ? (
+                      <CongratulationImg src="img/running.gif" alt="running" />
+                    ) : (
                       <CongratulationImg
                         src="img/congratulations.gif"
                         alt="congratulation"
                       />
-                    </Congratulation>
-                  )}
-
+                    )}
+                  </Congratulation>
                   <TextEl fontSize="30px" fontWeight="600">
                     {currValue}
                   </TextEl>
@@ -389,11 +405,20 @@ const BGBlack = styled.div`
   height: auto;
   background: #092001;
 `;
-const Padding20 = styled.div`
+interface IPadding20 {
+  isFixed?: boolean;
+}
+const Padding20 = styled.div<IPadding20>`
   padding: 0 20px;
   margin-top: 50px;
   padding-bottom: 50px;
-  height: 100vh;
+  height: ${(props) => {
+    if (props.isFixed) {
+      return "100%";
+    } else {
+      return "calc(100vh - 110px)";
+    }
+  }};
 `;
 const Ctn = styled.div`
   position: relative;

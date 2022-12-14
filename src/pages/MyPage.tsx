@@ -220,8 +220,8 @@ const MyPage = () => {
                         users?.stack[0] === "JavaScript" ||
                         users?.stack[0] === "Node.js" ||
                         users?.stack[0] === "Spring"
-                          ? users?.stack
-                          : `입력값이 없습니다. 빈칸을 수정해주세요.`}
+                          ? `입력값이 없습니다. 빈칸을 수정해주세요.`
+                          : users?.stack}
                       </RowTwo>
                     </Rows>
                   </FlexCol>
@@ -326,6 +326,7 @@ const RowOne = styled.div`
 `;
 
 const RowTwo = styled(RowOne)`
+  width: 400px;
   @media screen and (max-width: 600px) {
     flex-basis: 40px;
   }

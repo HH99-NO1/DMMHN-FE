@@ -8,6 +8,7 @@ import { isLoginState, userState } from "../recoil/atoms/atoms";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
+import { GrStackOverflow } from "react-icons/gr";
 
 interface IUsers {
   memberEmail: string;
@@ -22,10 +23,8 @@ interface IUsers {
 const MyPage = () => {
   // 로딩 상태 관리
   const [isLoading, setIsLoading] = useState(false);
-
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
-
   const [users, setUsers] = useState<IUsers>();
   const [modify, setModify] = useState(false);
   const [img, setImg] = useState<any>(
@@ -45,7 +44,7 @@ const MyPage = () => {
           },
         }
       );
-      console.log(data);
+      console.log(data.stack[0]);
       setUsers(data);
     } catch (e) {
       console.log(e);
@@ -217,9 +216,12 @@ const MyPage = () => {
                     <Rows>
                       <RowOne>스택</RowOne>
                       <RowTwo>
-                        {users?.stack === undefined
-                          ? `입력값이 없습니다. 빈칸을 수정해주세요.`
-                          : users?.stack}
+                        {users?.stack[0] === "React" ||
+                        users?.stack[0] === "JavaScript" ||
+                        users?.stack[0] === "Node.js" ||
+                        users?.stack[0] === "Spring"
+                          ? users?.stack
+                          : `입력값이 없습니다. 빈칸을 수정해주세요.`}
                       </RowTwo>
                     </Rows>
                   </FlexCol>

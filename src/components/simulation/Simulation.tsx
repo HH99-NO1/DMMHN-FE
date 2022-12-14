@@ -210,11 +210,30 @@ const Simulation = () => {
   useEffect(() => {
     getMedia();
   }, []);
+
+  // 배경 비율 조정 props
+  const [isFixed, setIsFixed] = useState(false);
+  const handleShowButton = () => {
+    if (window.scrollY > 0) {
+      setIsFixed(true);
+    } else {
+      setIsFixed(false);
+    }
+  };
+
+  useEffect(() => {
+    handleShowButton();
+    window.addEventListener("scroll", handleShowButton);
+    return () => {
+      window.removeEventListener("scroll", handleShowButton);
+    };
+  }, []);
+
   return (
     <>
       <BGBlack>
         <Gap gap="60px" />
-        <Padding20>
+        <Padding20 isFixed={isFixed}>
           <Ctn>
             <CategoryArea>
               모의면접 -{" "}
@@ -383,21 +402,23 @@ const Simulation = () => {
 };
 const BGBlack = styled.div`
   width: 100%;
-  /* height: 100%; */
-  height: calc(100vh);
+  height: auto;
   background: #092001;
-  overflow: hidden;
-  @media screen and (max-height: 900px) {
-    height: 100%;
-  }
 `;
-const Padding20 = styled.div`
+interface IPadding20 {
+  isFixed?: boolean;
+}
+const Padding20 = styled.div<IPadding20>`
   padding: 0 20px;
   margin-top: 50px;
-  margin-bottom: 20px;
   padding-bottom: 50px;
-  height: 100%;
-  /* overflow: auto; */
+  height: ${(props) => {
+    if (props.isFixed) {
+      return "100%";
+    } else {
+      return "calc(100vh - 110px)";
+    }
+  }};
 `;
 const Ctn = styled.div`
   position: relative;

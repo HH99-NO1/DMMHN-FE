@@ -62,7 +62,6 @@ const SimulationSetting = () => {
       category: category,
       number: number,
     };
-    console.log(config);
 
     if (window.confirm("모의면접을 시작하시겠습니까?")) {
       try {
@@ -148,11 +147,11 @@ const SimulationSetting = () => {
 
 const BGBlack = styled.div`
   width: 100%;
-  height: calc(100vh - 121px);
+  height: calc(100vh);
   background: #092001;
-  @media screen and (max-width: 600px) {
+  /* @media screen and (max-width: 600px) {
     height: calc(100vh);
-  }
+  } */
 `;
 
 const Ctn = styled.div`
@@ -160,7 +159,7 @@ const Ctn = styled.div`
   border: 1px solid #014021;
   border-radius: 20px;
   position: fixed;
-  top: 200px;
+  top: 150px;
   left: 50%;
   transform: translateX(-50%);
   max-width: 500px;
@@ -173,7 +172,7 @@ const Ctn = styled.div`
     position: relative;
     transform: none;
     left: 0;
-    top: 30px;
+    top: 50px;
   }
 `;
 

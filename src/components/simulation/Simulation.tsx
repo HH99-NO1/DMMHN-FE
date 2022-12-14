@@ -236,19 +236,16 @@ const Simulation = () => {
             <SimulationHeader>
               {isStart ? (
                 <>
-                  {currValue !== "모의 면접이 종료되었습니다." ? (
-                    <TextEl fontSize="24px" fontWeight="600">
-                      Q{result.length}.
-                    </TextEl>
-                  ) : (
-                    <Congratulation>
+                  <Congratulation>
+                    {currValue !== "모의 면접이 종료되었습니다." ? (
+                      <CongratulationImg src="img/running.gif" alt="running" />
+                    ) : (
                       <CongratulationImg
                         src="img/congratulations.gif"
                         alt="congratulation"
                       />
-                    </Congratulation>
-                  )}
-
+                    )}
+                  </Congratulation>
                   <TextEl fontSize="30px" fontWeight="600">
                     {currValue}
                   </TextEl>
@@ -387,16 +384,20 @@ const Simulation = () => {
 const BGBlack = styled.div`
   width: 100%;
   /* height: 100%; */
-  /* height: calc(100vh); */
+  height: calc(100vh);
   background: #092001;
   overflow: hidden;
+  @media screen and (max-height: 900px) {
+    height: 100%;
+  }
 `;
 const Padding20 = styled.div`
   padding: 0 20px;
   margin-top: 50px;
+  margin-bottom: 20px;
   padding-bottom: 50px;
   height: 100%;
-  overflow: auto;
+  /* overflow: auto; */
 `;
 const Ctn = styled.div`
   position: relative;

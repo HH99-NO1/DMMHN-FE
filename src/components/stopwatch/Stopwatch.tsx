@@ -4,7 +4,6 @@ import useStopwatch from "../../hooks/useStopwatch";
 import Controllers from "./Controllers";
 import Laps from "./Laps";
 import Time from "./Time";
-import stopwatchTime from "./utils/stopwatchTime";
 
 const Stopwatch: React.FC = () => {
   const { seconds, status, laps, nextLap, start, stop, record, reset } =
@@ -55,7 +54,7 @@ const Screen = styled.div`
   height: 100%;
   border-radius: 30px;
   overflow: hidden;
-  background-color: black;
+  background-color: #000;
 
   display: flex;
   flex-direction: column;

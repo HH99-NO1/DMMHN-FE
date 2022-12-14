@@ -32,9 +32,9 @@ const Post = ({ post }: IPost) => {
     <PostCtn>
       <PostBox>
         <PostHeader>
-          <Text fontSize="30px" fontWeight="600">
+          <DateText fontSize="30px" fontWeight="600">
             {dateChange(post.createdAt)}
-          </Text>
+          </DateText>
           <SmallText>
             {post.totalTime} / {post.number} 문항
           </SmallText>
@@ -58,7 +58,6 @@ const PostCtn = styled.div`
   width: 100%;
   height: auto;
   padding: 20px;
-  margin-bottom: 20px;
   border-radius: 10px;
   border: 3px solid ${(props) => props.theme.__grayLight};
   transition: all, 0.3s;
@@ -66,18 +65,16 @@ const PostCtn = styled.div`
   :hover {
     border: 3px solid ${(props) => props.theme.__greenMidium};
   }
-  @media screen and (max-width: 600px) {
-    margin-bottom: 0;
-  }
 `;
+
 const PostBox = styled(FlexCol)`
   gap: 20px;
   align-items: flex-start;
   @media screen and (max-width: 600px) {
-    flex-direction: row;
     align-items: flex-end;
   }
 `;
+
 const PostHeader = styled(FlexRow)`
   width: 100%;
   gap: 10px;
@@ -86,8 +83,11 @@ const PostHeader = styled(FlexRow)`
   @media screen and (max-width: 850px) {
     justify-content: left;
   }
+`;
+
+const DateText = styled(Text)`
   @media screen and (max-width: 600px) {
-    width: 150px;
+    font-size: 17px;
   }
 `;
 
@@ -97,12 +97,17 @@ const SmallText = styled.span`
     position: absolute;
     top: 10px;
     right: 10px;
+    font-size: 15px;
   }
 `;
+
 const TextEl = styled(Text)`
   font-size: 20px;
   font-weight: 400;
   width: 100%;
+  @media screen and (max-width: 600px) {
+    font-size: 16px;
+  }
 `;
 
 export default Post;

@@ -1,8 +1,12 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Portal from "./Portal";
 import styled from "styled-components";
 import { GrClose } from "react-icons/gr";
-import { AiOutlineAlert } from "react-icons/ai";
+import {
+  AiOutlineAlert,
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+} from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { UserApi } from "../../recoil/instance";
 import { useForm } from "react-hook-form";
@@ -10,11 +14,13 @@ import { FlexCol, FlexRow, Liner, Text } from "../../elements/elements";
 import errorNotYet from "../errors/errorNotYet";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
+  checkSucceedState,
   isLoginState,
   onLoginState,
   userState,
 } from "../../recoil/atoms/atoms";
 import jwt_decode from "jwt-decode";
+import FindPasswordModal from "./FindPasswordModal";
 
 interface IForm {
   memberEmail: string;
@@ -34,6 +40,10 @@ const LoginModal = () => {
   const setLoginUserState = useSetRecoilState(userState);
   const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
+  const [isFindPW, setIsFindPW] = useState(false);
+
+  // 패스워드 보이는 상태
+  const [isShowPassword, setIsShowPassword] = useState(false);
 
   // useForm 등록
   const {
@@ -44,7 +54,6 @@ const LoginModal = () => {
 
   // useForm을 통한 제출 이벤트
   const onValid = async (submitData: IForm) => {
-    console.log(submitData);
     try {
       const req = {
         memberEmail: submitData.memberEmail,
@@ -66,10 +75,12 @@ const LoginModal = () => {
       }
       return window.location.reload();
     } catch (error: any) {
-      console.log(error.response);
-      // console.log(error.message);
       if (error.response.status === 400) {
-        alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+        alert("비밀번호가 일치하지 않습니다.");
+      } else if (error.response.status === 401) {
+        alert("등록되지 않은 사용자입니다.");
+      } else {
+        console.log("알수 없는 오류입니다.");
       }
       return error.response;
     }
@@ -77,12 +88,13 @@ const LoginModal = () => {
 
   // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
   const modalRef = useRef<HTMLDivElement>(null);
-
+  const setCheckSucceed = useSetRecoilState(checkSucceedState);
   useEffect(() => {
     // 이벤트 핸들러 함수
     const handler = (event: any) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         setOnLogin(false);
+        setCheckSucceed(false);
       }
     };
 
@@ -109,11 +121,11 @@ const LoginModal = () => {
     <Portal>
       <BGBlack>
         <Ctn>
-          <LoginCtn ref={modalRef}>
+          <LoginCtn ref={modalRef} isFindPW={isFindPW}>
             <CloseBtn onClick={() => setOnLogin(false)}>
               <GrClose size={16} />
             </CloseBtn>
-            <LoginHeader>이메일로 로그인</LoginHeader>
+            <LoginHeader>로그인</LoginHeader>
             <LoginBody onSubmit={handleSubmit(onValid)}>
               <FlexCol gap="10px">
                 <InputBox>
@@ -127,70 +139,45 @@ const LoginModal = () => {
                     })}
                     placeholder="이메일"
                   />
-                  <Input
-                    type="password"
-                    pattern="[A-Za-z\d@!%*#?&]*"
-                    {...register("password", {
-                      required: "비밀번호를 입력해주세요.",
-                    })}
-                    placeholder="비밀번호"
-                  />
+                  <InputDiv>
+                    <Input
+                      type={!isShowPassword ? "password" : "text"}
+                      {...register("password", {
+                        required: "비밀번호를 입력해주세요.",
+                      })}
+                      placeholder="비밀번호"
+                    />
+                    <ToggleBtn
+                      type="button"
+                      onClick={() => setIsShowPassword(!isShowPassword)}
+                    >
+                      {!isShowPassword ? (
+                        <AiOutlineEyeInvisible size={24} />
+                      ) : (
+                        <AiOutlineEye size={24} />
+                      )}
+                    </ToggleBtn>
+                  </InputDiv>
                   <CheckBox>
-                    {
-                      errors?.memberEmail?.message ? (
-                        <ErrorMsg>
-                          <AiOutlineAlert
-                            fill="tomato"
-                            stroke="tomato"
-                            strokeWidth={30}
-                            size={16}
-                          />
-                          {errors?.memberEmail?.message}
-                        </ErrorMsg>
-                      ) : null
-                      // (
-                      //   <>
-                      //     <input id="login_is" type="checkbox" />
-                      //     <label htmlFor="login_is">로그인 상태 유지</label>
-                      //   </>
-                      // )
-                    }
+                    {errors?.memberEmail?.message ? (
+                      <ErrorMsg>
+                        <AiOutlineAlert
+                          fill="tomato"
+                          stroke="tomato"
+                          strokeWidth={30}
+                          size={16}
+                        />
+                        {errors?.memberEmail?.message}
+                      </ErrorMsg>
+                    ) : null}
                   </CheckBox>
                 </InputBox>
                 <LoginBtn>로그인</LoginBtn>
-                {/* <span>{errors?.extraError?.message}</span> */}
               </FlexCol>
             </LoginBody>
-            <Or>또는</Or>
-            {/* <SocialItemBox>
-              <Img
-                onClick={() => errorNotYet()}
-                border={true}
-                src="/img/apple.png"
-                alt="apple"
-              />
-              <Img
-                onClick={() => errorNotYet()}
-                border={true}
-                src="/img/google.png"
-                alt="google"
-              />
-              <Img
-                onClick={() => errorNotYet()}
-                src="/img/kakao.png"
-                alt="kakao"
-              />
-              <Img
-                onClick={() => errorNotYet()}
-                src="/img/naver.png"
-                alt="naver"
-              />
-            </SocialItemBox> */}
             <Liner />
             <LoginFooter>
-              <TextEl onClick={() => errorNotYet()}>
-                아이디/비밀번호 찾기
-              </TextEl>
+              <TextEl onClick={() => setIsFindPW(true)}>비밀번호 찾기</TextEl>
               <TextOr />
               <TextEl
                 onClick={() => {
@@ -201,6 +188,12 @@ const LoginModal = () => {
                 회원가입
               </TextEl>
             </LoginFooter>
+            {isFindPW && (
+              <>
+                <BGBlack2 />
+                <FindPasswordModal setIsFindPW={setIsFindPW} />
+              </>
+            )}
           </LoginCtn>
         </Ctn>
       </BGBlack>
@@ -208,8 +201,21 @@ const LoginModal = () => {
   );
 };
 
+// 비밀번호 찾기가 활성화 되어 있을 때, 활성화
+const BGBlack2 = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 300px;
+  width: 100%;
+  height: 100%;
+  z-index: 7;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
 // 모달 배경화면
 const BGBlack = styled.div`
+  position: relative;
   z-index: 6;
   width: 100%;
   height: calc(100vh);
@@ -234,28 +240,25 @@ const Ctn = styled.div`
   width: 100%;
   margin: 0 auto;
   overflow: hidden;
-
-  /* @media screen and (max-width: 800px) {
-    top: auto;
-    bottom: 0;
-    margin-bottom: -10px;
-    transform: translate(-50%, 0%);
-  }
-  @media screen and (max-height: 620px) {
-    position: relative;
-    height: 100%;
-    top: 0;
-    left: 0;
-    transform: translate(0%, 0%);
-  } */
 `;
 
-const LoginCtn = styled.div`
-  background-color: white;
+interface ILoginCtn {
+  isFindPW: boolean;
+}
+const LoginCtn = styled.div<ILoginCtn>`
   position: relative;
-  border: 1px solid #ebebeb;
   border-radius: 10px;
   margin: 0% 3%;
+  background-color: white;
+  border: 1px solid
+    ${(props) => {
+      if (!props.isFindPW) {
+        return "#ebebeb";
+      } else {
+        return "none";
+      }
+    }};
+  overflow: hidden;
 `;
 
 // 모달 닫기 버튼
@@ -318,6 +321,24 @@ const InputBox = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
+const InputDiv = styled(InputBox)`
+  gap: 0;
+`;
+const ToggleBtn = styled.button`
+  display: flex;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  & svg {
+    fill: ${(props) => props.theme.__grayMedium};
+  }
+`;
 
 const CheckBox = styled(FlexRow)`
   gap: 10px;
@@ -338,7 +359,7 @@ const ErrorMsg = styled(FlexRow)`
 
 const LoginBtn = styled.button`
   background-color: ${(props) => props.theme.__greenMidium};
-  color: white;
+  color: #fff;
   border: none;
   font-size: 16px;
   font-weight: 600;
@@ -350,13 +371,6 @@ const LoginBtn = styled.button`
   :hover {
     box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.5) inset;
   }
-`;
-
-const Or = styled.span`
-  min-width: 50px;
-  color: ${(props) => props.theme.__grayDark};
-  font-size: 14px;
-  text-align: center;
 `;
 
 // 소셜로그인 영역

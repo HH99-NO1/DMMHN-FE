@@ -20,8 +20,6 @@ const CheckEmailModal = () => {
   };
   const userEmail = useRecoilValue(userEmailValue);
   const checkServerCode = () => {
-    console.log("serverCode: ", serverCode);
-    console.log("checkCode: ", checkCode);
     if (serverCode + "" === checkCode) {
       alert("인증이 완료되었습니다.");
       setIsCheckEmailState(false);
@@ -34,31 +32,31 @@ const CheckEmailModal = () => {
   // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
   const setIsCheckEmailState = useSetRecoilState(isCheckEmail);
 
-  const modalRef = useRef<HTMLDivElement>(null);
+  // const modalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    // 이벤트 핸들러 함수
-    const handler = (event: any) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setIsCheckEmailState(false);
-      }
-    };
+  // useEffect(() => {
+  //   // 이벤트 핸들러 함수
+  //   const handler = (event: any) => {
+  //     if (modalRef.current && !modalRef.current.contains(event.target)) {
+  //       setIsCheckEmailState(false);
+  //     }
+  //   };
 
-    // 이벤트 핸들러 등록
-    document.addEventListener("mousedown", handler);
-    // document.addEventListener('touchstart', handler); // 모바일 대응
+  //   // 이벤트 핸들러 등록
+  //   document.addEventListener("mousedown", handler);
+  //   // document.addEventListener('touchstart', handler); // 모바일 대응
 
-    return () => {
-      // 이벤트 핸들러 해제
-      document.removeEventListener("mousedown", handler);
-      // document.removeEventListener('touchstart', handler); // 모바일 대응
-    };
-  });
+  //   return () => {
+  //     // 이벤트 핸들러 해제
+  //     document.removeEventListener("mousedown", handler);
+  //     // document.removeEventListener('touchstart', handler); // 모바일 대응
+  //   };
+  // });
 
   return (
     <BGBlack>
       <Ctn>
-        <CheckCtn ref={modalRef}>
+        <CheckCtn /* ref={modalRef}> */>
           <CloseBtn onClick={() => setIsCheckEmailState(false)}>
             <GrClose size={16} />
           </CloseBtn>
@@ -129,7 +127,7 @@ const Ctn = styled.div`
 `;
 
 const CheckCtn = styled.div`
-  background-color: white;
+  background-color: #fff;
   position: relative;
   border: 1px solid #ebebeb;
   border-radius: 10px;
@@ -203,7 +201,7 @@ const InputBox = styled.div`
 
 const CheckBtn = styled.button`
   background-color: ${(props) => props.theme.__greenMidium};
-  color: white;
+  color: #fff;
   border: none;
   font-size: 16px;
   font-weight: 600;

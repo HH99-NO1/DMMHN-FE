@@ -8,6 +8,7 @@ import { isLoginState, userState } from "../recoil/atoms/atoms";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
+import { GrStackOverflow } from "react-icons/gr";
 
 interface IUsers {
   memberEmail: string;
@@ -22,17 +23,14 @@ interface IUsers {
 const MyPage = () => {
   // 로딩 상태 관리
   const [isLoading, setIsLoading] = useState(false);
-
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
-
   const [users, setUsers] = useState<IUsers>();
   const [modify, setModify] = useState(false);
   const [img, setImg] = useState<any>(
     "https://i.ibb.co/jwSbV5Z/profile-default.png"
   );
   const [loginUserState, setLoginUserState] = useRecoilState(userState);
-  console.log(loginUserState);
 
   const getUserData = async () => {
     try {
@@ -46,7 +44,7 @@ const MyPage = () => {
           },
         }
       );
-      console.log(data);
+      console.log(data.stack[0]);
       setUsers(data);
     } catch (e) {
       console.log(e);
@@ -66,23 +64,12 @@ const MyPage = () => {
     getUserData();
   }, []);
 
-  // const inputRef = useRef<HTMLInputElement | null>(null);
-  // const onUploadImageButtonClick = () => {
-  //   if (!inputRef.current) {
-  //     return;
-  //   }
-  //   inputRef.current.click();
-  // };
-  console.log(users);
-
   const onChangeImg = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     if (e.target.files) {
       try {
-        console.log(e.target.files);
         const uploadFile = e.target.files[0];
-        console.log(uploadFile);
         const formData = new FormData();
         formData.append("profileImg", uploadFile);
 
@@ -122,7 +109,6 @@ const MyPage = () => {
   const deleteUserState = async () => {
     if (window.confirm("정말 회원탈퇴하시겠습니까?")) {
       try {
-        console.log("password: ", password);
         const { data } = await instance.delete(`/members/me`, {
           data: {
             password: password,
@@ -139,9 +125,6 @@ const MyPage = () => {
     } else return;
   };
 
-  // useEffect(() => {
-  //   users?.img && sessionStorage.setItem("userImg", users.img);
-  // }, [onChangeImg]);
   useEffect(() => {
     users?.img !== undefined && setImg(users.img);
   }, [users]);
@@ -155,10 +138,6 @@ const MyPage = () => {
         <Container>
           <Profile>
             <FlexRow gap="45px">
-              {/* <Button
-                label="이미지 업로드"
-                onClick={onUploadImageButtonClick}
-              /> */}
               <ImgBox>
                 <Img src={img} alt="userImg" />
                 <form>
@@ -219,14 +198,6 @@ const MyPage = () => {
                 <InnerWrap>
                   <FlexCol alignItem="left">
                     <Rows>
-                      <RowOne>계정</RowOne>
-                      <RowTwo>
-                        {users?.memberEmail === undefined
-                          ? `입력값이 없습니다. 빈칸을 수정해주세요.`
-                          : users?.memberEmail}
-                      </RowTwo>
-                    </Rows>
-                    <Rows>
                       <RowOne>생년월일</RowOne>
                       <RowTwo>
                         {users?.birth === undefined
@@ -237,7 +208,7 @@ const MyPage = () => {
                     <Rows>
                       <RowOne>직업</RowOne>
                       <RowTwo>
-                        {users?.job === undefined
+                        {users?.job === null
                           ? `입력값이 없습니다. 빈칸을 수정해주세요.`
                           : users?.job}
                       </RowTwo>
@@ -245,7 +216,10 @@ const MyPage = () => {
                     <Rows>
                       <RowOne>스택</RowOne>
                       <RowTwo>
-                        {users?.stack === undefined
+                        {users?.stack[0] === "React" ||
+                        users?.stack[0] === "JavaScript" ||
+                        users?.stack[0] === "Node.js" ||
+                        users?.stack[0] === "Spring"
                           ? `입력값이 없습니다. 빈칸을 수정해주세요.`
                           : users?.stack}
                       </RowTwo>
@@ -314,7 +288,7 @@ const Btn = styled.button`
 
 const Inform = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: #fff;
   border: 1px solid lightgray;
 `;
 
@@ -347,11 +321,12 @@ const RowOne = styled.div`
   }
 
   @media screen and (max-width: 600px) {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;
 
 const RowTwo = styled(RowOne)`
+  width: 400px;
   @media screen and (max-width: 600px) {
     flex-basis: 40px;
   }
@@ -361,7 +336,7 @@ const SubTitle = styled.div`
   font-size: 20px;
   font-weight: 600;
   @media screen and (max-width: 600px) {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;
 
@@ -377,7 +352,7 @@ const ImgChangeLabel = styled.label`
   position: absolute;
   bottom: 0;
   right: 0;
-  background-color: white;
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -417,6 +392,6 @@ const DelUserBtn = styled.button`
 
 const UserInfo = styled(Text)`
   @media screen and (max-width: 600px) {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;

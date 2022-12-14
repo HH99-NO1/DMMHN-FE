@@ -12,7 +12,7 @@ const Time: React.FC<IProps> = ({ seconds }) => {
 };
 
 const Container = styled.div`
-  color: white;
+  color: #fff;
   font-size: 60px;
 
   display: flex;

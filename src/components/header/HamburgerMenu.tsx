@@ -73,10 +73,6 @@ const HamburgerMenu = ({ setIsClick }: IHamburgerMenu) => {
           >
             <strong>Log out</strong>
           </MenuBox>
-          <MenuLine />
-          <MenuBox bgColor="#FAE6E6" onClick={() => navigate("/meeting")}>
-            면접 룸
-          </MenuBox>
         </>
       )}
     </Ctn>
@@ -105,7 +101,7 @@ const Ctn = styled.div`
   top: 70px;
   right: 20px;
   min-width: 200px;
-  background-color: white;
+  background-color: #fff;
   border-radius: 10px;
   padding: 10px 0;
   box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.1);

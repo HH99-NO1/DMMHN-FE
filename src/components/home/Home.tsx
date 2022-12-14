@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { FlexRow, Gap, HeaderBox } from "../../elements/elements";
-import { onLoginState } from "../../recoil/atoms/atoms";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -44,9 +42,14 @@ const Ctn = styled(FlexRow)`
   gap: 10%;
   justify-content: center;
   align-items: center;
-  overflow: auto;
+  /* overflow: auto; */
   @media screen and (max-width: 1180px) {
+    position: relative;
+    gap: 40px;
     flex-direction: column;
+    top: auto;
+    left: auto;
+    transform: translate(0, 0);
   }
   @media screen and (max-height: 600px) {
     position: relative;
@@ -55,6 +58,10 @@ const Ctn = styled(FlexRow)`
     top: auto;
     left: auto;
     transform: translate(0, 0);
+  }
+
+  @media screen and (max-width: 600px) {
+    position: relative;
   }
 `;
 
@@ -76,12 +83,16 @@ const MainText = styled.h2`
   font-weight: 700;
   line-height: 1.5;
   margin-bottom: 25px;
-  color: white;
+  color: #fff;
   @media screen and (max-width: 800px) {
     font-size: 24px;
   }
   @media screen and (max-height: 800px) {
     font-size: 24px;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 20px;
   }
 `;
 
@@ -94,12 +105,16 @@ const SubText = styled.p`
   font-size: 20px;
   font-weight: 200;
   line-height: 1.5;
-  color: white;
+  color: #fff;
   @media screen and (max-width: 800px) {
     font-size: 16px;
   }
   @media screen and (max-height: 800px) {
     font-size: 16px;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 15px;
   }
 `;
 const LoginBtn = styled.button`
@@ -123,6 +138,11 @@ const LoginBtn = styled.button`
   }
   @media screen and (max-height: 800px) {
     font-size: 24px;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 18px;
+    max-width: 200px;
   }
 `;
 export default Home;

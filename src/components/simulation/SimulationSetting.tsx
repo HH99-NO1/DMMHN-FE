@@ -62,7 +62,6 @@ const SimulationSetting = () => {
       category: category,
       number: number,
     };
-    console.log(config);
 
     if (window.confirm("모의면접을 시작하시겠습니까?")) {
       try {
@@ -148,8 +147,11 @@ const SimulationSetting = () => {
 
 const BGBlack = styled.div`
   width: 100%;
-  height: calc(100vh - 121px);
+  height: calc(100vh);
   background: #092001;
+  /* @media screen and (max-width: 600px) {
+    height: calc(100vh);
+  } */
 `;
 
 const Ctn = styled.div`
@@ -157,7 +159,7 @@ const Ctn = styled.div`
   border: 1px solid #014021;
   border-radius: 20px;
   position: fixed;
-  top: 200px;
+  top: 150px;
   left: 50%;
   transform: translateX(-50%);
   max-width: 500px;
@@ -165,8 +167,12 @@ const Ctn = styled.div`
   margin: 0 auto;
   padding: 30px;
   color: #fff;
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 600px) {
     width: 90%;
+    position: relative;
+    transform: none;
+    left: 0;
+    top: 50px;
   }
 `;
 
@@ -205,7 +211,10 @@ const Select = styled.select`
   appearance: none;
   width: 100%;
   background-color: inherit;
-  color: white;
+  color: #fff;
+  @media screen and (max-width: 600px) {
+    font-size: 13px;
+  }
 `;
 
 const Input = styled.input`
@@ -213,7 +222,7 @@ const Input = styled.input`
   width: 100%;
   font-size: 16px;
   background-color: transparent !important;
-  color: white;
+  color: #fff;
   :focus {
     background: transparent;
   }
@@ -227,7 +236,7 @@ const Input = styled.input`
   :-webkit-autofill:hover,
   :-webkit-autofill:focus,
   :-webkit-autofill:active {
-    -webkit-text-fill-color: white;
+    -webkit-text-fill-color: #fff;
     -webkit-box-shadow: 0 0 0px 1000px transparent inset;
     box-shadow: 0 0 0px 1000px transparent inset;
     transition: background-color 5000s ease-in-out 0s;
@@ -237,10 +246,16 @@ const Input = styled.input`
   :autofill:hover,
   :autofill:focus,
   :autofill:active {
-    -webkit-text-fill-color: white;
+    -webkit-text-fill-color: #fff;
     -webkit-box-shadow: 0 0 0px 1000px transparent inset;
     box-shadow: 0 0 0px 1000px transparent inset;
     transition: background-color 5000s ease-in-out 0s;
+  }
+
+  @media screen and (max-width: 600px) {
+    ::placeholder {
+      font-size: 13px;
+    }
   }
 `;
 const RightAbs = styled.div`
@@ -248,9 +263,13 @@ const RightAbs = styled.div`
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
+  color: #fff;
+  @media screen and (max-width: 600px) {
+    font-size: 13px;
+  }
 `;
 const Button = styled.button`
-  color: white;
+  color: #fff;
   max-width: 240px;
   width: 100%;
   border-radius: 20px;
@@ -266,7 +285,7 @@ const Video = styled.video`
   width: 240px;
   height: 200px;
   border-radius: 10px;
-  background-color: black;
+  background-color: #000;
   box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.5);
   margin-bottom: 30px;
 `;

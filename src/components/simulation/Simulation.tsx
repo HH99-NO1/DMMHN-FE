@@ -210,11 +210,30 @@ const Simulation = () => {
   useEffect(() => {
     getMedia();
   }, []);
+
+  // 배경 비율 조정 props
+  const [isFixed, setIsFixed] = useState(false);
+  const handleShowButton = () => {
+    if (window.scrollY > 0) {
+      setIsFixed(true);
+    } else {
+      setIsFixed(false);
+    }
+  };
+
+  useEffect(() => {
+    handleShowButton();
+    window.addEventListener("scroll", handleShowButton);
+    return () => {
+      window.removeEventListener("scroll", handleShowButton);
+    };
+  }, []);
+
   return (
     <>
       <BGBlack>
         <Gap gap="60px" />
-        <Padding20>
+        <Padding20 isFixed={isFixed}>
           <Ctn>
             <CategoryArea>
               모의면접 -{" "}
@@ -236,19 +255,16 @@ const Simulation = () => {
             <SimulationHeader>
               {isStart ? (
                 <>
-                  {currValue !== "모의 면접이 종료되었습니다." ? (
-                    <TextEl fontSize="24px" fontWeight="600">
-                      Q{result.length}.
-                    </TextEl>
-                  ) : (
-                    <Congratulation>
+                  <Congratulation>
+                    {currValue !== "모의 면접이 종료되었습니다." ? (
+                      <CongratulationImg src="img/running.gif" alt="running" />
+                    ) : (
                       <CongratulationImg
                         src="img/congratulations.gif"
                         alt="congratulation"
                       />
-                    </Congratulation>
-                  )}
-
+                    )}
+                  </Congratulation>
                   <TextEl fontSize="30px" fontWeight="600">
                     {currValue}
                   </TextEl>
@@ -267,9 +283,9 @@ const Simulation = () => {
             <FlexCol gap="10px">
               {isResult && (
                 <ResultArea>
-                  <Text fontSize="20px" fontWeight="600">
+                  <TextMod fontSize="20px" fontWeight="600">
                     모의면접 진행 현황
-                  </Text>
+                  </TextMod>
                   <Gap gap="30px" />
                   <FlexCol gap="10px" width="100%">
                     {result &&
@@ -342,7 +358,7 @@ const Simulation = () => {
             {currValue !== "모의 면접이 종료되었습니다." ? (
               <>
                 {!isStart ? (
-                  <Button
+                  <StartBtnMob
                     id="startBtn"
                     onClick={(event) => {
                       requestAudioFile(event);
@@ -353,26 +369,26 @@ const Simulation = () => {
                     }}
                   >
                     시작
-                  </Button>
+                  </StartBtnMob>
                 ) : (
-                  <Button
+                  <StartBtnMob
                     onClick={(event) => {
                       record();
                       requestAudioFile(event);
                     }}
                   >
                     다음 질문으로
-                  </Button>
+                  </StartBtnMob>
                 )}
               </>
             ) : (
-              <Button
+              <StartBtnMob
                 onClick={() => {
                   onResult();
                 }}
               >
                 결과 보기
-              </Button>
+              </StartBtnMob>
             )}
 
             <IconArea onClick={() => setIsResult(!isResult)}>
@@ -386,17 +402,23 @@ const Simulation = () => {
 };
 const BGBlack = styled.div`
   width: 100%;
-  /* height: 100%; */
-  height: calc(100vh);
+  height: auto;
   background: #092001;
-  overflow: hidden;
 `;
-const Padding20 = styled.div`
+interface IPadding20 {
+  isFixed?: boolean;
+}
+const Padding20 = styled.div<IPadding20>`
   padding: 0 20px;
   margin-top: 50px;
   padding-bottom: 50px;
-  height: 100%;
-  overflow: auto;
+  height: ${(props) => {
+    if (props.isFixed) {
+      return "100%";
+    } else {
+      return "calc(100vh - 110px)";
+    }
+  }};
 `;
 const Ctn = styled.div`
   position: relative;
@@ -421,7 +443,17 @@ const CategoryArea = styled(Text)`
   width: auto;
   font-size: 20px;
   font-weight: 400;
+  @media screen and (max-width: 600px) {
+    font-size: 16px;
+  }
 `;
+
+const TextMod = styled(Text)`
+  @media screen and (max-width: 600px) {
+    font-size: 16px;
+  }
+`;
+
 const Congratulation = styled.div``;
 const CongratulationImg = styled.img`
   width: 80px;
@@ -439,10 +471,15 @@ const CheckQuestion = styled.div`
   margin: 0 auto;
   border: 1px solid #014021;
   background-color: #092304;
-  color: white;
+  color: #fff;
   @media screen and (max-width: 800px) {
     position: absolute;
     right: 20px;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 16px;
+    width: 80px;
+    height: 40px;
   }
 `;
 const SimulationHeader = styled(FlexCol)`
@@ -476,21 +513,29 @@ const Button = styled.button`
   align-items: center;
   border: 1px solid #014021;
   background-color: #092304;
-  color: white;
+  color: #fff;
   font-weight: 600;
   border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
   transition: all, 0.3s;
 `;
+
+const StartBtnMob = styled(Button)`
+  @media screen and (max-width: 600px) {
+    font-size: 16px;
+    width: 180px;
+  }
+`;
+
 const TextEl = styled(Text)`
-  color: white;
+  color: #fff;
   @media screen and (max-width: 800px) {
     font-size: 20px;
   }
-  /* @media screen and (max-width: 500px) {
+  @media screen and (max-width: 600px) {
     font-size: 16px;
-  } */
+  }
 `;
 const Video = styled.video`
   max-width: 500px;
@@ -558,6 +603,9 @@ const TotalTimeTitle = styled(Text)`
   font-weight: 400;
   @media screen and (max-width: 800px) {
     font-size: 12px;
+  }
+  @media screen and (max-width: 600px) {
+    padding-left: 10px;
   }
 `;
 

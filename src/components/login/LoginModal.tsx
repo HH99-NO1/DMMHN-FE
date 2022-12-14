@@ -149,11 +149,9 @@ const LoginModal = () => {
                 <LoginBtn>로그인</LoginBtn>
               </FlexCol>
             </LoginBody>
-            <Or>또는</Or>
+            <Liner />
             <LoginFooter>
-              <TextEl onClick={() => errorNotYet()}>
-                아이디/비밀번호 찾기
-              </TextEl>
+              <TextEl onClick={() => errorNotYet()}>비밀번호 찾기</TextEl>
               <TextOr />
               <TextEl
                 onClick={() => {

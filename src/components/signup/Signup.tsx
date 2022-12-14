@@ -4,6 +4,7 @@ import { FlexCol, HeaderBox } from "../../elements/elements";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineAlert } from "react-icons/ai";
+import { GrPowerReset } from "react-icons/gr";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ko from "date-fns/locale/ko";
@@ -42,7 +43,7 @@ const Signup = () => {
   const setServerCode = useSetRecoilState(serverCodeNumber);
   const [userEmail, setUserEmail] = useRecoilState(userEmailValue);
 
-  const checkSucceed = useRecoilValue(checkSucceedState);
+  const [checkSucceed, setCheckSucceed] = useRecoilState(checkSucceedState);
   const onChangeUserEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserEmail(event.currentTarget.value);
   };
@@ -51,19 +52,35 @@ const Signup = () => {
     if (userEmail.trim() === "") {
       return alert("이메일을 입력해주세요.");
     } else {
-      try {
-        const { data } = await UserApi.post("/members/sendAuthCode", {
-          memberEmail: userEmail,
-        });
-        setServerCode(data.data);
-        setUserEmail(userEmail);
-        setIsCheckEmailState(true);
-        setIsChecked(true);
-      } catch (e: any | unknown) {
-        if (e.response.status === 400) {
-          alert("이미 가입된 이메일입니다.");
+      const emailRegex = /^[a-z0-9+-\_.]{4,30}@[a-z]{4,30}\.[a-z]{2,4}$/;
+      console.log(emailRegex.test(userEmail));
+      if (emailRegex.test(userEmail)) {
+        try {
+          const { data } = await UserApi.post("/members/sendAuthCode", {
+            memberEmail: userEmail,
+          });
+          setServerCode(data.data);
+          setUserEmail(userEmail);
+          setIsCheckEmailState(true);
+          setIsChecked(true);
+        } catch (e: any | unknown) {
+          if (e.response.status === 400) {
+            alert("이미 가입된 이메일입니다.");
+          }
         }
+      } else {
+        return alert("이메일 형식을 확인해주세요.");
       }
+    }
+  };
+
+  // 이메일 초기화
+  const resetEmail = () => {
+    if (window.confirm("이메일을 초기화하고 새로 작성하시겠습니까?")) {
+      setUserEmail("");
+      setCheckSucceed(false);
+
+      alert("이메일이 초기화되었습니다.");
     }
   };
 
@@ -161,11 +178,15 @@ const Signup = () => {
           >
             <FlexCol gap="25px">
               <InputBox>
+                <ResetEmailBtn type="button" onClick={() => resetEmail()}>
+                  이메일 초기화
+                  <GrPowerReset size={12} />
+                </ResetEmailBtn>
                 <Input
                   {...register("memberEmail", {
                     required: "이메일을 입력해주세요.",
                     pattern: {
-                      value: /^[a-z0-9+-\_.]{4,15}@[a-z]{4,15}\.[a-z]{2,3}$/,
+                      value: /^[a-z0-9+-\_.]{4,30}@[a-z]{4,30}\.[a-z]{2,4}$/,
                       message: "이메일 형식을 확인해주세요.",
                     },
                   })}
@@ -193,9 +214,15 @@ const Signup = () => {
               <InputBox>
                 <Input
                   {...register("memberName", {
-                    required: "이름을 입력해주세요.",
+                    required: "닉네임을 입력해주세요.",
+                    pattern: {
+                      value: /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]{2,10}$/,
+                      message:
+                        "닉네임은 한글, 영문, 숫자로 2자 이상, 10자 이하 가능합니다.",
+                    },
                   })}
                   placeholder="닉네임"
+                  maxLength={10}
                 />
               </InputBox>
               <InputBox>
@@ -417,6 +444,30 @@ const Label = styled.label`
   margin-right: 10px;
   :last-child {
     margin-left: 0;
+  }
+`;
+const ResetEmailBtn = styled.button`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: auto;
+  height: 20px;
+  top: -30px;
+  padding: 4px 10px;
+  font-size: 10px;
+  right: 0;
+  border: 1px solid ${(props) => props.theme.__lineGray};
+  border-radius: 15px;
+  background-color: white;
+  cursor: pointer;
+  & svg path {
+    /* fill: ${(props) => props.theme.__greenMidium}; */
+    stroke: ${(props) => props.theme.__greenMidium};
+  }
+  :hover {
+    background-color: #efefef;
   }
 `;
 const InputBox = styled.div`

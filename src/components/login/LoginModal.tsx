@@ -1,8 +1,12 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Portal from "./Portal";
 import styled from "styled-components";
 import { GrClose } from "react-icons/gr";
-import { AiOutlineAlert } from "react-icons/ai";
+import {
+  AiOutlineAlert,
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+} from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { UserApi } from "../../recoil/instance";
 import { useForm } from "react-hook-form";
@@ -35,6 +39,8 @@ const LoginModal = () => {
   const isLogin = useRecoilValue(isLoginState);
   const navigate = useNavigate();
 
+  const [isShowPassword, setIsShowPassword] = useState(false);
+
   // useForm 등록
   const {
     register,
@@ -66,7 +72,11 @@ const LoginModal = () => {
       return window.location.reload();
     } catch (error: any) {
       if (error.response.status === 400) {
-        alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+        alert("비밀번호가 일치하지 않습니다.");
+      } else if (error.response.status === 401) {
+        alert("등록되지 않은 사용자입니다.");
+      } else {
+        console.log("알수 없는 오류입니다.");
       }
       return error.response;
     }
@@ -124,14 +134,25 @@ const LoginModal = () => {
                     })}
                     placeholder="이메일"
                   />
-                  <Input
-                    type="password"
-                    pattern="[A-Za-z\d@!%*#?&]*"
-                    {...register("password", {
-                      required: "비밀번호를 입력해주세요.",
-                    })}
-                    placeholder="비밀번호"
-                  />
+                  <InputDiv>
+                    <Input
+                      type={!isShowPassword ? "password" : "text"}
+                      {...register("password", {
+                        required: "비밀번호를 입력해주세요.",
+                      })}
+                      placeholder="비밀번호"
+                    />
+                    <ToggleBtn
+                      type="button"
+                      onClick={() => setIsShowPassword(!isShowPassword)}
+                    >
+                      {!isShowPassword ? (
+                        <AiOutlineEyeInvisible size={24} />
+                      ) : (
+                        <AiOutlineEye size={24} />
+                      )}
+                    </ToggleBtn>
+                  </InputDiv>
                   <CheckBox>
                     {errors?.memberEmail?.message ? (
                       <ErrorMsg>
@@ -149,11 +170,9 @@ const LoginModal = () => {
                 <LoginBtn>로그인</LoginBtn>
               </FlexCol>
             </LoginBody>
-            <Or>또는</Or>
+            <Liner />
             <LoginFooter>
-              <TextEl onClick={() => errorNotYet()}>
-                아이디/비밀번호 찾기
-              </TextEl>
+              <TextEl onClick={() => errorNotYet()}>비밀번호 찾기</TextEl>
               <TextOr />
               <TextEl
                 onClick={() => {
@@ -267,6 +286,24 @@ const InputBox = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
+const InputDiv = styled(InputBox)`
+  gap: 0;
+`;
+const ToggleBtn = styled.button`
+  display: flex;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  & svg {
+    fill: ${(props) => props.theme.__grayMedium};
+  }
+`;
 
 const CheckBox = styled(FlexRow)`
   gap: 10px;
@@ -299,13 +336,6 @@ const LoginBtn = styled.button`
   :hover {
     box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.5) inset;
   }
-`;
-
-const Or = styled.span`
-  min-width: 50px;
-  color: ${(props) => props.theme.__grayDark};
-  font-size: 14px;
-  text-align: center;
 `;
 
 // 소셜로그인 영역

@@ -16,5 +16,6 @@ export const lightTheme: DefaultTheme = {
   __grayDark: "#717171",
   __red: "#D10303",
   __greenMidium: "#025729",
+  __greenDark: "#014521",
   __yellowLight: "#FFF9C1",
 };

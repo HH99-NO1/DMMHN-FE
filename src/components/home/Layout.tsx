@@ -21,10 +21,18 @@ const LayoutCtn = styled.div`
     #058841 70%,
     ${(props) => props.theme.bgColor} 70%
   );
+  /* overflow: hidden; */
+  @media screen and (max-height: 600px) {
+    height: 100%;
+  }
 `;
 const LayoutBox = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
+  @media screen and (max-width: 1180px) {
+    height: auto;
+  }
 `;
 
 export default Layout;

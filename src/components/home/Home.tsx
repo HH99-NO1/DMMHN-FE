@@ -42,9 +42,14 @@ const Ctn = styled(FlexRow)`
   gap: 10%;
   justify-content: center;
   align-items: center;
-  overflow: auto;
+  /* overflow: auto; */
   @media screen and (max-width: 1180px) {
+    position: relative;
+    gap: 40px;
     flex-direction: column;
+    top: auto;
+    left: auto;
+    transform: translate(0, 0);
   }
   @media screen and (max-height: 600px) {
     position: relative;

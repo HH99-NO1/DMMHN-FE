@@ -110,7 +110,7 @@ const LoginModal = () => {
             <CloseBtn onClick={() => setOnLogin(false)}>
               <GrClose size={16} />
             </CloseBtn>
-            <LoginHeader>이메일로 로그인</LoginHeader>
+            <LoginHeader>로그인</LoginHeader>
             <LoginBody onSubmit={handleSubmit(onValid)}>
               <FlexCol gap="10px">
                 <InputBox>
@@ -150,7 +150,6 @@ const LoginModal = () => {
               </FlexCol>
             </LoginBody>
             <Or>또는</Or>
-            <Liner />
             <LoginFooter>
               <TextEl onClick={() => errorNotYet()}>
                 아이디/비밀번호 찾기

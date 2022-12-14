@@ -190,7 +190,7 @@ const TitleBar = styled.div`
   padding: 10px 20px;
   border-radius: 20px;
   width: 100%;
-  text-align: left;
+  text-align: center;
   font-size: 20px;
   font-weight: 600;
   background-color: ${(props) => props.theme.__grayLight};

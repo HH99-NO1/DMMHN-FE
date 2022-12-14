@@ -87,11 +87,16 @@ a {
   width: 50%;
 } */
 
+.react-datepicker__header {
+  border-bottom: 1px solid ${(props) => props.theme.__greenMidium};
+}
+
 .birth-datepicker {
   border: none;
 }
 .react-datepicker {
-  border: 1px solid #ff0000;
+  border: 1px solid ${(props) => props.theme.__grayLight};
+  box-shadow: 0px 4px 4px rgb(0 0 0 / 0.05);
 }
 
 .react-datepicker__input-container{
@@ -112,6 +117,20 @@ a {
 }
 .react-datepicker__close-icon {
   right: 0
+}
+.react-datepicker__close-icon::after {
+  background-color: ${(props) => props.theme.__grayMedium};
+}
+.react-datepicker__day:hover {
+  border-radius: 50%;
+}
+.react-datepicker__day--selected {
+  border-radius: 50%;
+  border: none;
+  background-color: ${(props) => props.theme.__greenMidium};
+}
+.react-datepicker__day--selected:hover {
+  background-color: ${(props) => props.theme.__greenDark};
 }
 
 input:-webkit-autofill,

@@ -121,6 +121,8 @@ const Signup = () => {
           const { data } = await UserApi.post(`members/signup`, req);
           if (data.message) {
             alert("회원가입이 완료되었습니다.");
+            setCheckSucceed(false);
+
             navigate("/");
             return setOnLogin(true);
           }
@@ -190,6 +192,7 @@ const Signup = () => {
                       message: "이메일 형식을 확인해주세요.",
                     },
                   })}
+                  style={{ paddingRight: "115px" }}
                   placeholder="이메일"
                   value={userEmail}
                   onChange={onChangeUserEmail}

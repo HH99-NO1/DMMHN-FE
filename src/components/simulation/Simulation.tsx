@@ -386,17 +386,14 @@ const Simulation = () => {
 };
 const BGBlack = styled.div`
   width: 100%;
-  /* height: 100%; */
-  /* height: calc(100vh); */
+  height: auto;
   background: #092001;
-  overflow: hidden;
 `;
 const Padding20 = styled.div`
   padding: 0 20px;
   margin-top: 50px;
   padding-bottom: 50px;
-  height: 100%;
-  overflow: auto;
+  height: 100vh;
 `;
 const Ctn = styled.div`
   position: relative;

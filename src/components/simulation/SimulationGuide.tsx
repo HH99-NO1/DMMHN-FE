@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
 import "swiper/css/pagination";
-import { FlexCol, Gap } from "../../elements/elements";
+import { FlexRow, Gap } from "../../elements/elements";
 import { useSetRecoilState } from "recoil";
 import { onLoginState } from "../../recoil/atoms/atoms";
 import Layout from "../home/Layout";
@@ -31,8 +31,9 @@ const SimulationGuide = () => {
             <br />
             떨면뭐하니와 함께라면 긴장을 이겨낼 수 있습니다.
           </SubText>
+          <LoginBtn onClick={() => onLogin(true)}>모의면접 시작하기</LoginBtn>
         </MainCenter>
-        <LoginBtn onClick={() => onLogin(true)}>모의면접 시작하기</LoginBtn>
+
         <StyledSwiper
           speed={1000}
           navigation={true}
@@ -44,16 +45,10 @@ const SimulationGuide = () => {
           loopedSlides={1}
         >
           <SwiperSlide>
-            <Img
-              src="https://user-images.githubusercontent.com/77138259/202983306-94a7eaba-80d7-4668-a7cd-cee962f7733a.png"
-              alt="mainImg1"
-            />
+            <Img src="/img/guideImg-1.png" alt="GuideImg-1" />
           </SwiperSlide>
           <SwiperSlide>
-            <Img
-              src="https://user-images.githubusercontent.com/77138259/202984418-2b1bb93e-d88a-4387-82f0-ee4244176066.png"
-              alt="mainImg2"
-            />
+            <Img src="/img/guideImg-2.png" alt="GuideImg-2" />
           </SwiperSlide>
         </StyledSwiper>
       </Ctn>
@@ -61,23 +56,42 @@ const SimulationGuide = () => {
   );
 };
 
-const Ctn = styled(FlexCol)`
+const Ctn = styled(FlexRow)`
   position: absolute;
-  padding: 20px;
+  padding: 0 20px 50px 20px;
   max-width: 1200px;
   width: 100%;
+  height: 100%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  margin: 0 auto 0 auto;
-  gap: 20px;
-  justify-content: space-between;
+  margin: 0 auto;
+  gap: 10%;
+  justify-content: center;
   align-items: center;
-  @media screen and (max-height: 600px) {
+  /* overflow: auto; */
+  @media screen and (max-width: 1180px) {
     position: relative;
+    gap: 40px;
+    flex-direction: column;
     top: auto;
     left: auto;
     transform: translate(0, 0);
+  }
+  @media screen and (max-width: 800px) {
+    margin-top: 50px;
+  }
+  @media screen and (max-height: 600px) {
+    position: relative;
+    gap: 40px;
+    flex-direction: column;
+    top: auto;
+    left: auto;
+    transform: translate(0, 0);
+  }
+
+  @media screen and (max-width: 600px) {
+    position: relative;
   }
 `;
 
@@ -90,8 +104,9 @@ const StyledSwiper = styled(Swiper)`
   max-width: 500px;
   width: 100%;
   position: relative;
+  height: auto;
   @media screen and (max-height: 800px) {
-    max-width: 300px;
+    max-width: 400px;
   }
 `;
 
@@ -104,12 +119,16 @@ const MainText = styled.h2`
   font-weight: 700;
   line-height: 1.5;
   margin-bottom: 25px;
-  color: white;
+  color: #fff;
   @media screen and (max-width: 800px) {
     font-size: 24px;
   }
   @media screen and (max-height: 800px) {
     font-size: 24px;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 20px;
   }
 `;
 
@@ -122,12 +141,16 @@ const SubText = styled.p`
   font-size: 20px;
   font-weight: 200;
   line-height: 1.5;
-  color: white;
+  color: #fff;
   @media screen and (max-width: 800px) {
     font-size: 16px;
   }
   @media screen and (max-height: 800px) {
     font-size: 16px;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 15px;
   }
 `;
 const LoginBtn = styled.button`
@@ -136,7 +159,7 @@ const LoginBtn = styled.button`
   border: none;
   font-size: 30px;
   font-weight: 600;
-  margin: 10px auto 10px auto;
+  margin: 30px auto 10px auto;
   max-width: 300px;
   width: 100%;
   padding: 10px 30px;
@@ -151,6 +174,11 @@ const LoginBtn = styled.button`
   }
   @media screen and (max-height: 800px) {
     font-size: 24px;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 18px;
+    max-width: 200px;
   }
 `;
 

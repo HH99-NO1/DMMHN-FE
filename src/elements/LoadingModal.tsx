@@ -1,10 +1,10 @@
 import FadeLoader from "react-spinners/FadeLoader";
-import { HeaderBox } from "../elements/elements";
+import styled from "styled-components";
+import { HeaderBox } from "./elements";
 
-function Loading() {
+const LoadingModal = () => {
   return (
-    <>
-      <HeaderBox />
+    <BGBlack>
       <div
         style={{
           position: "fixed",
@@ -21,8 +21,16 @@ function Loading() {
           margin={2}
         />
       </div>
-    </>
+    </BGBlack>
   );
-}
+};
 
-export default Loading;
+const BGBlack = styled.div`
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: calc(100vh);
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+export default LoadingModal;

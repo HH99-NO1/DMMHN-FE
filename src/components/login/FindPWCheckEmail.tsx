@@ -28,8 +28,6 @@ const FindPWCheckEmail = () => {
   const {
     register,
     formState: { errors },
-    setError,
-    control,
   } = useForm<IForm>({});
   console.log(errors);
 
@@ -38,6 +36,7 @@ const FindPWCheckEmail = () => {
     if (userEmail.trim() === "") {
       return alert("이메일을 입력해주세요.");
     } else {
+      // eslint-disable-next-line
       const emailRegex = /^[a-z0-9+-\_.]{4,30}@[a-z]{4,30}\.[a-z]{2,4}$/;
       console.log(emailRegex.test(userEmail));
       if (emailRegex.test(userEmail)) {
@@ -85,6 +84,7 @@ const FindPWCheckEmail = () => {
           {...register("memberEmail", {
             required: "이메일을 입력해주세요.",
             pattern: {
+              // eslint-disable-next-line
               value: /^[a-z0-9+-\_.]{4,30}@[a-z]{4,30}\.[a-z]{2,4}$/,
               message: "이메일 형식을 확인해주세요.",
             },

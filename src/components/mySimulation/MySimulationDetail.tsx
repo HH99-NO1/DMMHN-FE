@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import {
   FlexCol,
@@ -8,8 +9,9 @@ import {
   HeaderBox,
   Liner,
 } from "../../elements/elements";
+import { isLoginState } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
-import Loading from "../Loading";
+import Loading from "../../elements/Loading";
 
 const MySimulationDetail = () => {
   // 로딩 상태 관리
@@ -32,7 +34,7 @@ const MySimulationDetail = () => {
   };
   const [mySimulation, setMySimulation] = useState(init);
 
-  const getMySimulation = async () => {
+  const getMySimulation = useCallback(async () => {
     try {
       setIsLoading(true);
       const { data } = await instance.get(
@@ -45,7 +47,7 @@ const MySimulationDetail = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [postId]);
   const deleteMySimulation = async () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       try {
@@ -64,7 +66,7 @@ const MySimulationDetail = () => {
   };
   useEffect(() => {
     getMySimulation();
-  }, []);
+  }, [getMySimulation]);
 
   const dateChange = (date: string) => {
     console.log(date);
@@ -84,6 +86,15 @@ const MySimulationDetail = () => {
     spring: "백엔드 - spring",
     custom: "커스텀 질문 - custom",
   };
+
+  const isLogin = useRecoilValue(isLoginState);
+  useEffect(() => {
+    if (!isLogin) {
+      alert("잘못된 접근 경로입니다.");
+      return navigate(-1);
+    } else return;
+  }, [isLogin, navigate]);
+
   if (isLoading) {
     return <Loading />;
   } else {
@@ -93,7 +104,9 @@ const MySimulationDetail = () => {
         <Ctn>
           <FlexCol width="100%" gap="20px">
             <RightDiv>
-              <MoveBtn onClick={() => navigate(-1)}>이전으로</MoveBtn>
+              <MoveBtn onClick={() => navigate("/mysimulation")}>
+                목록으로
+              </MoveBtn>
               <DelBtn onClick={() => deleteMySimulation()}>삭제</DelBtn>
             </RightDiv>
             <FlexRow
@@ -147,6 +160,7 @@ const MySimulationDetail = () => {
                         <FlexCol width="100%" gap="10px" alignItem="flex-start">
                           {mySimulation.resultsArr.map((arr, index) => (
                             <FrowMob
+                              key={index}
                               width="100%"
                               gap="10px"
                               justifyContent="space-between"

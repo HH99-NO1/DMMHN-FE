@@ -7,9 +7,7 @@ import { useRecoilState } from "recoil";
 import { isLoginState, userState } from "../recoil/atoms/atoms";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Loading from "../components/Loading";
-import { GrStackOverflow } from "react-icons/gr";
-import { startOfWeek } from "date-fns/esm";
+import Loading from "../elements/Loading";
 
 interface IUsers {
   memberEmail: string;
@@ -62,7 +60,7 @@ const MyPage = () => {
       alert("잘못된 접근 경로입니다.");
       return navigate(-1);
     } else return;
-  }, []);
+  }, [isLogin, navigate]);
 
   useEffect(() => {
     getUserData();

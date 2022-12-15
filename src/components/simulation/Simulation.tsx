@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
 import RecordRTC from "recordrtc";
@@ -13,10 +13,14 @@ import stopwatchTime from "../stopwatch/utils/stopwatchTime";
 import { Player } from "video-react";
 import "video-react/dist/video-react.css";
 import { saveAs } from "file-saver";
+import LoadingModal from "../../elements/LoadingModal";
 
 let count = 0;
 
 const Simulation = () => {
+  // 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const [isStart, setIsStart] = useState(false);
   const [isResult, setIsResult] = useState(false);
@@ -60,6 +64,7 @@ const Simulation = () => {
     isStop && stop();
 
     try {
+      setIsLoading(true);
       const config = {
         question: value,
       };
@@ -91,6 +96,7 @@ const Simulation = () => {
         event.target.disabled = false;
         event.target.style.backgroundColor = "#092304";
       }, source.buffer.duration * 1000 + 500);
+      setIsLoading(false);
 
       let resultEl = {
         question: currValue,
@@ -116,11 +122,11 @@ const Simulation = () => {
       event.target.style.backgroundColor = "#092304";
       console.log(e);
     } finally {
+      setIsLoading(false);
     }
   };
 
   const getAudioContext = () => {
-    AudioContext = window.AudioContext; /* || window.webkitAudioContext */
     const audioContent = new AudioContext();
     return audioContent;
   };
@@ -181,7 +187,7 @@ const Simulation = () => {
     setRecorder(recorder);
   };
 
-  const stopRecording = () => {
+  const stopRecording = useCallback(() => {
     console.log("stop");
     if (recorder) {
       recorder.stopRecording(() => {
@@ -191,7 +197,7 @@ const Simulation = () => {
       });
       // (stream as any).stop();
     }
-  };
+  }, [recorder]);
 
   const downloadVideo = () => {
     console.log("down");
@@ -205,7 +211,7 @@ const Simulation = () => {
 
   useEffect(() => {
     currValue === "모의 면접이 종료되었습니다." && stopRecording();
-  }, [currValue]);
+  }, [currValue, stopRecording]);
 
   useEffect(() => {
     getMedia();
@@ -231,6 +237,7 @@ const Simulation = () => {
 
   return (
     <>
+      {isLoading && <LoadingModal />}
       <BGBlack>
         <Gap gap="60px" />
         <Padding20 isFixed={isFixed}>
@@ -559,7 +566,7 @@ const ResultArea = styled(FlexCol)`
 `;
 const IconArea = styled.div`
   position: absolute;
-  z-index: 4;
+  z-index: 0;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -3,12 +3,10 @@ import styled from "styled-components";
 import { FlexCol, HeaderBox } from "../../elements/elements";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineAlert } from "react-icons/ai";
-import { GrPowerReset } from "react-icons/gr";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ko from "date-fns/locale/ko";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   checkSucceedState,
   isCheckEmail,
@@ -17,6 +15,8 @@ import {
   userEmailValue,
 } from "../../recoil/atoms/atoms";
 import { UserApi } from "../../recoil/instance";
+import AlertItem from "../../elements/AlertItem";
+import ResetItem from "../../elements/ResetItem";
 
 interface IForm {
   memberEmail: string;
@@ -182,7 +182,7 @@ const Signup = () => {
               <InputBox>
                 <ResetEmailBtn type="button" onClick={() => resetEmail()}>
                   이메일 초기화
-                  <GrPowerReset size={12} />
+                  <ResetItem />
                 </ResetEmailBtn>
                 <Input
                   {...register("memberEmail", {
@@ -382,12 +382,7 @@ const Signup = () => {
               <Height30>
                 {totalError() && (
                   <ErrorMsg>
-                    <AiOutlineAlert
-                      fill="tomato"
-                      stroke="tomato"
-                      strokeWidth={30}
-                      size={16}
-                    />
+                    <AlertItem />
                     {totalError()}
                   </ErrorMsg>
                 )}
@@ -466,8 +461,10 @@ const ResetEmailBtn = styled.button`
   background-color: white;
   cursor: pointer;
   & svg path {
-    /* fill: ${(props) => props.theme.__greenMidium}; */
     stroke: ${(props) => props.theme.__greenMidium};
+  }
+  & svg {
+    width: 12px;
   }
   :hover {
     background-color: #efefef;
@@ -494,7 +491,10 @@ const ErrorMsg = styled.div`
   padding: 4px 10px;
   color: #747373;
   & svg {
-    min-width: 16px;
+    fill: tomato;
+    stroke: tomato;
+    stroke-width: 30;
+    width: 16px;
   }
 `;
 
@@ -521,7 +521,6 @@ const SignupBtn = styled.button`
 const GenderBox = styled.div`
   width: 100%;
   display: flex;
-
   span {
     width: 90px;
     font-weight: bold;

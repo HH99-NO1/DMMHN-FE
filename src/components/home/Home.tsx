@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { FlexRow, Gap, HeaderBox } from "../../elements/elements";
+import { FlexRow, Gap } from "../../elements/elements";
 
 const Home = () => {
   const navigate = useNavigate();
   return (
     <>
-      {/* <CustomGap /> */}
       <Gap />
       <Ctn>
         <MainCenter>
@@ -51,6 +50,9 @@ const Ctn = styled(FlexRow)`
     left: auto;
     transform: translate(0, 0);
   }
+  @media screen and (max-width: 800px) {
+    margin-top: 50px;
+  }
   @media screen and (max-height: 600px) {
     position: relative;
     gap: 40px;
@@ -66,9 +68,13 @@ const Ctn = styled(FlexRow)`
 `;
 
 const Img = styled.img`
-  max-width: 600px;
-  width: 100%;
-  height: auto;
+  width: 500px;
+  height: 356px;
+  @media screen and (max-width: 1180px) {
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+  }
   @media screen and (max-height: 800px) {
     max-width: 400px;
   }

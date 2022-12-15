@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { GrClose } from "react-icons/gr";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { checkSucceedState, userEmailValue } from "../../recoil/atoms/atoms";
 import FindPWCheckEmail from "./FindPWCheckEmail";
 import ChangePassword from "./ChangePassword";
+import CloseItem from "../../elements/CloseItem";
 
 const FindPasswordModal = ({
   setIsFindPW,
@@ -49,7 +49,7 @@ const FindPasswordModal = ({
               setIsFindPW(false);
             }}
           >
-            <GrClose size={16} />
+            <CloseItem />
           </CloseBtn>
           <Header>비밀번호 찾기</Header>
           <CheckBody>
@@ -120,6 +120,9 @@ const CloseBtn = styled.div`
   &:hover {
     background-color: #ebebeb;
     transform: rotate(-90deg);
+  }
+  & svg {
+    width: 16px;
   }
 `;
 

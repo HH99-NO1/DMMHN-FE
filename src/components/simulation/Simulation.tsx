@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { FlexCol, FlexRow, Gap, Text } from "../../elements/elements";
 import RecordRTC from "recordrtc";
@@ -120,7 +120,6 @@ const Simulation = () => {
   };
 
   const getAudioContext = () => {
-    AudioContext = window.AudioContext; /* || window.webkitAudioContext */
     const audioContent = new AudioContext();
     return audioContent;
   };
@@ -181,7 +180,7 @@ const Simulation = () => {
     setRecorder(recorder);
   };
 
-  const stopRecording = () => {
+  const stopRecording = useCallback(() => {
     console.log("stop");
     if (recorder) {
       recorder.stopRecording(() => {
@@ -191,7 +190,7 @@ const Simulation = () => {
       });
       // (stream as any).stop();
     }
-  };
+  }, [recorder]);
 
   const downloadVideo = () => {
     console.log("down");
@@ -205,7 +204,7 @@ const Simulation = () => {
 
   useEffect(() => {
     currValue === "모의 면접이 종료되었습니다." && stopRecording();
-  }, [currValue]);
+  }, [currValue, stopRecording]);
 
   useEffect(() => {
     getMedia();

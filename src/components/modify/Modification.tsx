@@ -54,7 +54,6 @@ const MyPage = ({ users, setModify }: IProps) => {
     control,
   } = useForm<IProps>({});
 
-
   const onSubmit = async (submitData: IProps) => {
     console.log(submitData);
     try {
@@ -219,7 +218,6 @@ const MyPage = ({ users, setModify }: IProps) => {
 };
 export default MyPage;
 
-
 const Container = styled.form``;
 
 const SelectDiv = styled.div`
@@ -236,7 +234,6 @@ const Label = styled.label`
     margin-left: 0;
   }
 `;
-
 
 const Modify = styled.div`
   display: flex;
@@ -324,4 +321,3 @@ const RowTwo = styled(RowOne)`
 const DatePickerWid = styled(DatePicker)`
   width: 100% !important;
 `;
-

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Gap } from "../../elements/elements";
 
 const Layout = (props: any) => {
   return (
@@ -21,7 +20,6 @@ const LayoutCtn = styled.div`
     #058841 70%,
     ${(props) => props.theme.bgColor} 70%
   );
-  /* overflow: hidden; */
   @media screen and (max-height: 600px) {
     height: 100%;
   }

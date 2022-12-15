@@ -149,9 +149,6 @@ const BGBlack = styled.div`
   width: 100%;
   height: calc(100vh);
   background: #092001;
-  /* @media screen and (max-width: 600px) {
-    height: calc(100vh);
-  } */
 `;
 
 const Ctn = styled.div`

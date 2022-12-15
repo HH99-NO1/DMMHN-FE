@@ -46,37 +46,6 @@ export const isLoginState = atom({
   default: checkDefaultLoginState,
 });
 
-// 로그인의 필요 여부를 체크하기 위한 상태
-export const isReqLoginState = atom({
-  key: "isReqLogin",
-  default: false,
-});
-
-export interface IStream {
-  videoState: string;
-  audioState: string;
-}
-
-export const StreamState = atom<IStream[]>({
-  key: "streamControl",
-  default: [],
-});
-
-export interface ILocalVideo {
-  onChange: boolean;
-}
-
-export const LocalVideoState = atom({
-  key: "LocalVideo",
-  default: true,
-});
-
-// 모의면접 커스텀 질문페이지 상태
-export const isCustom = atom({
-  key: "isCustom",
-  default: false,
-});
-
 // 모의면접 안내 및 영상녹화 동의
 export const isOK = atom({
   key: "isOK",
@@ -105,38 +74,4 @@ export const userEmailValue = atom({
 export const checkSucceedState = atom({
   key: "checkSucceedState",
   default: false,
-});
-
-// 스톱워치 시작 상태
-export const isTimeStartState = atom({
-  key: "isTimeStartState",
-  default: false,
-});
-
-// 스톱워치 정지 상태
-export const isStopState = atom({
-  key: "isStopState",
-  default: false,
-});
-
-// 스톱워치 랩 기록 상태
-export const isRecordState = atom({
-  key: "isRecordState",
-  default: false,
-});
-
-// 스톱워치 seconds 값
-export const timeSecondsValue = atom({
-  key: "timeSecondsValue",
-  default: "",
-});
-
-export const timeLapsValue = atom({
-  key: "timeLapsValue",
-  default: "",
-});
-
-export const countState = atom({
-  key: "countState",
-  default: 0,
 });

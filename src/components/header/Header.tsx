@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FlexRow } from "../../elements/elements";
@@ -101,6 +101,7 @@ const LogoBox = styled.div`
   }
 `;
 const Img = styled.img`
+  width: 151px;
   height: 60px;
   object-fit: cover;
   cursor: pointer;
@@ -121,4 +122,4 @@ const UpWidth500 = styled(FlexRow)`
   }
 `;
 
-export default React.memo(Header);
+export default Header;

@@ -144,6 +144,7 @@ const MySimulationDetail = () => {
                         <FlexCol width="100%" gap="10px" alignItem="flex-start">
                           {mySimulation.resultsArr.map((arr, index) => (
                             <FrowMob
+                              key={index}
                               width="100%"
                               gap="10px"
                               justifyContent="space-between"

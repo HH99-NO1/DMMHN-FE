@@ -1,22 +1,11 @@
-import Layout from "../home/Layout";
 import styled from "styled-components";
-import { FlexRow, FlexCol, Text } from "../../elements/elements";
+import { FlexCol } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
-import React, { useEffect, useState } from "react";
-import { Controller, useForm, useFormState } from "react-hook-form";
-import DatePicker, { ReactDatePicker } from "react-datepicker";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ko from "date-fns/locale/ko";
-
-interface IUsers {
-  memeberName: string;
-  memberEmail: string;
-  img: string;
-  stack: string;
-  birth: string;
-  job: string;
-  gender: string;
-}
 
 interface IProps {
   users:
@@ -36,23 +25,7 @@ interface IProps {
 const MyPage = ({ users, setModify }: IProps) => {
   const [startDate, setStartDate] = useState(new Date());
 
-  // const [name, setName] = useState(users?.memberName);
-  const [btnChange, setBtnChange] = useState(false);
-
-  // const onChangeName = (e: React.FormEvent<HTMLFormElement>) => {
-  //   setName(e?.currentTarget.value);
-  // };
-  // const onChangeStack = (e: any) => {
-  //   setStack(e?.currentTarget.value);
-  // };
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setError,
-    control,
-  } = useForm<IProps>({});
+  const { register, handleSubmit, control } = useForm<IProps>({});
 
   const onSubmit = async (submitData: IProps) => {
     console.log(submitData);
@@ -79,33 +52,15 @@ const MyPage = ({ users, setModify }: IProps) => {
   return (
     <>
       <Container onSubmit={handleSubmit(onSubmit)}>
-        {btnChange ? (
-          <Modify>
-            <SubTitle>개인정보</SubTitle>
-            <Btn type="button" onClick={() => setModify(false)}>
-              수정완료
-            </Btn>
-          </Modify>
-        ) : (
-          <Modify>
-            <SubTitle>개인정보</SubTitle>
-            <Btn type="submit">수정완료</Btn>
-          </Modify>
-        )}
+        <Modify>
+          <SubTitle>개인정보</SubTitle>
+          <Btn type="button" onClick={() => setModify(false)}>
+            수정취소
+          </Btn>
+        </Modify>
         <Inform>
           <InnerWrap>
             <FlexCol alignItem="left">
-              {/* <Rows>
-              <RowOne>계정</RowOne>
-              <RowTwo>
-                <input
-                  {...register("users.memberName", {
-                    required: "이름을 입력해주세요.",
-                  })}
-                  placeholder="닉네임"
-                />
-              </RowTwo>
-            </Rows> */}
               <Rows>
                 <RowOne>생년월일</RowOne>
                 <RowTwo>
@@ -140,6 +95,7 @@ const MyPage = ({ users, setModify }: IProps) => {
                         {...register("users.job")}
                         type="radio"
                         value="취준생"
+                        checked
                       />
                       취준생
                     </Label>
@@ -174,6 +130,7 @@ const MyPage = ({ users, setModify }: IProps) => {
                         {...register("users.stack")}
                         type="checkbox"
                         value="javaScript"
+                        checked
                       />
                       javaScript
                     </Label>
@@ -209,6 +166,9 @@ const MyPage = ({ users, setModify }: IProps) => {
                   </SelectDiv>
                 </RowTwo>
               </Rows>
+              <BtnBox>
+                <ModifyBtn type="submit">수정완료</ModifyBtn>
+              </BtnBox>
             </FlexCol>
           </InnerWrap>
         </Inform>
@@ -246,7 +206,7 @@ const SubTitle = styled.div`
   font-size: 20px;
   font-weight: 600;
   @media screen and (max-width: 740px) {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;
 
@@ -268,13 +228,14 @@ const Inform = styled.div`
 const InnerWrap = styled.div`
   width: 100%;
   padding: 50px;
+  display: flex;
+  justify-content: center;
 `;
 
 const Rows = styled.div`
   display: flex;
   align-items: center;
   flex-basis: 100px;
-  gap: 140px;
   padding-left: 50px;
   @media screen and (max-width: 740px) {
     flex-direction: column;
@@ -287,22 +248,21 @@ const Rows = styled.div`
 const RowOne = styled.div`
   width: 200px;
   font-size: 20px;
+  font-weight: 600;
   white-space: pre-line;
   &:first-child {
     color: #585858;
   }
   @media screen and (max-width: 740px) {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;
 
 const RowTwo = styled(RowOne)`
-  width: 600px;
+  width: 400px;
   display: flex;
   gap: 10px;
   input {
-    /* width: 100%; */
-    /* height: 50px; */
     padding: 8px 20px;
     border-radius: 67px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
@@ -312,12 +272,21 @@ const RowTwo = styled(RowOne)`
     }
     @media screen and (max-width: 600px) {
       width: 100%;
+      box-shadow: none;
+      :focus {
+        outline: none;
+      }
     }
   }
   @media screen and (max-width: 600px) {
     width: auto;
   }
 `;
-const DatePickerWid = styled(DatePicker)`
-  width: 100% !important;
+
+const BtnBox = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+const ModifyBtn = styled(Btn)`
+  width: 140px;
 `;

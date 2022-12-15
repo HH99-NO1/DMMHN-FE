@@ -33,7 +33,6 @@ const MySimulationDetail = () => {
     totalTime: "",
   };
   const [mySimulation, setMySimulation] = useState(init);
-  console.log(mySimulation);
 
   const getMySimulation = useCallback(async () => {
     try {
@@ -104,6 +103,12 @@ const MySimulationDetail = () => {
         <HeaderBox />
         <Ctn>
           <FlexCol width="100%" gap="20px">
+            <RightDiv>
+              <MoveBtn onClick={() => navigate("/mysimulation")}>
+                목록으로
+              </MoveBtn>
+              <DelBtn onClick={() => deleteMySimulation()}>삭제</DelBtn>
+            </RightDiv>
             <FlexRow
               width="100%"
               justifyContent="space-between"
@@ -172,9 +177,6 @@ const MySimulationDetail = () => {
                     </FlexCol>
                   </OptionScrollBox2>
                 </OptionScrollBox>
-                <RightDiv>
-                  <DelBtn onClick={() => deleteMySimulation()}>삭제</DelBtn>
-                </RightDiv>
               </FlexCol>
             </FlexCol>
           </FlexCol>
@@ -267,9 +269,23 @@ const DelBtn = styled.button`
   border-radius: 10px;
 `;
 
+const MoveBtn = styled.button`
+  cursor: pointer;
+  background: none;
+  width: 100px;
+  height: 30px;
+  box-sizing: border-box;
+  border: 2px solid #000;
+  font-weight: 600;
+  border-radius: 10px;
+`;
+
 const RightDiv = styled.div`
   text-align: right;
   margin-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export default MySimulationDetail;

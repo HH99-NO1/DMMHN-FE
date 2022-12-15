@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { FlexCol } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -95,7 +95,7 @@ const MyPage = ({ users, setModify }: IProps) => {
                         {...register("users.job")}
                         type="radio"
                         value="취준생"
-                        checked
+                        defaultChecked
                       />
                       취준생
                     </Label>
@@ -130,7 +130,7 @@ const MyPage = ({ users, setModify }: IProps) => {
                         {...register("users.stack")}
                         type="checkbox"
                         value="javaScript"
-                        checked
+                        defaultChecked
                       />
                       javaScript
                     </Label>

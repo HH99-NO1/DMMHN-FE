@@ -42,7 +42,11 @@ const Header = () => {
       <Wrap>
         <FlexRow gap="10px" justifyContent="space-between">
           <FlexRow gap="10px">
-            <Img onClick={() => navigate("/")} src="img/logo.png" alt="logo" />
+            <Img
+              onClick={() => navigate("/")}
+              src={process.env.REACT_APP_PUBLIC_URL + "/img/logo.png"}
+              alt="logo"
+            />
           </FlexRow>
           <FlexRow gap="30px">
             <UpWidth500>

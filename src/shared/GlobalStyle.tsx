@@ -97,6 +97,7 @@ a {
 .react-datepicker {
   border: 1px solid ${(props) => props.theme.__grayLight};
   box-shadow: 0px 4px 4px rgb(0 0 0 / 0.05);
+
 }
 
 .react-datepicker__input-container{
@@ -108,6 +109,9 @@ a {
     border-radius: 67px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
     border: 1px solid ${(props) => props.theme.__grayLight};
+    :focus {
+      outline: 1px solid ${(props) => props.theme.__grayMedium};
+    }
   }
   position: relative;
   width: 300px;

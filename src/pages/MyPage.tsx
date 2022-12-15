@@ -187,7 +187,6 @@ const MyPage = () => {
               </FlexCol>
             </FlexRow>
           </Profile>
-
           {!modify ? (
             <>
               <Modify>
@@ -196,7 +195,7 @@ const MyPage = () => {
               </Modify>
               <Inform>
                 <InnerWrap>
-                  <FlexCol alignItem="left">
+                  <FlexCol justifyContent="center">
                     <Rows>
                       <RowOne>생년월일</RowOne>
                       <RowTwo>
@@ -217,11 +216,11 @@ const MyPage = () => {
                       <RowOne>스택</RowOne>
                       <RowTwo>
                         {users?.stack[0] === "React" ||
-                        users?.stack[0] === "JavaScript" ||
+                        users?.stack[0] === "javaScript" ||
                         users?.stack[0] === "Node.js" ||
                         users?.stack[0] === "Spring"
-                          ? `입력값이 없습니다. 빈칸을 수정해주세요.`
-                          : users?.stack}
+                          ? users?.stack
+                          : `입력값이 없습니다. 빈칸을 수정해주세요.`}
                       </RowTwo>
                     </Rows>
                   </FlexCol>
@@ -295,13 +294,16 @@ const Inform = styled.div`
 const InnerWrap = styled.div`
   width: 100%;
   padding: 50px;
+  display: flex;
+  justify-content: center;
 `;
 
 const Rows = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   flex-basis: 100px;
-  gap: 140px;
+  /* gap: 140px; */
   padding-left: 50px;
   @media screen and (max-width: 600px) {
     flex-direction: column;
@@ -326,7 +328,7 @@ const RowOne = styled.div`
 `;
 
 const RowTwo = styled(RowOne)`
-  width: 400px;
+  width: 100%;
   @media screen and (max-width: 600px) {
     flex-basis: 40px;
   }

@@ -96,7 +96,7 @@ const MyPage = ({ users, setModify }: IProps) => {
                         {...register("users.job")}
                         type="radio"
                         value="취준생"
-                        checked
+                        defaultChecked
                       />
                       취준생
                     </Label>
@@ -131,7 +131,7 @@ const MyPage = ({ users, setModify }: IProps) => {
                         {...register("users.stack")}
                         type="checkbox"
                         value="javaScript"
-                        checked
+                        defaultChecked
                       />
                       javaScript
                     </Label>

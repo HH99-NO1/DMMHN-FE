@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { FlexRow, HeaderBox } from "../../elements/elements";
+import { isLoginState } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
-import Loading from "../Loading";
+import Loading from "../../elements/Loading";
 import Post from "./Post";
 
 const MySimulation = () => {
@@ -40,6 +42,14 @@ const MySimulation = () => {
   useEffect(() => {
     getMySimulations();
   }, []);
+
+  const isLogin = useRecoilValue(isLoginState);
+  useEffect(() => {
+    if (!isLogin) {
+      alert("잘못된 접근 경로입니다.");
+      return navigate(-1);
+    } else return;
+  }, [isLogin, navigate]);
 
   if (isLoading) {
     return <Loading />;

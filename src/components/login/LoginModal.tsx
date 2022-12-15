@@ -1,17 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import Portal from "./Portal";
 import styled from "styled-components";
-import { GrClose } from "react-icons/gr";
-import {
-  AiOutlineAlert,
-  AiOutlineEye,
-  AiOutlineEyeInvisible,
-} from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { UserApi } from "../../recoil/instance";
 import { useForm } from "react-hook-form";
 import { FlexCol, FlexRow, Liner, Text } from "../../elements/elements";
-import errorNotYet from "../errors/errorNotYet";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   checkSucceedState,
@@ -21,6 +14,12 @@ import {
 } from "../../recoil/atoms/atoms";
 import jwt_decode from "jwt-decode";
 import FindPasswordModal from "./FindPasswordModal";
+import CloseItem from "../../elements/CloseItem";
+import {
+  OutlineEyeInvisibleItem,
+  OutlineEyeItem,
+} from "../../elements/EyeItem";
+import AlertItem from "../../elements/AlertItem";
 
 interface IForm {
   memberEmail: string;
@@ -63,6 +62,7 @@ const LoginModal = () => {
       sessionStorage.setItem("accessToken", data.data.accessToken);
       sessionStorage.setItem("refreshToken", data.data.refreshToken);
       alert("로그인이 완료되었습니다.");
+      navigate("/");
       console.log(data);
       setOnLogin(false);
       setIsLogin(true);
@@ -115,7 +115,7 @@ const LoginModal = () => {
       alert("이미 로그인 되어있습니다.");
       return setOnLogin(false);
     }
-  }, []);
+  }, [isLogin, setOnLogin]);
 
   return (
     <Portal>
@@ -123,7 +123,7 @@ const LoginModal = () => {
         <Ctn>
           <LoginCtn ref={modalRef} isFindPW={isFindPW}>
             <CloseBtn onClick={() => setOnLogin(false)}>
-              <GrClose size={16} />
+              <CloseItem />
             </CloseBtn>
             <LoginHeader>로그인</LoginHeader>
             <LoginBody onSubmit={handleSubmit(onValid)}>
@@ -133,6 +133,7 @@ const LoginModal = () => {
                     {...register("memberEmail", {
                       required: "이메일을 입력해주세요.",
                       pattern: {
+                        // eslint-disable-next-line
                         value: /^[a-z0-9+-\_.]{4,15}@[a-z]{4,15}\.[a-z]{2,3}$/,
                         message: "이메일 형식을 확인해주세요.",
                       },
@@ -152,21 +153,16 @@ const LoginModal = () => {
                       onClick={() => setIsShowPassword(!isShowPassword)}
                     >
                       {!isShowPassword ? (
-                        <AiOutlineEyeInvisible size={24} />
+                        <OutlineEyeInvisibleItem />
                       ) : (
-                        <AiOutlineEye size={24} />
+                        <OutlineEyeItem />
                       )}
                     </ToggleBtn>
                   </InputDiv>
                   <CheckBox>
                     {errors?.memberEmail?.message ? (
                       <ErrorMsg>
-                        <AiOutlineAlert
-                          fill="tomato"
-                          stroke="tomato"
-                          strokeWidth={30}
-                          size={16}
-                        />
+                        <AlertItem />
                         {errors?.memberEmail?.message}
                       </ErrorMsg>
                     ) : null}
@@ -210,7 +206,7 @@ const BGBlack2 = styled.div`
   width: 100%;
   height: 100%;
   z-index: 7;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
 `;
 
 // 모달 배경화면
@@ -279,6 +275,9 @@ const CloseBtn = styled.div`
     background-color: #ebebeb;
     transform: rotate(-90deg);
   }
+  & svg {
+    width: 16px;
+  }
 `;
 
 // 모달(로그인) 제목
@@ -336,6 +335,7 @@ const ToggleBtn = styled.button`
   transform: translateY(-50%);
   cursor: pointer;
   & svg {
+    width: 24px;
     fill: ${(props) => props.theme.__grayMedium};
   }
 `;
@@ -355,6 +355,12 @@ const ErrorMsg = styled(FlexRow)`
   border-radius: 20px;
   font-size: 14px;
   color: ${(props) => props.theme.__grayDark};
+  & svg {
+    fill: tomato;
+    stroke: tomato;
+    stroke-width: 30;
+    width: 16px;
+  }
 `;
 
 const LoginBtn = styled.button`
@@ -372,36 +378,6 @@ const LoginBtn = styled.button`
     box-shadow: 0px 4px 8px -1px rgba(0, 0, 0, 0.5) inset;
   }
 `;
-
-// 소셜로그인 영역
-const SocialItemBox = styled(FlexRow)`
-  width: 100%;
-  padding: 30px 10%;
-  gap: 10px;
-  justify-content: space-between;
-`;
-
-interface IImg {
-  border?: boolean;
-}
-const Img = styled.img<IImg>`
-  max-width: 70px;
-  min-width: 30px;
-  width: 100%;
-  max-height: 70px;
-  height: 100%;
-  border-radius: 50%;
-  border: ${(props) =>
-    props.border === undefined
-      ? "none"
-      : "1px solid " + props.theme.__grayLight};
-  cursor: pointer;
-  transition: all, 0.3s;
-  :hover {
-    box-shadow: 0px 4px 4px 0px #0000000d;
-  }
-`;
-
 // 푸터 영역
 const LoginFooter = styled(FlexRow)`
   padding: 30px 10%;

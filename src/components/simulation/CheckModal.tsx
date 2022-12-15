@@ -133,7 +133,7 @@ const Btn = styled.button<IBtn>`
     if (props.isOK) {
       return props.theme.__yellowLight;
     } else {
-      return props.theme.__grayMedium;
+      return props.theme.__grayDark;
     }
   }};
   color: ${(props) => {

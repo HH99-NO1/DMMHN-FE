@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FlexRow } from "../../elements/elements";
@@ -17,7 +17,7 @@ const Header = () => {
 
   useEffect(() => {
     preAccessToken ? setIsLogin(true) : setIsLogin(false);
-  }, [preAccessToken]);
+  }, [preAccessToken, setIsLogin]);
 
   // 헤더 배경 등 고정
   const [isFixed, setIsFixed] = useState(false);
@@ -42,7 +42,11 @@ const Header = () => {
       <Wrap>
         <FlexRow gap="10px" justifyContent="space-between">
           <FlexRow gap="10px">
-            <Img onClick={() => navigate("/")} src="img/logo.png" alt="logo" />
+            <Img
+              onClick={() => navigate("/")}
+              src={process.env.REACT_APP_PUBLIC_URL + "/img/logo.png"}
+              alt="logo"
+            />
           </FlexRow>
           <FlexRow gap="30px">
             <UpWidth500>
@@ -101,6 +105,7 @@ const LogoBox = styled.div`
   }
 `;
 const Img = styled.img`
+  width: 151px;
   height: 60px;
   object-fit: cover;
   cursor: pointer;
@@ -121,4 +126,4 @@ const UpWidth500 = styled(FlexRow)`
   }
 `;
 
-export default React.memo(Header);
+export default Header;

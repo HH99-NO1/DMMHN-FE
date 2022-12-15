@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 
 import { RecoilRoot } from "recoil";
@@ -12,9 +11,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <RecoilRoot>
     <ThemeProvider theme={lightTheme}>
-      <React.Suspense fallback={<div>Loading...</div>}>
-        <App />
-      </React.Suspense>
+      <App />
     </ThemeProvider>
   </RecoilRoot>
 );

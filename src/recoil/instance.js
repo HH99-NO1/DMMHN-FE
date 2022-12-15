@@ -2,12 +2,12 @@ import axios from "axios";
 
 const preAccessToken = sessionStorage.getItem("accessToken");
 export const instance = axios.create({
-  baseURL: "https://chamchimayo.shop",
+  baseURL: process.env.REACT_APP_API_URL,
   headers: { Authorization: preAccessToken },
 });
 
 export const UserApi = axios.create({
-  baseURL: "https://chamchimayo.shop",
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 instance.interceptors.response.use(
@@ -19,7 +19,6 @@ instance.interceptors.response.use(
     try {
       const errResponseStatus = error.response.status;
       const errResponseData = error.response.data;
-      const prevRequest = error.config;
 
       // access token이 만료되어 발생하는 에러인 경우
       if (
@@ -33,7 +32,7 @@ instance.interceptors.response.use(
           try {
             const checkToken = async () => {
               return await axios
-                .get("https://chamchimayo.shop/members/me", {
+                .get(`${process.env.REACT_APP_API_URL}/members/me`, {
                   headers: {
                     Authorization: preAccessToken,
                   },
@@ -42,6 +41,7 @@ instance.interceptors.response.use(
                   console.log(res);
                 });
             };
+            checkToken();
           } catch (error) {
             const errorCode = error.response;
             if (errorCode === undefined) {

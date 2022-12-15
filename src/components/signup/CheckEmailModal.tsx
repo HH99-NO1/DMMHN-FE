@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { GrClose } from "react-icons/gr";
 import { FlexCol, Text } from "../../elements/elements";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
@@ -9,6 +8,7 @@ import {
   serverCodeNumber,
   userEmailValue,
 } from "../../recoil/atoms/atoms";
+import CloseItem from "../../elements/CloseItem";
 
 const CheckEmailModal = () => {
   const serverCode = useRecoilValue(serverCodeNumber);
@@ -29,36 +29,14 @@ const CheckEmailModal = () => {
     }
   };
 
-  // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
   const setIsCheckEmailState = useSetRecoilState(isCheckEmail);
-
-  // const modalRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   // 이벤트 핸들러 함수
-  //   const handler = (event: any) => {
-  //     if (modalRef.current && !modalRef.current.contains(event.target)) {
-  //       setIsCheckEmailState(false);
-  //     }
-  //   };
-
-  //   // 이벤트 핸들러 등록
-  //   document.addEventListener("mousedown", handler);
-  //   // document.addEventListener('touchstart', handler); // 모바일 대응
-
-  //   return () => {
-  //     // 이벤트 핸들러 해제
-  //     document.removeEventListener("mousedown", handler);
-  //     // document.removeEventListener('touchstart', handler); // 모바일 대응
-  //   };
-  // });
 
   return (
     <BGBlack>
       <Ctn>
-        <CheckCtn /* ref={modalRef}> */>
+        <CheckCtn>
           <CloseBtn onClick={() => setIsCheckEmailState(false)}>
-            <GrClose size={16} />
+            <CloseItem />
           </CloseBtn>
           <Header>이메일 인증 확인</Header>
           <CheckBody>
@@ -66,7 +44,6 @@ const CheckEmailModal = () => {
               <UserEmailCall>{`${userEmail}로 인증 메일을 발송했습니다.`}</UserEmailCall>
               <InputBox>
                 <Input
-                  //
                   onInput={(e) => {
                     if (
                       e.currentTarget.value.length > e.currentTarget.maxLength
@@ -151,6 +128,9 @@ const CloseBtn = styled.div`
   &:hover {
     background-color: #ebebeb;
     transform: rotate(-90deg);
+  }
+  & svg {
+    width: 16px;
   }
 `;
 

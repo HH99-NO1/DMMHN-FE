@@ -1,15 +1,15 @@
 import { useForm } from "react-hook-form";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { FlexCol, Liner, Text } from "../../elements/elements";
 import { checkSucceedState, userEmailValue } from "../../recoil/atoms/atoms";
 import { UserApi } from "../../recoil/instance";
-import {
-  AiOutlineAlert,
-  AiOutlineEye,
-  AiOutlineEyeInvisible,
-} from "react-icons/ai";
 import { useState } from "react";
+import {
+  OutlineEyeInvisibleItem,
+  OutlineEyeItem,
+} from "../../elements/EyeItem";
+import AlertItem from "../../elements/AlertItem";
 
 interface IForm {
   password: string;
@@ -100,11 +100,7 @@ const ChangePassword = ({
             type="button"
             onClick={() => setIsShowPassword(!isShowPassword)}
           >
-            {!isShowPassword ? (
-              <AiOutlineEyeInvisible size={24} />
-            ) : (
-              <AiOutlineEye size={24} />
-            )}
+            {!isShowPassword ? <OutlineEyeInvisibleItem /> : <OutlineEyeItem />}
           </ToggleBtn>
         </InputBox>
         <InputBox>
@@ -125,22 +121,20 @@ const ChangePassword = ({
             type="button"
             onClick={() => setIsShowPassword(!isShowPassword)}
           >
-            {!isShowPassword ? (
-              <AiOutlineEyeInvisible size={24} />
-            ) : (
-              <AiOutlineEye size={24} />
-            )}
+            {!isShowPassword ? <OutlineEyeInvisibleItem /> : <OutlineEyeItem />}
           </ToggleBtn>
         </InputBox>
         <Height40>
           {totalError() && (
             <ErrorMsg>
-              <AiOutlineAlert
+              <AlertItem />
+
+              {/* <AiOutlineAlert
                 fill="tomato"
                 stroke="tomato"
                 strokeWidth={30}
                 size={16}
-              />
+              /> */}
               {totalError()}
             </ErrorMsg>
           )}
@@ -226,7 +220,10 @@ const ErrorMsg = styled.div`
   padding: 4px 10px;
   color: #747373;
   & svg {
-    min-width: 16px;
+    fill: tomato;
+    stroke: tomato;
+    stroke-width: 30;
+    width: 16px;
   }
 `;
 const ToggleBtn = styled.button`
@@ -241,6 +238,7 @@ const ToggleBtn = styled.button`
   transform: translateY(-50%);
   cursor: pointer;
   & svg {
+    width: 24px;
     fill: ${(props) => props.theme.__grayMedium};
   }
 `;

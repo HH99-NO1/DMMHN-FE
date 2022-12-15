@@ -79,21 +79,6 @@ const HamburgerMenu = ({ setIsClick }: IHamburgerMenu) => {
   );
 };
 
-// 모달 배경화면
-const BGTransparent = styled.div`
-  z-index: 4;
-  width: 100%;
-  height: calc(100vh);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  left: 0;
-  top: 0;
-  text-align: center;
-  background-color: rgba(0, 0, 0, 0);
-`;
-
 // 모달 바디
 const Ctn = styled.div`
   position: absolute;

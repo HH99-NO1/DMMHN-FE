@@ -1,10 +1,9 @@
-import Layout from "../home/Layout";
 import styled from "styled-components";
-import { FlexRow, FlexCol, Text } from "../../elements/elements";
+import { FlexCol } from "../../elements/elements";
 import { instance } from "../../recoil/instance";
-import React, { useEffect, useState } from "react";
-import { Controller, useForm, useFormState } from "react-hook-form";
-import DatePicker, { ReactDatePicker } from "react-datepicker";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ko from "date-fns/locale/ko";
 
@@ -282,9 +281,6 @@ const RowTwo = styled(RowOne)`
   @media screen and (max-width: 600px) {
     width: auto;
   }
-`;
-const DatePickerWid = styled(DatePicker)`
-  width: 100% !important;
 `;
 
 const BtnBox = styled.div`

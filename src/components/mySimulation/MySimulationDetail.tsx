@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import {
   FlexCol,
@@ -8,6 +9,7 @@ import {
   HeaderBox,
   Liner,
 } from "../../elements/elements";
+import { isLoginState } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
 import Loading from "../Loading";
 
@@ -85,6 +87,15 @@ const MySimulationDetail = () => {
     spring: "백엔드 - spring",
     custom: "커스텀 질문 - custom",
   };
+
+  const isLogin = useRecoilValue(isLoginState);
+  useEffect(() => {
+    if (!isLogin) {
+      alert("잘못된 접근 경로입니다.");
+      return navigate(-1);
+    } else return;
+  }, [isLogin, navigate]);
+
   if (isLoading) {
     return <Loading />;
   } else {

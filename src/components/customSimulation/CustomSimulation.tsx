@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { FlexCol, FlexRow, HeaderBox } from "../../elements/elements";
-import { isSimulationState, test } from "../../recoil/atoms/atoms";
+import {
+  isLoginState,
+  isSimulationState,
+  test,
+} from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
 
 interface IQuestions {
@@ -123,6 +127,14 @@ const CustomSimulation = () => {
   useEffect(() => {
     getCustomQuestion();
   }, []);
+
+  const isLogin = useRecoilValue(isLoginState);
+  useEffect(() => {
+    if (!isLogin) {
+      alert("잘못된 접근 경로입니다.");
+      return navigate(-1);
+    } else return;
+  }, [isLogin, navigate]);
 
   return (
     <>

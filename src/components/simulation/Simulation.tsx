@@ -13,10 +13,14 @@ import stopwatchTime from "../stopwatch/utils/stopwatchTime";
 import { Player } from "video-react";
 import "video-react/dist/video-react.css";
 import { saveAs } from "file-saver";
+import LoadingModal from "../../elements/LoadingModal";
 
 let count = 0;
 
 const Simulation = () => {
+  // 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const [isStart, setIsStart] = useState(false);
   const [isResult, setIsResult] = useState(false);
@@ -60,6 +64,7 @@ const Simulation = () => {
     isStop && stop();
 
     try {
+      setIsLoading(true);
       const config = {
         question: value,
       };
@@ -91,6 +96,7 @@ const Simulation = () => {
         event.target.disabled = false;
         event.target.style.backgroundColor = "#092304";
       }, source.buffer.duration * 1000 + 500);
+      setIsLoading(false);
 
       let resultEl = {
         question: currValue,
@@ -116,6 +122,7 @@ const Simulation = () => {
       event.target.style.backgroundColor = "#092304";
       console.log(e);
     } finally {
+      setIsLoading(false);
     }
   };
 
@@ -230,6 +237,7 @@ const Simulation = () => {
 
   return (
     <>
+      {isLoading && <LoadingModal />}
       <BGBlack>
         <Gap gap="60px" />
         <Padding20 isFixed={isFixed}>
@@ -558,7 +566,7 @@ const ResultArea = styled(FlexCol)`
 `;
 const IconArea = styled.div`
   position: absolute;
-  z-index: 4;
+  z-index: 0;
   display: flex;
   justify-content: center;
   align-items: center;

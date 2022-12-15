@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { FlexRow, HeaderBox } from "../../elements/elements";
 import { isLoginState } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
-import Loading from "../Loading";
+import Loading from "../../elements/Loading";
 import Post from "./Post";
 
 const MySimulation = () => {

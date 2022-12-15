@@ -11,7 +11,7 @@ import {
 } from "../../elements/elements";
 import { isLoginState } from "../../recoil/atoms/atoms";
 import { instance } from "../../recoil/instance";
-import Loading from "../Loading";
+import Loading from "../../elements/Loading";
 
 const MySimulationDetail = () => {
   // 로딩 상태 관리

@@ -7,7 +7,7 @@ import { useRecoilState } from "recoil";
 import { isLoginState, userState } from "../recoil/atoms/atoms";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Loading from "../components/Loading";
+import Loading from "../elements/Loading";
 
 interface IUsers {
   memberEmail: string;

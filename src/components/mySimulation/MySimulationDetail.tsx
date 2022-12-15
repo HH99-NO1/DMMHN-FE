@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -33,7 +33,7 @@ const MySimulationDetail = () => {
   const [mySimulation, setMySimulation] = useState(init);
   console.log(mySimulation);
 
-  const getMySimulation = async () => {
+  const getMySimulation = useCallback(async () => {
     try {
       setIsLoading(true);
       const { data } = await instance.get(
@@ -46,7 +46,7 @@ const MySimulationDetail = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [postId]);
   const deleteMySimulation = async () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       try {
@@ -65,7 +65,7 @@ const MySimulationDetail = () => {
   };
   useEffect(() => {
     getMySimulation();
-  }, []);
+  }, [getMySimulation]);
 
   const dateChange = (date: string) => {
     console.log(date);

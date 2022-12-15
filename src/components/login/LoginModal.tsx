@@ -115,7 +115,7 @@ const LoginModal = () => {
       alert("이미 로그인 되어있습니다.");
       return setOnLogin(false);
     }
-  }, []);
+  }, [isLogin, setOnLogin]);
 
   return (
     <Portal>
@@ -133,6 +133,7 @@ const LoginModal = () => {
                     {...register("memberEmail", {
                       required: "이메일을 입력해주세요.",
                       pattern: {
+                        // eslint-disable-next-line
                         value: /^[a-z0-9+-\_.]{4,15}@[a-z]{4,15}\.[a-z]{2,3}$/,
                         message: "이메일 형식을 확인해주세요.",
                       },

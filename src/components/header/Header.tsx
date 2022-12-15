@@ -17,7 +17,7 @@ const Header = () => {
 
   useEffect(() => {
     preAccessToken ? setIsLogin(true) : setIsLogin(false);
-  }, [preAccessToken]);
+  }, [preAccessToken, setIsLogin]);
 
   // 헤더 배경 등 고정
   const [isFixed, setIsFixed] = useState(false);

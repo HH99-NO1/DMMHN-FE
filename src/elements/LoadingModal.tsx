@@ -1,6 +1,5 @@
 import FadeLoader from "react-spinners/FadeLoader";
 import styled from "styled-components";
-import { HeaderBox } from "./elements";
 
 const LoadingModal = () => {
   return (

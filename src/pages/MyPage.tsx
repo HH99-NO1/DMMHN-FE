@@ -25,6 +25,7 @@ interface IUsers {
 const MyPage = () => {
   // 로딩 상태 관리
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   const [users, setUsers] = useState<IUsers>();
@@ -66,6 +67,7 @@ const MyPage = () => {
     getUserData();
   }, []);
 
+  // 유저 이미지 변경 이벤트
   const onChangeImg = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
